@@ -183,10 +183,10 @@ function renderTables() {
           const filter = selectedType.toLowerCase();
 
           if (filter === "anime") {
-            if (rowType !== "anime" && rowType !== "anime (movie)")
+            if (rowType !== "anime" && rowType !== "anime (film)")
               return false;
-          } else if (filter === "movie") {
-            if (rowType !== "movie" && rowType !== "anime (movie)")
+          } else if (filter === "film") {
+            if (rowType !== "film" && rowType !== "anime (film)")
               return false;
           } else {
             if (rowType !== filter) return false;
