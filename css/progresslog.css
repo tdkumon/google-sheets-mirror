@@ -111,6 +111,11 @@ body[data-year="2026"] #table-container td.col-meta {
   padding-left: 4px !important;
 }
 
+#table-container td.col-extra,
+body[data-year="2026"] #table-container td.col-extra {
+  padding-left: 4px !important;
+}
+
 #search-input {
   font-weight: 700;
   font-family: "Noto Sans JP", sans-serif;
