@@ -108,6 +108,7 @@ body[data-year="2026"] #table-container td.col-meta {
   width: 250px;
   text-align: left;
   font-size: inherit !important;
+  padding-left: 4px !important;
 }
 
 #search-input {
