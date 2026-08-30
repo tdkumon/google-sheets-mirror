@@ -1,319 +1,101 @@
-#table-container {
-  width: 100%;
-}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tdk's progress log</title>
+    <meta
+      name="description"
+      content="daily progress log for anime/manga/games etc."
+    />
+    <meta name="theme-color" content="#0a0a0c" />
+    <!--<link rel="icon" type="image/png" href="../media/shinobu.png" />-->
 
-#table-container table,
-body[data-year="2026"] #table-container table,
-body[data-year="2025"] #table-container table {
-  border-collapse: collapse !important;
-  background-color: #16181c !important;
-  border: 1px solid #252932 !important;
-}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="tdk's progress log" />
+    <meta
+      property="og:description"
+      content="daily progress log for anime/manga/games etc."
+    />
+    <meta
+      property="og:image"
+      content="https://tdkumon.github.io/google-sheets-mirror/media/shinobu.png"
+    />
 
-#table-container th,
-body[data-year="2026"] #table-container th {
-  background-color: #242832 !important;
-  color: #f0f0f5 !important;
-  border-bottom: 2px solid #3b4760 !important;
-  vertical-align: middle !important;
-}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="tdk's progress log" />
+    <meta
+      name="twitter:description"
+      content="daily progress log for anime/manga/games etc."
+    />
+    <meta
+      name="twitter:image"
+      content="https://tdkumon.github.io/google-sheets-mirror/media/shinobu.png"
+    />
 
-#table-container tr,
-body[data-year="2026"] #table-container tr,
-body[data-year="2025"] #table-container tr {
-  border: none !important;
-  background-color: #16181c !important;
-}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Noto+Sans+JP:wght@700;900&family=Noto+Sans:wght@400;700&family=Roboto:wght@400;700&family=Shippori+Mincho:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
 
-#table-container td,
-body[data-year="2026"] #table-container td,
-body[data-year="2025"] #table-container td {
-  border-top: none !important;
-  border-bottom: none !important;
-  border-left: 1px solid #252932 !important;
-  border-right: 1px solid #252932 !important;
-  background-color: #16181c !important;
-  color: #e0e0ea !important;
-  vertical-align: middle !important;
-  padding: 6px 16px !important; /* Reduced from 12px to 6px */
-  height: 50px;
-  line-height: 1.2; /* Tightens line spacing so 2 lines fit in 50px */
-}
+    <link rel="stylesheet" href="../css/tracking-sheet.css" />
+    <link rel="stylesheet" href="../css/progresslog.css" />
+  </head>
+  ``` :3
 
-th.col-date,
-td.col-date {
-  width: 100px;
-  text-align: center;
-  font-weight: 700;
-}
+  <body data-year="2026">
+    <div class="header-section">
+      <div class="header-container">
+        <img src="../media/shinobu.png" alt="nobu" class="header-img" />
+        <div class="header-text">
+          <h1>tdk's daily progress log 🚧 WIP</h1>
+          <p style="font-size: 20px">
+            daily progress log for everything that seems relevant to me
+          </p>
+        </div>
+      </div>
+      <div class="links-container">
+        <a
+          href="https://docs.google.com/spreadsheets/d/1E_CjeXDPRjPy0PWOipLHwxvdX129M2vg9ULqXZK0GWA"
+          target="_blank"
+          rel="noopener"
+          >google sheets version</a
+        >
+        <a href="https://rentry.co/tdkumon" target="_blank" rel="noopener"
+          >rentry page</a
+        >
+        <a href="../tracking-sheet/" target="_blank" rel="noopener"
+          >more comprehensible tracking sheet w/ only start & finish dates</a
+        >
+      </div>
+    </div>
 
-#table-container td.col-date,
-body[data-year="2026"] #table-container td.col-date,
-body[data-year="2025"] #table-container td.col-date {
-  font-size: 1.1rem !important;
-  color: #badefc !important;
-  border-right: 2px solid #3b4760 !important;
-}
+    <div class="search-container">
+      <div class="search-wrapper" id="search-wrapper">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search by title..."
+          oninput="handleManualInput()"
+          autocomplete="off"
+        />
+        <button id="clear-filter-btn" onclick="clearFilter()">
+          clear filter
+        </button>
+      </div>
+    </div>
 
-th.col-title,
-td.col-title {
-  width: 35%;
-  font-weight: normal !important;
-}
+    <div id="table-container">Loading data...</div>
 
-.title-bold {
-  font-weight: 700 !important;
-}
+    <div id="last-updated" class="last-updated-badge">
+      Loading update time...
+    </div>
 
-th.col-meta {
-  text-align: center;
-  width: 220px;
-}
+    <img src="../media/nobu.png" alt="nobu" class="bottom-right-shinobu" />
 
-th.col-extra,
-td.col-extra {
-  width: auto;
-}
-
-.kw-green {
-  color: #2ecc71 !important;
-}
-
-.kw-blue {
-  color: #3498db !important;
-}
-
-.kw-red {
-  color: #ea4335 !important;
-}
-
-td.col-title,
-td.col-extra,
-td.col-meta {
-  white-space: pre-line;
-}
-
-#table-container tr.day-start td,
-body[data-year="2026"] #table-container tr.day-start td {
-  border-top: 1px solid #252932 !important;
-}
-
-#table-container tr.day-entry td,
-body[data-year="2026"] #table-container tr.day-entry td {
-  border-top: 1px dotted #4a5162 !important;
-}
-
-#table-container td.col-meta,
-body[data-year="2026"] #table-container td.col-meta {
-  width: 250px;
-  text-align: left;
-  font-size: inherit !important;
-}
-
-#search-input {
-  font-weight: 700;
-  font-family: "Noto Sans JP", sans-serif;
-  font-size: 16px;
-}
-
-.last-updated-badge {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: #6c757d;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  z-index: 1000;
-}
-
-body[data-year="2026"] .last-updated-badge {
-  background-color: #000000;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  box-shadow: 4px 4px 0px #46bdc6;
-  border-radius: 0px;
-  font-family: "Shippori Mincho", serif;
-  font-weight: 700;
-}
-
-@media (max-width: 900px) {
-  .bottom-right-shinobu {
-    display: none;
-  }
-}
-
-td.col-title {
-  cursor: default !important;
-}
-
-.title-clickable {
-  cursor: pointer;
-  display: inline;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: text-decoration-color 0.2s ease;
-}
-
-.title-clickable:hover {
-  text-decoration-color: inherit;
-}
-
-.search-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-}
-
-#search-input {
-  min-width: 250px !important;
-  width: 100%;
-  box-sizing: border-box;
-  transition: none !important;
-}
-
-.search-wrapper.title-active #search-input {
-  width: auto;
-  flex: 0 0 auto;
-  transition: none !important;
-}
-
-#clear-filter-btn {
-  display: none;
-  padding: 8px 14px;
-  background-color: #242832;
-  color: #f0f0f5;
-  border: 1px solid #3b4760;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 14px;
-  white-space: nowrap;
-  flex: 0 0 auto;
-}
-
-#clear-filter-btn:hover {
-  background-color: #3b4760;
-}
-
-.search-wrapper.title-active #clear-filter-btn {
-  display: inline-block;
-}
-
-td.col-extra {
-  position: relative !important;
-  overflow: visible !important;
-}
-
-/* Position triangle at exact top-right of the cell */
-.comment-corner-mark {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 10px 10px 0;
-  border-color: transparent #46bdc6 transparent transparent;
-  pointer-events: none;
-}
-
-/* Hover Popover Box */
-.comment-popover {
-  display: none;
-  position: absolute;
-  top: calc(100% + 2px);
-  right: 0;
-  width: 280px;
-  background-color: #1e222a;
-  border: 1px solid #3b4760;
-  box-shadow: 4px 4px 0px #000000;
-  padding: 10px 12px;
-  z-index: 999;
-  color: #e0e0ea;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
-  white-space: normal;
-  word-break: break-word;
-  border-radius: 2px;
-}
-
-body[data-year="2026"] .comment-popover {
-  background-color: #121418;
-  border: 2px solid #ffffff;
-  box-shadow: 4px 4px 0px #46bdc6;
-}
-
-td.col-extra:hover .comment-popover {
-  display: block;
-}
-
-.comment-popover-header {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #46bdc6;
-  margin-bottom: 6px;
-  border-bottom: 1px solid #252932;
-  padding-bottom: 4px;
-}
-
-.comment-popover-body {
-  color: #f0f0f5;
-  font-size: 13px;
-  white-space: pre-wrap;
-}
-
-.comment-popover-body.is-truncated {
-  max-height: 80px;
-  overflow: hidden;
-  position: relative;
-}
-
-.comment-popover-body.is-truncated::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 24px;
-  background: linear-gradient(to bottom, transparent, #1e222a);
-}
-
-body[data-year="2026"] .comment-popover-body.is-truncated::after {
-  background: linear-gradient(to bottom, transparent, #121418);
-}
-
-.comment-expand-btn {
-  margin-top: 6px;
-  background: none;
-  border: none;
-  color: #46bdc6;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.comment-expand-btn:hover {
-  color: #ffffff;
-}
-
-/* Allow corner mark and popover positioning on progress header */
-th.col-meta {
-  position: relative !important;
-  overflow: visible !important;
-}
-
-/* Show comment popover when hovering over progress header */
-th.col-meta:hover .comment-popover {
-  display: block;
-  font-family: "Noto Sans", "Noto Sans JP", sans-serif;
-}
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="../scripts/progresslog.js"></script>
+  </body>
+</html>
