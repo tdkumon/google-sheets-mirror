@@ -16,18 +16,18 @@ const YEAR_CONFIGS = {
     start: 3,
     finish: 4,
     extra: 5,
-    type: -1,
-    daysSpent: -1,
-    comment: 10, // Column K
+    type: 7, // Column H
+    daysSpent: 8, // Column I
+    comment: -1, // Column K
   },
   2024: {
     title: 1,
     start: -1,
     finish: 2,
     extra: 3,
-    type: -1,
+    type: 4, // Column E
     daysSpent: -1,
-    comment: 10, // Column K
+    comment: -1, // Column K
   },
 };
 
@@ -183,11 +183,9 @@ function renderTables() {
           const filter = selectedType.toLowerCase();
 
           if (filter === "anime") {
-            if (rowType !== "anime" && rowType !== "anime (film)")
-              return false;
+            if (rowType !== "anime" && rowType !== "anime (film)") return false;
           } else if (filter === "film") {
-            if (rowType !== "film" && rowType !== "anime (film)")
-              return false;
+            if (rowType !== "film" && rowType !== "anime (film)") return false;
           } else {
             if (rowType !== filter) return false;
           }
@@ -244,9 +242,19 @@ function renderTables() {
     filteredRows.forEach((row) => {
       const tr = document.createElement("tr");
 
+      const colAVal = row[0] ? row[0].trim().toLowerCase() : "";
+      if (colAVal === "minor") {
+        tr.classList.add("row-minor");
+      } else if (colAVal === "major") {
+        tr.classList.add("row-major");
+      }
+
       if (cfg.title !== -1) {
         const td = document.createElement("td");
         td.className = "col-title";
+        if (colAVal === "major") {
+          td.classList.add("title-major");
+        }
         td.textContent = row[cfg.title] ? row[cfg.title].trim() : "";
         tr.appendChild(td);
       }
