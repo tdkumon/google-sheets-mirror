@@ -1,33 +1,31 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>tdkumon links</title>
 
-    <meta
-      name="description"
-      content="all awesome links of tdkumon"
-    />
+    <meta name="description" content="all awesome links of tdkumon" />
+
     <!--<link rel="icon" type="image/png" href="../media/shinobu.png" />-->
 
     <meta property="og:type" content="website" />
+
     <meta property="og:title" content="tdkumon links" />
-    <meta
-      property="og:description"
-      content="all awesome links of tdkumon"
-    />
-    <meta
-      property="og:image"
-      content="https://tdkumon.com/media/shinobu.png"
-    />
+
+    <meta property="og:description" content="all awesome links of tdkumon" />
+
+    <meta property="og:image" content="https://tdkumon.com/media/shinobu.png" />
 
     <meta name="twitter:card" content="summary" />
+
     <meta name="twitter:title" content="tdkumon links" />
-    <meta
-      name="twitter:description"
-      content="all awesome links of tdkumon"
-    />
+
+    <meta name="twitter:description" content="all awesome links of tdkumon" />
+
     <meta
       name="twitter:image"
       content="https://tdkumon.com/media/shinobu.png"
@@ -36,10 +34,15 @@
     <style>
       :root {
         --bg-color: #1c1c1c;
+
         --text-color: #bdc0c2;
+
         --link-color: #4f93d8;
+
         --code-bg: #a3717126;
+
         --code-color: #e0aeb4;
+
         --heading-color: #ffffff;
       }
 
@@ -49,26 +52,37 @@
 
       body {
         background-color: var(--bg-color);
+
         color: var(--text-color);
+
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
+
         line-height: 1.5;
+
         margin: 0;
+
         padding: 40px 20px;
+
         display: flex;
+
         justify-content: center;
       }
 
       .container {
         width: 100%;
+
         max-width: 1124px;
+
         background-color: #262626;
+
         padding: 20px;
       }
 
       a {
         color: var(--link-color);
+
         text-decoration: none;
       }
 
@@ -83,8 +97,11 @@
       h5,
       h6 {
         color: var(--text-color);
+
         margin-top: 1rem;
+
         margin-bottom: 0.5rem;
+
         font-weight: 700;
       }
 
@@ -94,9 +111,13 @@
 
       code {
         background-color: var(--code-bg);
+
         color: var(--code-color);
+
         padding: 2px 3px;
+
         font-size: 0.85em;
+
         font-family:
           ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo,
           monospace;
@@ -108,21 +129,29 @@
 
       .header-row {
         display: flex;
+
         justify-content: space-between;
+
         align-items: center;
+
         gap: 15px;
+
         margin-bottom: 20px;
+
         flex-wrap: wrap;
       }
 
       .header-left {
         display: flex;
+
         align-items: center;
+
         gap: 15px;
       }
 
       .header-left img {
         width: 100px;
+
         height: 100px;
       }
 
@@ -132,16 +161,23 @@
 
       img {
         max-width: 100%;
+
         height: auto;
       }
 
       .music-player-widget {
         width: 300px;
+
         max-width: 100%;
+
         background-color: #1c1c1c;
+
         border: 1px solid #3a3a3a;
+
         padding: 8px;
+
         border-radius: 6px;
+
         font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
       }
 
@@ -157,36 +193,51 @@
         border-radius: 3px;
       }
 
+      /* Pauses scrolling when hovered */
+      .marquee-wrapper:hover .marquee-text {
+        animation-play-state: paused;
+      }
+
       .marquee-text {
         display: inline-block;
         padding-left: 100%;
         animation: marquee 12s linear infinite;
+        will-change: transform;
       }
 
       @keyframes marquee {
         0% {
-          transform: translate(0, 0);
-        }
-        95% {
-          transform: translate(calc(-100% - 20px), 0);
+          transform: translateX(0);
         }
         100% {
-          transform: translate(calc(-100% - 20px), 0);
+          transform: translateX(-100%);
+        }
+      }
+
+      /* Respects user motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-text {
+          animation: none;
+          padding-left: 0;
         }
       }
 
       .music-player-widget audio {
         width: 100%;
+
         height: 30px;
+
         filter: invert(0.85) hue-rotate(180deg);
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <div class="header-row">
         <div class="header-left">
           <img src="media/shinobu.png" alt="nobu" title="nobu" />
+
           <h4 id="tdk-links">tdk links</h4>
         </div>
 
@@ -194,6 +245,7 @@
           <div class="marquee-wrapper">
             <span class="marquee-text">♫ Yakuza 4 OST Track 6 - Funny</span>
           </div>
+
           <audio
             controls
             loop
@@ -201,6 +253,7 @@
             onloadedmetadata="this.volume = 0.1"
           >
             <source src="media/funny.mp3" type="audio/mpeg" />
+
             Your browser does not support the audio element.
           </audio>
         </div>
@@ -208,42 +261,62 @@
 
       <p>
         <strong>socials</strong> <code>(follow me please)</code><br />
+
         twitter: <a href="http://x.com/tdkumon" target="_blank">x.com/tdkumon</a
         ><br />
+
         twitch:
+
         <a href="http://twitch.tv/tdkumon" target="_blank">twitch.tv/tdkumon</a
         ><br />
+
         youtube:
+
         <a href="http://youtube.com/@tdkumon" target="_blank"
           >youtube.com/@tdkumon</a
         ><br />
+
         discord: @tdkumon
       </p>
 
       <p>
         <strong>anime and games and stuff</strong>
+
         <code>(send friend requests please)</code><br />
+
         anilist:
+
         <a href="http://anilist.co/user/tdkumon" target="_blank"
           >anilist.co/user/tdkumon</a
         >
+
         (more active than mal)<br />
+
         mal:
+
         <a href="http://myanimelist.net/profile/tdkumon" target="_blank"
           >myanimelist.net/profile/tdkumon</a
         ><br />
+
         vndb:
+
         <a href="http://vndb.org/u274677" target="_blank">vndb.org/u274677</a
         ><br />
+
         steam:
+
         <a href="http://steamcommunity.com/id/tdkumon" target="_blank"
           >steamcommunity.com/id/tdkumon</a
         ><br />
+
         letterboxd:
+
         <a href="http://letterboxd.com/tdkumon" target="_blank"
           >letterboxd.com/tdkumon</a
         ><br />
+
         backloggd:
+
         <a href="http://backloggd.com/u/tdkumon" target="_blank"
           >backloggd.com/u/tdkumon</a
         >
@@ -253,12 +326,14 @@
         <span style="color: lightgreen"
           >personal tracking sheet with everything of the above &amp; more</span
         ><br />
-        <a href="/tracking-sheet" target="_blank">tdkumon.com/tracking-sheet</a
-        ><br />
+
+        <a href="/tracking-sheet">tdkumon.com/tracking-sheet</a><br />
+
         <span style="color: lightgreen"
           >daily progress log for everything i read/watch/play</span
         ><br />
-        <a href="/progress-log" target="_blank">tdkumon.com/progress-log</a>
+
+        <a href="/progress-log">tdkumon.com/progress-log</a>
       </p>
 
       <p>
@@ -274,6 +349,7 @@
 
       <p style="margin-bottom: unset">
         professional linktree:
+
         <a href="http://linktr.ee/tdkumon" target="_blank">linktr.ee/tdkumon</a>
       </p>
     </div>
