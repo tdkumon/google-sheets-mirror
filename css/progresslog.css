@@ -5,39 +5,39 @@
 #table-container table,
 body[data-year="2026"] #table-container table,
 body[data-year="2025"] #table-container table {
-  border-collapse: collapse !important;
-  background-color: #16181c !important;
-  border: 1px solid #252932 !important;
+  border-collapse: collapse;
+  background-color: #16181c;
+  border: 1px solid #252932;
 }
 
 #table-container th,
 body[data-year="2026"] #table-container th {
-  background-color: #242832 !important;
-  color: #f0f0f5 !important;
-  border-bottom: 2px solid #3b4760 !important;
-  vertical-align: middle !important;
+  background-color: #242832;
+  color: #f0f0f5;
+  border-bottom: 2px solid #3b4760;
+  vertical-align: middle;
 }
 
 #table-container tr,
 body[data-year="2026"] #table-container tr,
 body[data-year="2025"] #table-container tr {
-  border: none !important;
-  background-color: #16181c !important;
+  border: none;
+  background-color: #16181c;
 }
 
 #table-container td,
 body[data-year="2026"] #table-container td,
 body[data-year="2025"] #table-container td {
-  border-top: none !important;
-  border-bottom: none !important;
-  border-left: 1px solid #252932 !important;
-  border-right: 1px solid #252932 !important;
-  background-color: #16181c !important;
-  color: #e0e0ea !important;
-  vertical-align: middle !important;
-  padding: 6px 16px !important; /* Reduced from 12px to 6px */
+  border-top: none;
+  border-bottom: none;
+  border-left: 1px solid #252932;
+  border-right: 1px solid #252932;
+  background-color: #16181c;
+  color: #e0e0ea;
+  vertical-align: middle;
+  padding: 6px 16px;
   height: 50px;
-  line-height: 1.2; /* Tightens line spacing so 2 lines fit in 50px */
+  line-height: 1.2;
 }
 
 th.col-date,
@@ -50,24 +50,44 @@ td.col-date {
 #table-container td.col-date,
 body[data-year="2026"] #table-container td.col-date,
 body[data-year="2025"] #table-container td.col-date {
-  font-size: 1.1rem !important;
-  color: #badefc !important;
-  border-right: 2px solid #3b4760 !important;
+  font-size: 1.1rem;
+  color: #badefc;
+  border-right: 2px solid #3b4760;
 }
 
 th.col-title,
 td.col-title {
   width: 35%;
-  font-weight: normal !important;
+  font-weight: normal;
 }
 
 .title-bold {
-  font-weight: 700 !important;
+  font-weight: 700;
 }
 
 th.col-meta {
   text-align: center;
   width: 220px;
+  position: relative;
+  overflow: visible;
+}
+
+th.col-meta:hover .comment-popover {
+  display: block;
+  font-family: "Noto Sans", "Noto Sans JP", sans-serif;
+}
+
+#table-container td.col-meta,
+body[data-year="2026"] #table-container td.col-meta {
+  width: 250px;
+  text-align: left;
+  font-size: inherit;
+  padding-left: 4px;
+}
+
+#table-container td.col-extra,
+body[data-year="2026"] #table-container td.col-extra {
+  padding-left: 4px;
 }
 
 th.col-extra,
@@ -76,84 +96,29 @@ td.col-extra {
 }
 
 .kw-green {
-  color: #2ecc71 !important;
+  color: #2ecc71;
 }
 
 .kw-blue {
-  color: #3498db !important;
+  color: #3498db;
 }
 
 .kw-red {
-  color: #ea4335 !important;
-}
-
-td.col-title,
-td.col-extra,
-td.col-meta {
-  white-space: pre-line;
+  color: #ea4335;
 }
 
 #table-container tr.day-start td,
 body[data-year="2026"] #table-container tr.day-start td {
-  border-top: 1px solid #252932 !important;
+  border-top: 1px solid #252932;
 }
 
 #table-container tr.day-entry td,
 body[data-year="2026"] #table-container tr.day-entry td {
-  border-top: 1px dotted #4a5162 !important;
-}
-
-#table-container td.col-meta,
-body[data-year="2026"] #table-container td.col-meta {
-  width: 250px;
-  text-align: left;
-  font-size: inherit !important;
-  padding-left: 4px !important;
-}
-
-#table-container td.col-extra,
-body[data-year="2026"] #table-container td.col-extra {
-  padding-left: 4px !important;
-}
-
-#search-input {
-  font-weight: 700;
-  font-family: "Noto Sans JP", sans-serif;
-  font-size: 16px;
-}
-
-.last-updated-badge {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: #6c757d;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  z-index: 1000;
-}
-
-body[data-year="2026"] .last-updated-badge {
-  background-color: #000000;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  box-shadow: 4px 4px 0px #46bdc6;
-  border-radius: 0px;
-  font-family: "Shippori Mincho", serif;
-  font-weight: 700;
-}
-
-@media (max-width: 900px) {
-  .bottom-right-shinobu {
-    display: none;
-  }
+  border-top: 1px dotted #4a5162;
 }
 
 td.col-title {
-  cursor: default !important;
+  cursor: default;
 }
 
 .title-clickable {
@@ -176,16 +141,19 @@ td.col-title {
 }
 
 #search-input {
-  min-width: 250px !important;
+  min-width: 250px;
   width: 100%;
   box-sizing: border-box;
-  transition: none !important;
+  transition: none;
+  font-weight: 700;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 16px;
 }
 
 .search-wrapper.title-active #search-input {
   width: auto;
   flex: 0 0 auto;
-  transition: none !important;
+  transition: none;
 }
 
 #clear-filter-btn {
@@ -210,116 +178,76 @@ td.col-title {
   display: inline-block;
 }
 
-td.col-extra {
-  position: relative !important;
-  overflow: visible !important;
+/* ==========================================
+   2026 Theme Color Overrides (#46bdc6 -> #ea377a)
+   ========================================== */
+
+body[data-year="2026"] {
+  background-image:
+    linear-gradient(rgba(234, 55, 122, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(234, 55, 122, 0.12) 1px, transparent 1px);
 }
 
-/* Position triangle at exact top-right of the cell */
-.comment-corner-mark {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 10px 10px 0;
-  border-color: transparent #46bdc6 transparent transparent;
-  pointer-events: none;
+body[data-year="2026"] #search-input:focus,
+body[data-year="2026"] #type-filter:focus {
+  border-color: #ea377a;
+  box-shadow: 4px 4px 0px #ea377a;
 }
 
-/* Hover Popover Box */
-.comment-popover {
-  display: none;
-  position: absolute;
-  top: calc(100% + 2px);
-  right: 0;
-  width: 280px;
-  background-color: #1e222a;
-  border: 1px solid #3b4760;
-  box-shadow: 4px 4px 0px #000000;
-  padding: 10px 12px;
-  z-index: 999;
-  color: #e0e0ea;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
-  white-space: normal;
-  word-break: break-word;
-  border-radius: 2px;
+body[data-year="2026"] .section-title {
+  color: #ea377a;
+  border-bottom: 2px solid #ea377a;
+}
+
+body[data-year="2026"] .marquee-2026 {
+  background: #ea377a;
+}
+
+body[data-year="2026"] .header-text h1 {
+  background-color: #ea377a;
+}
+
+body[data-year="2026"] .header-text p {
+  border-left: 4px solid #ea377a;
+}
+
+body[data-year="2026"] .header-img {
+  box-shadow: 6px 6px 0px #ea377a;
+}
+
+body[data-year="2026"] .header-img:hover {
+  box-shadow: 8px 8px 0px #ea377a;
+}
+
+body[data-year="2026"] a {
+  border-left: 3px solid #ea377a;
+}
+
+body[data-year="2026"] a:hover {
+  background-color: #ea377a;
+}
+
+body[data-year="2026"] .tab-btn.active {
+  background: #ea377a;
+}
+
+body[data-year="2026"] th {
+  background-color: #ea377a;
+}
+
+body[data-year="2026"] .comment-corner-mark {
+  border-color: transparent #ea377a transparent transparent;
 }
 
 body[data-year="2026"] .comment-popover {
-  background-color: #121418;
-  border: 2px solid #ffffff;
-  box-shadow: 4px 4px 0px #46bdc6;
+  box-shadow: 4px 4px 0px #ea377a;
 }
 
-td.col-extra:hover .comment-popover {
-  display: block;
+body[data-year="2026"] .comment-popover-header,
+body[data-year="2026"] .comment-expand-btn {
+  color: #ea377a;
 }
 
-.comment-popover-header {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #46bdc6;
-  margin-bottom: 6px;
-  border-bottom: 1px solid #252932;
-  padding-bottom: 4px;
-}
-
-.comment-popover-body {
-  color: #f0f0f5;
-  font-size: 13px;
-  white-space: pre-wrap;
-}
-
-.comment-popover-body.is-truncated {
-  max-height: 80px;
-  overflow: hidden;
-  position: relative;
-}
-
-.comment-popover-body.is-truncated::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 24px;
-  background: linear-gradient(to bottom, transparent, #1e222a);
-}
-
-body[data-year="2026"] .comment-popover-body.is-truncated::after {
-  background: linear-gradient(to bottom, transparent, #121418);
-}
-
-.comment-expand-btn {
-  margin-top: 6px;
-  background: none;
-  border: none;
-  color: #46bdc6;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.comment-expand-btn:hover {
-  color: #ffffff;
-}
-
-/* Allow corner mark and popover positioning on progress header */
-th.col-meta {
-  position: relative !important;
-  overflow: visible !important;
-}
-
-/* Show comment popover when hovering over progress header */
-th.col-meta:hover .comment-popover {
-  display: block;
-  font-family: "Noto Sans", "Noto Sans JP", sans-serif;
+body[data-year="2026"] .last-updated-badge {
+  box-shadow: 4px 4px 0px #ea377a;
 }
