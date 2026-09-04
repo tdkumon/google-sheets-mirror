@@ -1,48 +1,30 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <title>tdkumon links</title>
-
     <meta name="description" content="all awesome links of tdkumon" />
 
     <!--<link rel="icon" type="image/png" href="../media/shinobu.png" />-->
 
     <meta property="og:type" content="website" />
-
     <meta property="og:title" content="tdkumon links" />
-
     <meta property="og:description" content="all awesome links of tdkumon" />
-
     <meta property="og:image" content="https://tdkumon.com/media/shinobu.png" />
 
     <meta name="twitter:card" content="summary" />
-
     <meta name="twitter:title" content="tdkumon links" />
-
     <meta name="twitter:description" content="all awesome links of tdkumon" />
-
-    <meta
-      name="twitter:image"
-      content="https://tdkumon.com/media/shinobu.png"
-    />
+    <meta name="twitter:image" content="https://tdkumon.com/media/shinobu.png" />
 
     <style>
       :root {
         --bg-color: #1c1c1c;
-
         --text-color: #bdc0c2;
-
         --link-color: #4f93d8;
-
         --code-bg: #a3717126;
-
         --code-color: #e0aeb4;
-
         --heading-color: #ffffff;
       }
 
@@ -52,37 +34,28 @@
 
       body {
         background-color: var(--bg-color);
-
         color: var(--text-color);
-
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
-
         line-height: 1.5;
-
         margin: 0;
-
         padding: 40px 20px;
-
         display: flex;
-
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
       }
 
       .container {
         width: 100%;
-
         max-width: 1124px;
-
         background-color: #262626;
-
         padding: 20px;
       }
 
       a {
         color: var(--link-color);
-
         text-decoration: none;
       }
 
@@ -90,34 +63,18 @@
         text-decoration: underline;
       }
 
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
+      h1, h2, h3, h4, h5, h6 {
         color: var(--text-color);
-
         margin-top: 1rem;
-
         margin-bottom: 0.5rem;
-
         font-weight: 700;
-      }
-
-      h4 {
-        font-size: 1.5rem;
       }
 
       code {
         background-color: var(--code-bg);
-
         color: var(--code-color);
-
         padding: 2px 3px;
-
         font-size: 0.85em;
-
         font-family:
           ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo,
           monospace;
@@ -129,55 +86,41 @@
 
       .header-row {
         display: flex;
-
         justify-content: space-between;
-
         align-items: center;
-
         gap: 15px;
-
         margin-bottom: 20px;
-
         flex-wrap: wrap;
       }
 
       .header-left {
         display: flex;
-
         align-items: center;
-
         gap: 15px;
       }
 
       .header-left img {
         width: 100px;
-
         height: 100px;
       }
 
-      .header-left h4 {
+      .header-left h1 {
         margin: 0;
+        font-size: 1.5rem;
       }
 
       img {
         max-width: 100%;
-
         height: auto;
       }
 
       .music-player-widget {
         width: 300px;
-
         max-width: 100%;
-
         background-color: #1c1c1c;
-
         border: 1px solid #3a3a3a;
-
         padding: 8px;
-
         border-radius: 6px;
-
         font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
       }
 
@@ -224,10 +167,25 @@
 
       .music-player-widget audio {
         width: 100%;
-
         height: 30px;
-
         filter: invert(0.85) hue-rotate(180deg);
+      }
+
+      .shuffle-character {
+        position: fixed;
+        bottom: 0;
+        right: 0px;
+        max-height: 500px;
+        width: auto;
+        max-width: 400px;
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      @media (max-width: 1200px) {
+        .shuffle-character {
+          opacity: 0;
+        }
       }
     </style>
   </head>
@@ -237,8 +195,7 @@
       <div class="header-row">
         <div class="header-left">
           <img src="media/shinobu.png" alt="nobu" title="nobu" />
-
-          <h4 id="tdk-links">tdk links</h4>
+          <h1 id="tdk-links">tdk links</h1>
         </div>
 
         <div class="music-player-widget">
@@ -253,7 +210,6 @@
             onloadedmetadata="this.volume = 0.1"
           >
             <source src="media/funny.mp3" type="audio/mpeg" />
-
             Your browser does not support the audio element.
           </audio>
         </div>
@@ -261,78 +217,27 @@
 
       <p>
         <strong>socials</strong> <code>(follow me please)</code><br />
-
-        twitter: <a href="http://x.com/tdkumon" target="_blank">x.com/tdkumon</a
-        ><br />
-
-        twitch:
-
-        <a href="http://twitch.tv/tdkumon" target="_blank">twitch.tv/tdkumon</a
-        ><br />
-
-        youtube:
-
-        <a href="http://youtube.com/@tdkumon" target="_blank"
-          >youtube.com/@tdkumon</a
-        ><br />
-
+        twitter: <a href="https://x.com/tdkumon" target="_blank">x.com/tdkumon</a><br />
+        twitch: <a href="https://twitch.tv/tdkumon" target="_blank">twitch.tv/tdkumon</a><br />
+        youtube: <a href="https://youtube.com/@tdkumon" target="_blank">youtube.com/@tdkumon</a><br />
         discord: @tdkumon
       </p>
 
       <p>
         <strong>anime and games and stuff</strong>
-
         <code>(send friend requests please)</code><br />
-
-        anilist:
-
-        <a href="http://anilist.co/user/tdkumon" target="_blank"
-          >anilist.co/user/tdkumon</a
-        >
-
-        (more active than mal)<br />
-
-        mal:
-
-        <a href="http://myanimelist.net/profile/tdkumon" target="_blank"
-          >myanimelist.net/profile/tdkumon</a
-        ><br />
-
-        vndb:
-
-        <a href="http://vndb.org/u274677" target="_blank">vndb.org/u274677</a
-        ><br />
-
-        steam:
-
-        <a href="http://steamcommunity.com/id/tdkumon" target="_blank"
-          >steamcommunity.com/id/tdkumon</a
-        ><br />
-
-        letterboxd:
-
-        <a href="http://letterboxd.com/tdkumon" target="_blank"
-          >letterboxd.com/tdkumon</a
-        ><br />
-
-        backloggd:
-
-        <a href="http://backloggd.com/u/tdkumon" target="_blank"
-          >backloggd.com/u/tdkumon</a
-        >
+        anilist: <a href="https://anilist.co/user/tdkumon" target="_blank">anilist.co/user/tdkumon</a> (more active than mal)<br />
+        mal: <a href="https://myanimelist.net/profile/tdkumon" target="_blank">myanimelist.net/profile/tdkumon</a><br />
+        vndb: <a href="https://vndb.org/u274677" target="_blank">vndb.org/u274677</a><br />
+        steam: <a href="https://steamcommunity.com/id/tdkumon" target="_blank">steamcommunity.com/id/tdkumon</a><br />
+        letterboxd: <a href="https://letterboxd.com/tdkumon" target="_blank">letterboxd.com/tdkumon</a><br />
+        backloggd: <a href="https://backloggd.com/u/tdkumon" target="_blank">backloggd.com/u/tdkumon</a>
       </p>
 
       <p>
-        <span style="color: lightgreen"
-          >personal tracking sheet with everything of the above &amp; more</span
-        ><br />
-
+        <span style="color: lightgreen">personal tracking sheet with everything of the above &amp; more</span><br />
         <a href="/tracking-sheet">tdkumon.com/tracking-sheet</a><br />
-
-        <span style="color: lightgreen"
-          >daily progress log for everything i read/watch/play</span
-        ><br />
-
+        <span style="color: lightgreen">daily progress log for everything i read/watch/play</span><br />
         <a href="/progress-log">tdkumon.com/progress-log</a>
       </p>
 
@@ -349,9 +254,145 @@
 
       <p style="margin-bottom: unset">
         professional linktree:
-
-        <a href="http://linktr.ee/tdkumon" target="_blank">linktr.ee/tdkumon</a>
+        <a href="https://linktr.ee/tdkumon" target="_blank">linktr.ee/tdkumon</a>
       </p>
     </div>
+
+    <div
+      class="container"
+      style="
+        background: unset;
+        padding-top: unset;
+        margin: unset;
+        font-family: &quot;MS PGothic&quot;, &quot;MS Gothic&quot;, sans-serif;
+      "
+    >
+      <p style="margin: unset" id="last-completed">last completed:</p>
+      <p style="margin: unset; display: none" id="currently-active"></p>
+    </div>
+
+    <img
+      id="shuffle-img"
+      class="shuffle-character"
+      style="display: none"
+      alt=""
+    />
+
+    <script>
+      async function loadRandomCharacter() {
+        try {
+          const response = await fetch("media/shuffle/images.json");
+          if (!response.ok) return;
+
+          const images = await response.json();
+          if (!Array.isArray(images) || images.length === 0) return;
+
+          const randomImage = images[Math.floor(Math.random() * images.length)];
+          const imgElem = document.getElementById("shuffle-img");
+          if (imgElem) {
+            imgElem.src = `media/shuffle/${randomImage}`;
+            imgElem.style.display = "block";
+          }
+        } catch (error) {
+          console.error("Failed to load random character image:", error);
+        }
+      }
+
+      async function fetchTrackingData() {
+        try {
+          const currentYear = new Date().getFullYear();
+          const response = await fetch(`trackingsheet-${currentYear}.csv`);
+          if (!response.ok) return;
+
+          const text = await response.text();
+          const lines = text.split(/\r?\n/);
+
+          let startedIndex = -1;
+          let droppedIndex = lines.length;
+
+          for (let i = 0; i < lines.length; i++) {
+            const cols = parseCSVLine(lines[i]);
+            const col2 = cols[2] ? cols[2].toLowerCase() : "";
+            if (col2.includes("started but not finished")) {
+              startedIndex = i;
+            } else if (
+              startedIndex !== -1 &&
+              col2.includes("(probably) dropped")
+            ) {
+              droppedIndex = i;
+              break;
+            }
+          }
+
+          // Search backwards for the last completed entry before "started but not finished"
+          let cutoffIndex = startedIndex !== -1 ? startedIndex : lines.length;
+          let lastTitle = "";
+          for (let i = cutoffIndex - 1; i >= 0; i--) {
+            const cols = parseCSVLine(lines[i]);
+            const title = cols[2] ? cols[2].replace(/^"|"$/g, "").trim() : "";
+            if (
+              title &&
+              !title.toLowerCase().includes("started but not finished")
+            ) {
+              lastTitle = title;
+              break;
+            }
+          }
+
+          if (lastTitle) {
+            document.getElementById("last-completed").textContent =
+              `last completed: ${lastTitle}`;
+          }
+
+          // Search inside "started but not finished" for titles ending with '!'
+          const activeTitles = [];
+          if (startedIndex !== -1) {
+            for (let i = startedIndex + 1; i < droppedIndex; i++) {
+              const cols = parseCSVLine(lines[i]);
+              let title = cols[2] ? cols[2].replace(/^"|"$/g, "").trim() : "";
+              if (title.endsWith("!")) {
+                const cleanTitle = title.slice(0, -1).trim();
+                if (cleanTitle) {
+                  activeTitles.push(cleanTitle);
+                }
+              }
+            }
+          }
+
+          const activeElem = document.getElementById("currently-active");
+          if (activeTitles.length > 0) {
+            activeElem.textContent = `in progress: ${activeTitles.join(", ")}`;
+            activeElem.style.display = "block";
+          } else {
+            document.getElementById("last-completed").style.marginBottom = "0";
+            activeElem.style.display = "none";
+          }
+        } catch (error) {
+          console.error("Error loading tracking sheet:", error);
+        }
+      }
+
+      function parseCSVLine(text) {
+        const result = [];
+        let current = "";
+        let inQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === "," && !inQuotes) {
+            result.push(current.trim());
+            current = "";
+          } else {
+            current += char;
+          }
+        }
+        result.push(current.trim());
+        return result;
+      }
+
+      loadRandomCharacter();
+      fetchTrackingData();
+    </script>
   </body>
 </html>
