@@ -194,7 +194,7 @@ td.col-extra {
 .comment-popover {
   display: none;
   position: absolute;
-  top: calc(100% + 2px);
+  top: calc(100% + 0px);
   right: 0;
   width: 280px;
   background-color: #ffffff;
