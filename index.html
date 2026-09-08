@@ -150,7 +150,6 @@
         border-radius: 3px;
       }
 
-      /* Pauses scrolling when hovered */
       .marquee-wrapper:hover .marquee-text {
         animation-play-state: paused;
       }
@@ -387,7 +386,6 @@
           const text = await response.text();
           const rows = parseCSV(text);
 
-          // Dynamically detect column index for 'title' header (defaults to column 2)
           let titleCol = 2;
           for (let i = 0; i < rows.length; i++) {
             const idx = rows[i].findIndex(
@@ -417,21 +415,22 @@
             }
           }
 
-          // Search backwards for the last completed entry before "started but not finished"
           let cutoffIndex = startedIndex !== -1 ? startedIndex : rows.length;
           let lastTitle = "";
 
           for (let i = cutoffIndex - 1; i >= 0; i--) {
             let title = rows[i][titleCol] ? rows[i][titleCol].trim() : "";
-            // Replace embedded newlines or extra whitespace with single spaces
             title = title.replace(/\s+/g, " ");
+
+            let colA = rows[i][0] ? rows[i][0].trim().toLowerCase() : "";
 
             if (
               title &&
               title.toLowerCase() !== "title" &&
               !title.toLowerCase().includes("started but not finished") &&
               !title.toLowerCase().includes("tracking sheet") &&
-              !title.toLowerCase().includes("progress log")
+              !title.toLowerCase().includes("progress log") &&
+              !colA.includes("minor")
             ) {
               lastTitle = title;
               break;
@@ -471,7 +470,6 @@
         }
       }
 
-      // Full CSV parser supporting quotes, escaped quotes, and internal newlines
       function parseCSV(text) {
         const rows = [];
         let currentRow = [];
