@@ -37,7 +37,7 @@ const COLUMNS = [
   { key: "finish", label: "finish date", className: "col-date" },
   { key: "extra", label: "extra", className: "col-extra" },
   { key: "type", label: "type", className: "col-meta" },
-  { key: "daysSpent", label: "days spent", className: "col-meta" },
+  { key: "daysSpent", label: "days taken", className: "col-meta" },
 ];
 
 function escapeHTML(str) {
