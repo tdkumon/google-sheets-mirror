@@ -175,7 +175,11 @@ td.col-meta {
 
 td.col-title,
 td.col-extra {
-  white-space: pre-line;
+  white-space: pre-wrap;
+}
+
+td.col-extra {
+  padding-left: 4px;
 }
 
 /* Tooltip & Popovers */
