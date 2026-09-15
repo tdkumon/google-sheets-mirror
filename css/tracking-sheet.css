@@ -287,6 +287,7 @@ td.col-extra:hover .comment-popover {
 .header-text {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .header-text h1 {

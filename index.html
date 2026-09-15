@@ -213,7 +213,12 @@
     <div class="container">
       <div class="header-row">
         <div class="header-left">
-          <img src="media/shinobu.png" alt="nobu" title="nobu" />
+          <img
+            id="avatar-img"
+            src="media/shinobu.png"
+            alt="nobu"
+            title="nobu"
+          />
           <h1 id="tdk-links">tdk links</h1>
         </div>
 
@@ -515,6 +520,27 @@
         return rows;
       }
 
+      async function loadRandomAvatar() {
+        const avatars = [
+          "shinobu.png",
+          "renge.png",
+          "mspaintoc.png",
+          "rikapacifier.png",
+          "commissionocpfp.png",
+          "sakuyaforsen.jpg",
+          "sakuyafumo.jpg",
+          "umarutdk.jpg",
+        ];
+
+        const randomAvatar =
+          avatars[Math.floor(Math.random() * avatars.length)];
+        const avatarElem = document.getElementById("avatar-img");
+        if (avatarElem) {
+          avatarElem.src = `media/${randomAvatar}`;
+        }
+      }
+
+      loadRandomAvatar();
       loadRandomCharacter();
       fetchTrackingData();
     </script>
