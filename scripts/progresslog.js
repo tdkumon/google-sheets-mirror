@@ -57,7 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function cleanTitle(fullTitle) {
   let cleaned = fullTitle
-    .replace(/^.*?\b(finished|played|read|watched|started|dropped)\b\s*/i, "")
+    .replace(
+      /^.*?\b(finished|played|read|watched|started|dropped|restarted)\b\s*/i,
+      "",
+    )
     .trim();
 
   const allowedMediaRegex = /\b(Anime|Manga|Light Novel|VN|Book)\b/i;
@@ -138,7 +141,7 @@ function renderProgressLog(rows) {
     const col2 = (row[2] || "").trim();
     const col3 = (row[3] || "").trim();
     const col4 = (row[4] || "").trim();
-    const col5 = (row[5] || "").trim(); // Column F
+    const col5 = (row[5] || "").trim();
 
     if (col1.match(/^[A-Za-z]+\s+\d{4}$/)) {
       currentMonthTitle = col1;
@@ -177,7 +180,7 @@ function renderProgressLog(rows) {
         title: col2,
         progress: col3,
         note: col4,
-        comment: col5, // Stored Column F text
+        comment: col5,
       });
     }
   });
@@ -356,16 +359,15 @@ function handleSearch() {
 
 function formatTitle(title) {
   const escaped = escapeHTML(title);
-  const hasKeyword = /\b(finished|played|read|watched|started|dropped)\b/i.test(
-    title,
-  );
+  const hasKeyword =
+    /\b(finished|played|read|watched|started|dropped|restarted)\b/i.test(title);
 
   const formatted = escaped
     .replace(
       /\b(finished|played|read|watched)\b/gi,
       '<span class="kw-green">$1</span>',
     )
-    .replace(/\b(started)\b/gi, '<span class="kw-blue">$1</span>')
+    .replace(/\b(started|restarted)\b/gi, '<span class="kw-blue">$1</span>')
     .replace(/\b(dropped)\b/gi, '<span class="kw-red">$1</span>');
 
   const content = hasKeyword
@@ -382,7 +384,6 @@ function escapeHTML(str) {
     .replace(/"/g, "&quot;");
 }
 
-// Expose functions globally for inline HTML handlers
 window.clearFilter = clearFilter;
 window.handleManualInput = handleManualInput;
 window.toggleCommentExpand = toggleCommentExpand;
