@@ -355,7 +355,6 @@ td.col-extra:hover .comment-popover {
   }
 }
 
-/* Row Utilities */
 tr.row-minor td {
   height: auto !important;
   font-size: 12px !important;
@@ -366,7 +365,11 @@ td.title-major {
   font-size: 20px !important;
   font-weight: bold !important;
   color: #ffffff !important;
-  background-color: #ff0000 !important;
+}
+
+body[data-year="2025"] td.title-major,
+body[data-year="2024"] td.title-major {
+  color: #000000 !important;
 }
 
 body[data-year="2024"] td.col-meta {
