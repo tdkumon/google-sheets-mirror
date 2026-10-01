@@ -166,12 +166,12 @@ td.col-extra {
   width: auto;
   position: relative !important;
   overflow: visible !important;
-  min-width: 700px;
+  min-width: 500px;
 }
 
 th.col-meta,
 td.col-meta {
-  width: 125px;
+  min-width: 125px;
   text-align: center;
 }
 
