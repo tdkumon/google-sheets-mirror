@@ -151,6 +151,7 @@ tr:last-child {
 th.col-title,
 td.col-title {
   width: 35%;
+  min-width: 400px;
 }
 
 th.col-date,
@@ -165,6 +166,7 @@ td.col-extra {
   width: auto;
   position: relative !important;
   overflow: visible !important;
+  min-width: 700px;
 }
 
 th.col-meta,
@@ -200,7 +202,7 @@ td.col-extra {
   position: absolute;
   top: calc(100% + 0px);
   right: 0;
-  width: 280px;
+  width: 400px;
   background-color: #ffffff;
   border: 1px solid #ced4da;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -237,7 +239,7 @@ td.col-extra:hover .comment-popover {
 }
 
 .comment-popover-body.is-truncated {
-  max-height: 80px;
+  max-height: 200px;
   overflow: hidden;
   position: relative;
 }
