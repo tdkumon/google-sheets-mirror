@@ -239,7 +239,7 @@ td.col-extra:hover .comment-popover {
 }
 
 .comment-popover-body.is-truncated {
-  max-height: 200px;
+  max-height: 140px;
   overflow: hidden;
   position: relative;
 }
@@ -252,6 +252,14 @@ td.col-extra:hover .comment-popover {
   right: 0;
   height: 24px;
   background: linear-gradient(to bottom, transparent, #ffffff);
+}
+
+.comment-popover-body.is-expanded {
+  max-height: 280px;
+  overflow-y: auto;
+  position: relative;
+  padding-right: 12px;
+  scrollbar-gutter: stable;
 }
 
 .comment-expand-btn {
