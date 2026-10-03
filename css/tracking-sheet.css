@@ -171,7 +171,7 @@ td.col-extra {
 
 th.col-meta,
 td.col-meta {
-  min-width: 125px;
+  width: 125px;
   text-align: center;
 }
 
@@ -236,12 +236,14 @@ td.col-extra:hover .comment-popover {
   color: #333333;
   font-size: 13px;
   white-space: pre-wrap;
+  position: relative;
+  padding-right: 12px;
+  scrollbar-gutter: stable;
 }
 
 .comment-popover-body.is-truncated {
   max-height: 140px;
   overflow: hidden;
-  position: relative;
 }
 
 .comment-popover-body.is-truncated::after {
@@ -257,9 +259,6 @@ td.col-extra:hover .comment-popover {
 .comment-popover-body.is-expanded {
   max-height: 280px;
   overflow-y: auto;
-  position: relative;
-  padding-right: 12px;
-  scrollbar-gutter: stable;
 }
 
 .comment-expand-btn {

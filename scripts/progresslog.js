@@ -1,4 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const tableContainer = document.getElementById("table-container");
+
+  // Reset comment scroll position on hover to fix F5 / scroll persistence quirks
+  if (tableContainer) {
+    tableContainer.addEventListener("mouseover", (e) => {
+      const cell = e.target.closest("td.col-extra, th.col-meta");
+      if (!cell) return;
+      const popoverBody = cell.querySelector(
+        ".comment-popover-body.is-truncated",
+      );
+      if (popoverBody) {
+        popoverBody.scrollTop = 0;
+      }
+    });
+  }
+
+  // Ensure comment scroll positions reset before page reload
+  window.addEventListener("beforeunload", () => {
+    document.querySelectorAll(".comment-popover-body").forEach((body) => {
+      body.scrollTop = 0;
+    });
+  });
+
   const searchInput = document.getElementById("search-input");
   const clearBtn = document.getElementById("clear-filter-btn");
 
@@ -259,9 +282,12 @@ function toggleCommentExpand(btn, event) {
   const body = btn.previousElementSibling;
   if (body.classList.contains("is-truncated")) {
     body.classList.remove("is-truncated");
+    body.classList.add("is-expanded");
     btn.textContent = "Show less";
   } else {
+    body.classList.remove("is-expanded");
     body.classList.add("is-truncated");
+    body.scrollTop = 0;
     btn.textContent = "Show more";
   }
 }
