@@ -166,12 +166,12 @@ td.col-extra {
   width: auto;
   position: relative !important;
   overflow: visible !important;
-  min-width: 500px;
+  min-width: 700px;
 }
 
 th.col-meta,
 td.col-meta {
-  width: 125px;
+  min-width: 125px;
   text-align: center;
 }
 
@@ -358,8 +358,34 @@ td.col-extra:hover .comment-popover {
   pointer-events: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1800px) {
   .bottom-right-shinobu {
+    display: none;
+  }
+}
+
+@media (max-width: 1550px) {
+  th.col-extra,
+  td.col-extra {
+    display: none;
+  }
+  th.col-meta,
+  td.col-meta {
+    width: 125px;
+  }
+  .disclaimer_extra {
+    display: none;
+  }
+  .disclaimer_mobile {
+    display: block;
+  }
+}
+
+@media (min-width: 1551px) {
+  .disclaimer_extra {
+    display: block;
+  }
+  .disclaimer_mobile {
     display: none;
   }
 }

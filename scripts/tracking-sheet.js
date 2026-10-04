@@ -39,11 +39,11 @@ const YEAR_CONFIGS = {
 
 const COLUMNS = [
   { key: "title", label: "title", className: "col-title" },
+  { key: "type", label: "type", className: "col-meta" },
   { key: "start", label: "start date", className: "col-date" },
   { key: "finish", label: "finish date", className: "col-date" },
-  { key: "extra", label: "extra", className: "col-extra" },
-  { key: "type", label: "type", className: "col-meta" },
   { key: "daysSpent", label: "days taken", className: "col-meta" },
+  { key: "extra", label: "extra", className: "col-extra" },
 ];
 
 function escapeHTML(str) {
@@ -268,6 +268,13 @@ function renderTables() {
         tr.appendChild(td);
       }
 
+      if (cfg.type !== -1) {
+        const td = document.createElement("td");
+        td.className = "col-meta";
+        td.textContent = row[cfg.type] ? row[cfg.type].trim() : "";
+        tr.appendChild(td);
+      }
+
       if (cfg.start !== -1) {
         const td = document.createElement("td");
         td.className = "col-date";
@@ -283,6 +290,13 @@ function renderTables() {
         tr.appendChild(td);
       }
 
+      if (cfg.daysSpent !== -1) {
+        const td = document.createElement("td");
+        td.className = "col-meta";
+        td.textContent = row[cfg.daysSpent] ? row[cfg.daysSpent].trim() : "";
+        tr.appendChild(td);
+      }
+
       if (cfg.extra !== -1) {
         const td = document.createElement("td");
         td.className = "col-extra";
@@ -295,20 +309,6 @@ function renderTables() {
         } else {
           td.textContent = noteVal;
         }
-        tr.appendChild(td);
-      }
-
-      if (cfg.type !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-meta";
-        td.textContent = row[cfg.type] ? row[cfg.type].trim() : "";
-        tr.appendChild(td);
-      }
-
-      if (cfg.daysSpent !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-meta";
-        td.textContent = row[cfg.daysSpent] ? row[cfg.daysSpent].trim() : "";
         tr.appendChild(td);
       }
 
