@@ -255,3 +255,42 @@ body[data-year="2026"] .comment-expand-btn {
 body[data-year="2026"] .last-updated-badge {
   box-shadow: 4px 4px 0px #ea377a;
 }
+
+@media (min-width: 1400px) {
+  th.col-extra,
+  td.col-extra {
+    display: table-cell;
+  }
+  th.col-meta,
+  td.col-meta {
+    min-width: 150px;
+    width: 12%;
+  }
+
+  th.col-date,
+  td.col-date {
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 1399px) {
+  th.col-extra,
+  td.col-extra {
+    display: none;
+  }
+  th.col-meta,
+  td.col-meta {
+    width: 12%;
+  }
+
+  th.col-date,
+  td.col-date {
+    width: 5%;
+  }
+}
+
+@media (min-width: 1400px) {
+  .disclaimer_mobile {
+    display: none;
+  }
+}

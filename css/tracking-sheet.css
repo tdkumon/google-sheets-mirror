@@ -364,7 +364,7 @@ td.col-extra:hover .comment-popover {
   }
 }
 
-@media (max-width: 1550px) {
+@media (max-width: 1650px) {
   th.col-extra,
   td.col-extra {
     display: none;
@@ -381,7 +381,7 @@ td.col-extra:hover .comment-popover {
   }
 }
 
-@media (min-width: 1551px) {
+@media (min-width: 1651px) {
   .disclaimer_extra {
     display: block;
   }
