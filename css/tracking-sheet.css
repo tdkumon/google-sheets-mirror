@@ -1,3 +1,102 @@
+/* comic-neue-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Comic Neue";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/comic-neue-v9-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* comic-neue-italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Comic Neue";
+  font-style: italic;
+  font-weight: 400;
+  src: url("../fonts/comic-neue-v9-latin-italic.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* comic-neue-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Comic Neue";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/comic-neue-v9-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* noto-sans-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/noto-sans-v42-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* noto-sans-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Noto Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/noto-sans-v42-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* noto-sans-jp-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Noto Sans JP";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/noto-sans-jp-v57-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* noto-sans-jp-900 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Noto Sans JP";
+  font-style: normal;
+  font-weight: 900;
+  src: url("../fonts/noto-sans-jp-v57-latin-900.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* roboto-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/roboto-v51-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* roboto-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/roboto-v51-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* shippori-mincho-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/shippori-mincho-v17-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* shippori-mincho-800 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Shippori Mincho";
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/shippori-mincho-v17-latin-800.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
 *,
 *::before,
 *::after {
@@ -164,8 +263,8 @@ td.col-date {
 th.col-extra,
 td.col-extra {
   width: auto;
-  position: relative !important;
-  overflow: visible !important;
+  position: relative;
+  overflow: visible;
   min-width: 700px;
 }
 
@@ -222,6 +321,9 @@ td.col-extra:hover .comment-popover {
 }
 
 .comment-popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -230,6 +332,118 @@ td.col-extra:hover .comment-popover {
   margin-bottom: 6px;
   border-bottom: 1px solid #dee2e6;
   padding-bottom: 4px;
+}
+
+.comment-fullscreen-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: inherit;
+  padding: 0;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.comment-fullscreen-btn:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Comment Modal Overlay */
+.comment-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.comment-modal-overlay.is-active {
+  display: flex;
+}
+
+.comment-modal-box {
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  border-radius: 4px;
+  position: relative;
+}
+
+.comment-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #0d6efd;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 6px;
+}
+
+.comment-modal-body {
+  color: #333333;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  max-height: calc(80vh - 70px);
+}
+
+.comment-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: inherit;
+  font-weight: bold;
+  padding: 0;
+}
+
+/* Modal Theme Overrides */
+body[data-year="2025"] .comment-modal-box {
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  color: #000000;
+  box-shadow: 6px 6px 0px #000000;
+  border-radius: 0px;
+}
+body[data-year="2025"] .comment-modal-header {
+  color: #30714f;
+  border-bottom: 1px solid #ddc26c;
+}
+body[data-year="2025"] .comment-modal-body {
+  color: #000000;
+}
+
+body[data-year="2026"] .comment-modal-box {
+  background-color: #121418;
+  border: 2px solid #ffffff;
+  box-shadow: 6px 6px 0px #46bdc6;
+  color: #e0e0ea;
+  border-radius: 0px;
+}
+body[data-year="2026"] .comment-modal-header {
+  color: #46bdc6;
+  border-bottom: 1px solid #252932;
+}
+body[data-year="2026"] .comment-modal-body {
+  color: #f0f0f5;
 }
 
 .comment-popover-body {
@@ -391,19 +605,22 @@ td.col-extra:hover .comment-popover {
 }
 
 tr.row-minor td {
-  height: auto !important;
-  font-size: 12px !important;
+  height: auto;
+  font-size: 12px;
   color: #888888 !important;
 }
 
 td.title-major {
-  font-weight: bold !important;
-  color: #ffffff !important;
+  font-weight: bold;
+}
+
+body[data-year="2026"] td.title-major {
+  color: #ffffff;
 }
 
 body[data-year="2025"] td.title-major,
 body[data-year="2024"] td.title-major {
-  color: #000000 !important;
+  color: #000000;
 }
 
 body[data-year="2024"] td.col-meta {

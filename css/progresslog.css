@@ -2,32 +2,25 @@
   width: 100%;
 }
 
-#table-container table,
-body[data-year="2026"] #table-container table,
-body[data-year="2025"] #table-container table {
+#table-container table {
   border-collapse: collapse;
   background-color: #16181c;
   border: 1px solid #252932;
 }
 
-#table-container th,
-body[data-year="2026"] #table-container th {
+#table-container th {
   background-color: #242832;
   color: #f0f0f5;
   border-bottom: 2px solid #3b4760;
   vertical-align: middle;
 }
 
-#table-container tr,
-body[data-year="2026"] #table-container tr,
-body[data-year="2025"] #table-container tr {
+#table-container tr {
   border: none;
   background-color: #16181c;
 }
 
-#table-container td,
-body[data-year="2026"] #table-container td,
-body[data-year="2025"] #table-container td {
+#table-container td {
   border-top: none;
   border-bottom: none;
   border-left: 1px solid #252932;
@@ -47,9 +40,7 @@ td.col-date {
   font-weight: 700;
 }
 
-#table-container td.col-date,
-body[data-year="2026"] #table-container td.col-date,
-body[data-year="2025"] #table-container td.col-date {
+#table-container td.col-date {
   font-size: 1.1rem;
   color: #badefc;
   border-right: 2px solid #3b4760;
@@ -81,16 +72,14 @@ td.col-meta {
   white-space: pre-wrap;
 }
 
-#table-container td.col-meta,
-body[data-year="2026"] #table-container td.col-meta {
+#table-container td.col-meta {
   width: 250px;
   text-align: left;
   font-size: inherit;
   padding-left: 4px;
 }
 
-#table-container td.col-extra,
-body[data-year="2026"] #table-container td.col-extra {
+#table-container td.col-extra {
   padding-left: 4px;
 }
 
@@ -111,13 +100,11 @@ td.col-extra {
   color: #ea4335;
 }
 
-#table-container tr.day-start td,
-body[data-year="2026"] #table-container tr.day-start td {
+#table-container tr.day-start td {
   border-top: 1px solid #252932;
 }
 
-#table-container tr.day-entry td,
-body[data-year="2026"] #table-container tr.day-entry td {
+#table-container tr.day-entry td {
   border-top: 1px dotted #4a5162;
 }
 
@@ -293,4 +280,11 @@ body[data-year="2026"] .last-updated-badge {
   .disclaimer_mobile {
     display: none;
   }
+}
+
+body[data-year="2026"] .comment-modal-box {
+  box-shadow: 6px 6px 0px #ea377a;
+}
+body[data-year="2026"] .comment-modal-header {
+  color: #ea377a;
 }

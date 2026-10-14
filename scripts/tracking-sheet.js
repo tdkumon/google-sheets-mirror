@@ -63,7 +63,7 @@ function renderNoteCell(note, comment) {
   const escapedComment = escapeHTML(comment);
   const isLong = comment.length > 150 || comment.split("\n").length > 3;
 
-  return `${escapedNote}<div class="comment-corner-mark"></div><div class="comment-popover"><div class="comment-popover-header">Comment</div><div class="comment-popover-body ${isLong ? "is-truncated" : ""}">${escapedComment}</div>${isLong ? `<button type="button" class="comment-expand-btn" onclick="toggleCommentExpand(this, event)">Show more</button>` : ""}</div>`;
+  return `${escapedNote}<div class="comment-corner-mark"></div><div class="comment-popover"><div class="comment-popover-header"><span>Comment</span><button type="button" class="comment-fullscreen-btn" onclick="openCommentModal(this, event)">⤢</button></div><div class="comment-popover-body ${isLong ? "is-truncated" : ""}">${escapedComment}</div>${isLong ? `<button type="button" class="comment-expand-btn" onclick="toggleCommentExpand(this, event)">Show more</button>` : ""}</div>`;
 }
 
 function toggleCommentExpand(btn, event) {
@@ -353,6 +353,52 @@ function formatUTCToLocal(utcString) {
     minute: "2-digit",
   });
 }
+
+function initCommentModal() {
+  if (document.getElementById("comment-modal-overlay")) return;
+  const overlay = document.createElement("div");
+  overlay.id = "comment-modal-overlay";
+  overlay.className = "comment-modal-overlay";
+  overlay.innerHTML = `
+    <div class="comment-modal-box" onclick="event.stopPropagation()">
+      <div class="comment-modal-header">
+        <span id="comment-modal-title">Comment</span>
+        <button type="button" class="comment-modal-close-btn" onclick="closeCommentModal()">✕</button>
+      </div>
+      <div id="comment-modal-body" class="comment-modal-body"></div>
+    </div>
+  `;
+  overlay.addEventListener("click", closeCommentModal);
+  document.body.appendChild(overlay);
+}
+
+function openCommentModal(btn, event) {
+  event.stopPropagation();
+  initCommentModal();
+  const popover = btn.closest(".comment-popover");
+  const bodyEl = popover.querySelector(".comment-popover-body");
+  const headerSpan = popover.querySelector(".comment-popover-header span");
+
+  const modalBody = document.getElementById("comment-modal-body");
+  const modalTitle = document.getElementById("comment-modal-title");
+
+  modalBody.innerHTML = bodyEl ? bodyEl.innerHTML : "";
+  modalTitle.textContent = headerSpan ? headerSpan.textContent : "Comment";
+
+  document.getElementById("comment-modal-overlay").classList.add("is-active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeCommentModal() {
+  const overlay = document.getElementById("comment-modal-overlay");
+  if (overlay) {
+    overlay.classList.remove("is-active");
+    document.body.style.overflow = "";
+  }
+}
+
+window.openCommentModal = openCommentModal;
+window.closeCommentModal = closeCommentModal;
 
 fetch("../trackingsheet-last-updated.txt?v=" + Date.now())
   .then((response) => response.text())
