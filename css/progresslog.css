@@ -169,10 +169,6 @@ td.col-title {
   display: inline-block;
 }
 
-/* ==========================================
-   2026 Theme Color Overrides (#46bdc6 -> #ea377a)
-   ========================================== */
-
 body[data-year="2026"] {
   background-image:
     linear-gradient(rgba(234, 55, 122, 0.12) 1px, transparent 1px),
