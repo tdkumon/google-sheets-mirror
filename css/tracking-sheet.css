@@ -400,6 +400,8 @@ td.col-extra:hover .comment-popover {
   white-space: pre-wrap;
   overflow-y: auto;
   max-height: calc(80vh - 70px);
+  padding-right: 12px; /* noooooote: find other solution for this because this also adds padding when there's no scrollbar and i don't like it */
+  scrollbar-gutter: stable;
 }
 
 .comment-modal-close-btn {
