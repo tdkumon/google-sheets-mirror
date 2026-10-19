@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const tableContainer = document.getElementById("table-container");
 
-  // Reset comment scroll position on hover to fix F5 / scroll persistence quirks
   if (tableContainer) {
     tableContainer.addEventListener("mouseover", (e) => {
       const cell = e.target.closest("td.col-extra, th.col-meta");
@@ -15,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Ensure comment scroll positions reset before page reload
   window.addEventListener("beforeunload", () => {
     document.querySelectorAll(".comment-popover-body").forEach((body) => {
       body.scrollTop = 0;
