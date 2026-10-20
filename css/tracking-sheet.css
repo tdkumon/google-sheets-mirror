@@ -1,100 +1,89 @@
-/* comic-neue-regular - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Comic Neue";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/comic-neue-v9-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/comic-neue-v9-latin-regular.woff2") format("woff2");
 }
 
-/* comic-neue-italic - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Comic Neue";
   font-style: italic;
   font-weight: 400;
-  src: url("../fonts/comic-neue-v9-latin-italic.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/comic-neue-v9-latin-italic.woff2") format("woff2");
 }
 
-/* comic-neue-700 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Comic Neue";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/comic-neue-v9-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/comic-neue-v9-latin-700.woff2") format("woff2");
 }
 
-/* noto-sans-regular - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Noto Sans";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/noto-sans-v42-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/noto-sans-v42-latin-regular.woff2") format("woff2");
 }
 
-/* noto-sans-700 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Noto Sans";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/noto-sans-v42-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/noto-sans-v42-latin-700.woff2") format("woff2");
 }
 
-/* noto-sans-jp-700 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Noto Sans JP";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/noto-sans-jp-v57-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/noto-sans-jp-v57-latin-700.woff2") format("woff2");
 }
 
-/* noto-sans-jp-900 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Noto Sans JP";
   font-style: normal;
   font-weight: 900;
-  src: url("../fonts/noto-sans-jp-v57-latin-900.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/noto-sans-jp-v57-latin-900.woff2") format("woff2");
 }
 
-/* roboto-regular - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  src: url("../fonts/roboto-v51-latin-regular.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/roboto-v51-latin-regular.woff2") format("woff2");
 }
 
-/* roboto-700 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/roboto-v51-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/roboto-v51-latin-700.woff2") format("woff2");
 }
 
-/* shippori-mincho-700 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Shippori Mincho";
   font-style: normal;
   font-weight: 700;
-  src: url("../fonts/shippori-mincho-v17-latin-700.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/shippori-mincho-v17-latin-700.woff2") format("woff2");
 }
 
-/* shippori-mincho-800 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: "Shippori Mincho";
   font-style: normal;
   font-weight: 800;
-  src: url("../fonts/shippori-mincho-v17-latin-800.woff2") format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url("../fonts/shippori-mincho-v17-latin-800.woff2") format("woff2");
 }
 
 *,
@@ -110,12 +99,114 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  margin: 30px;
+  margin: 0;
+  padding: 24px;
   background-color: #fafafa;
   color: #333;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+}
+
+.header-section,
+.nav-tabs,
+.search-container,
+.last-updated-badge,
+#table-container {
+  max-width: 1700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+#table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 28px;
+}
+
+table {
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-width: 1100px;
+  margin-bottom: 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 4px 16px;
+  height: 50px;
+  line-height: 1.25;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #f1f3f5;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  text-align: center;
+  white-space: nowrap;
+}
+
+tr {
+  border-bottom: 1px solid #edf2f7;
+}
+
+th.col-title,
+td.col-title {
+  width: 32%;
+  min-width: 360px;
+}
+
+th.col-date,
+td.col-date {
+  width: 120px;
+  min-width: 110px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+th.col-meta,
+td.col-meta {
+  width: 110px;
+  min-width: 100px;
+  text-align: center;
+}
+
+th.col-extra,
+td.col-extra {
+  width: auto;
+  min-width: 480px;
+  position: relative;
+  overflow: visible;
+}
+
+td.col-title,
+td.col-extra {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 950px) {
+  body {
+    margin: 12px;
+    padding: 0;
+  }
+
+  th.col-extra,
+  td.col-extra {
+    display: none;
+  }
+
+  table {
+    min-width: 100%;
+  }
 }
 
 a {
@@ -168,13 +259,6 @@ a:focus-visible {
   border-color: #0d6efd;
 }
 
-.search-container {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  width: 85%;
-}
-
 #search-input {
   flex: 1;
   padding: 10px 14px;
@@ -215,68 +299,8 @@ a:focus-visible {
   margin-top: 0;
 }
 
-table {
-  border-collapse: collapse;
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  width: 85%;
-  margin-bottom: 28px;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 4px 16px;
-  height: 50px;
-  line-height: 1.25;
-  vertical-align: middle;
-}
-
-th {
-  background-color: #f1f3f5;
-  font-weight: 600;
-  border-bottom: 2px solid #dee2e6;
-  text-align: center;
-}
-
-tr {
-  border-bottom: 1px solid #edf2f7;
-}
-
 tr:last-child {
   border-bottom: none;
-}
-
-th.col-title,
-td.col-title {
-  width: 35%;
-  min-width: 400px;
-}
-
-th.col-date,
-td.col-date {
-  width: 175px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-th.col-extra,
-td.col-extra {
-  width: auto;
-  position: relative;
-  overflow: visible;
-  min-width: 700px;
-}
-
-th.col-meta,
-td.col-meta {
-  min-width: 125px;
-  text-align: center;
-}
-
-td.col-title,
-td.col-extra {
-  white-space: pre-wrap;
 }
 
 td.col-extra {
@@ -400,7 +424,7 @@ td.col-extra:hover .comment-popover {
   white-space: pre-wrap;
   overflow-y: auto;
   max-height: calc(80vh - 70px);
-  padding-right: 12px; /* noooooote: find other solution for this because this also adds padding when there's no scrollbar and i don't like it */
+  padding-right: 12px;
   scrollbar-gutter: stable;
 }
 
@@ -569,21 +593,13 @@ body[data-year="2026"] .comment-modal-body {
   pointer-events: none;
 }
 
-@media (max-width: 1800px) {
+@media (max-width: 2090px) {
   .bottom-right-shinobu {
     display: none;
   }
 }
 
 @media (max-width: 1650px) {
-  th.col-extra,
-  td.col-extra {
-    display: none;
-  }
-  th.col-meta,
-  td.col-meta {
-    width: 125px;
-  }
   .disclaimer_extra {
     display: none;
   }
@@ -629,7 +645,6 @@ body[data-year="2025"] td.col-meta {
   color: #666666;
 }
 
-/* 2025 Theme Overrides */
 body[data-year="2025"] {
   background-color: #ffffff;
   color: #000000;
