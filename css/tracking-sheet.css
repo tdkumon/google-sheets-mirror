@@ -599,7 +599,7 @@ body[data-year="2026"] .comment-modal-body {
   }
 }
 
-@media (max-width: 1650px) {
+@media (max-width: 950px) {
   .disclaimer_extra {
     display: none;
   }
@@ -608,7 +608,7 @@ body[data-year="2026"] .comment-modal-body {
   }
 }
 
-@media (min-width: 1651px) {
+@media (min-width: 951px) {
   .disclaimer_extra {
     display: block;
   }
