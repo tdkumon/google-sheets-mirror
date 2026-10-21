@@ -725,6 +725,7 @@ body[data-year="2026"] {
     linear-gradient(90deg, rgba(70, 189, 198, 0.12) 1px, transparent 1px);
   background-size: 24px 24px;
   color: #f0f0f5;
+  background-attachment: fixed;
 }
 
 body[data-year="2026"] td.col-meta {
