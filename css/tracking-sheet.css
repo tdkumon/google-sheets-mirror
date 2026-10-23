@@ -198,22 +198,6 @@ td.col-extra {
   word-break: break-word;
 }
 
-@media (max-width: 950px) {
-  body {
-    margin: 12px;
-    padding: 0;
-  }
-
-  th.col-extra,
-  td.col-extra {
-    display: none;
-  }
-
-  table {
-    min-width: 100%;
-  }
-}
-
 a {
   color: #38bdf8;
   text-decoration: underline;
@@ -299,7 +283,6 @@ a:focus-visible {
   color: #495057;
 }
 
-#table-container table:first-of-type + .section-title,
 .section-title:first-child {
   margin-top: 0;
 }
@@ -600,24 +583,6 @@ body[data-year="2026"] .comment-modal-body {
 
 @media (max-width: 2090px) {
   .bottom-right-shinobu {
-    display: none;
-  }
-}
-
-@media (max-width: 950px) {
-  .disclaimer_extra {
-    display: none;
-  }
-  .disclaimer_mobile {
-    display: block;
-  }
-}
-
-@media (min-width: 951px) {
-  .disclaimer_extra {
-    display: block;
-  }
-  .disclaimer_mobile {
     display: none;
   }
 }

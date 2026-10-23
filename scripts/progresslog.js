@@ -1,3 +1,6 @@
+// Global storage for ID metadata (sessions, first logged date, title)
+window.progressLogMetadata = {};
+
 document.addEventListener("DOMContentLoaded", () => {
   const tableContainer = document.getElementById("table-container");
 
@@ -29,23 +32,39 @@ document.addEventListener("DOMContentLoaded", () => {
     clearBtn.addEventListener("click", clearFilter);
   }
 
+  // Click handler: filters by ID and switches search bar to stats banner
   document.getElementById("table-container").addEventListener("click", (e) => {
     const titleSpan = e.target.closest(".title-clickable");
     if (!titleSpan) return;
 
-    const rawTitle = titleSpan.textContent.trim();
-    const titleOnly = cleanTitle(rawTitle);
+    const row = titleSpan.closest("tr");
+    if (!row) return;
+    const entryId = row.getAttribute("data-id");
+    if (!entryId) return;
 
-    const wrapper = document.getElementById("search-wrapper");
+    const searchInput = document.getElementById("search-input");
+    const searchWrapper = document.getElementById("search-wrapper");
+    const filterBanner = document.getElementById("filter-banner");
+    const bannerText = document.getElementById("filter-banner-text");
 
     if (searchInput) {
-      searchInput.value = titleOnly;
-      searchInput.style.width = `${Math.max(titleOnly.length + 2, 8)}ch`;
+      searchInput.setAttribute("data-filtered-id", entryId);
     }
 
-    if (wrapper) {
-      wrapper.classList.add("title-active");
+    // Retrieve stats metadata for this ID
+    const meta = window.progressLogMetadata[entryId] || {
+      cleanTitle: cleanTitle(titleSpan.textContent.trim()),
+      sessions: 1,
+      firstDate: "Unknown",
+    };
+
+    // Populate and swap banner
+    if (bannerText) {
+      bannerText.innerHTML = `Showing entries for <strong>${escapeHTML(meta.cleanTitle)}</strong> (ID #${entryId}) &bull; ${meta.sessions} session${meta.sessions > 1 ? "s" : ""} &bull; First logged: ${escapeHTML(meta.firstDate)}`;
     }
+
+    if (searchWrapper) searchWrapper.style.display = "none";
+    if (filterBanner) filterBanner.style.display = "flex";
 
     handleSearch();
   });
@@ -100,29 +119,32 @@ function cleanTitle(fullTitle) {
 
 function handleManualInput() {
   const searchInput = document.getElementById("search-input");
-  const wrapper = document.getElementById("search-wrapper");
+  const searchWrapper = document.getElementById("search-wrapper");
+  const filterBanner = document.getElementById("filter-banner");
 
-  if (wrapper) {
-    wrapper.classList.remove("title-active");
-  }
   if (searchInput) {
-    searchInput.style.removeProperty("width");
+    searchInput.removeAttribute("data-filtered-id");
   }
+
+  if (searchWrapper) searchWrapper.style.display = "flex";
+  if (filterBanner) filterBanner.style.display = "none";
 
   handleSearch();
 }
 
 function clearFilter() {
   const searchInput = document.getElementById("search-input");
-  const wrapper = document.getElementById("search-wrapper");
+  const searchWrapper = document.getElementById("search-wrapper");
+  const filterBanner = document.getElementById("filter-banner");
 
   if (searchInput) {
     searchInput.value = "";
+    searchInput.removeAttribute("data-filtered-id");
     searchInput.style.removeProperty("width");
   }
-  if (wrapper) {
-    wrapper.classList.remove("title-active");
-  }
+
+  if (searchWrapper) searchWrapper.style.display = "flex";
+  if (filterBanner) filterBanner.style.display = "none";
 
   handleSearch();
 }
@@ -151,6 +173,7 @@ function formatUTCToLocal(utcString) {
 function renderProgressLog(rows) {
   const container = document.getElementById("table-container");
   container.innerHTML = "";
+  window.progressLogMetadata = {};
 
   let activeYear = "2026";
   let currentMonthTitle = "";
@@ -158,6 +181,7 @@ function renderProgressLog(rows) {
   let currentDayBlock = null;
 
   rows.forEach((row) => {
+    const colId = (row[0] || "").trim();
     const col1 = (row[1] || "").trim();
     const col2 = (row[2] || "").trim();
     const col3 = (row[3] || "").trim();
@@ -180,7 +204,8 @@ function renderProgressLog(rows) {
     if (
       !col2 ||
       col1.toLowerCase() === "date" ||
-      col2.toLowerCase() === "title"
+      col2.toLowerCase() === "title" ||
+      colId.toLowerCase() === "id"
     ) {
       return;
     }
@@ -196,8 +221,26 @@ function renderProgressLog(rows) {
       currentSection.dayBlocks.push(currentDayBlock);
     }
 
-    if (currentDayBlock) {
+    if (currentDayBlock && currentDayBlock.date) {
+      const entryDateStr = `${currentDayBlock.date} ${currentMonthTitle}`;
+
+      // Build ID metadata for stats banner
+      if (colId) {
+        if (!window.progressLogMetadata[colId]) {
+          window.progressLogMetadata[colId] = {
+            cleanTitle: cleanTitle(col2),
+            sessions: 0,
+            firstDate: entryDateStr,
+          };
+        }
+        window.progressLogMetadata[colId].sessions += 1;
+        // Since parsing goes newest -> oldest, updating this on each occurrence
+        // leaves the final value as the chronological oldest date.
+        window.progressLogMetadata[colId].firstDate = entryDateStr;
+      }
+
       currentDayBlock.entries.push({
+        id: colId,
         title: col2,
         progress: col3,
         note: col4,
@@ -241,6 +284,9 @@ function renderProgressLog(rows) {
         const isFirst = index === 0;
 
         tr.className = isFirst ? "day-start" : "day-entry";
+        if (entry.id) {
+          tr.setAttribute("data-id", entry.id);
+        }
 
         let html = "";
         if (isFirst) {
@@ -291,10 +337,9 @@ function toggleCommentExpand(btn, event) {
 }
 
 function handleSearch() {
-  const query = document
-    .getElementById("search-input")
-    .value.toLowerCase()
-    .trim();
+  const searchInput = document.getElementById("search-input");
+  const query = searchInput.value.toLowerCase().trim();
+  const activeIdFilter = searchInput.getAttribute("data-filtered-id");
   const tables = document.querySelectorAll("#table-container table");
 
   tables.forEach((table) => {
@@ -337,12 +382,21 @@ function handleSearch() {
         let firstVisibleRow = null;
 
         dayRows.forEach((row) => {
+          const rowId = row.getAttribute("data-id") || "";
           const titleCell = row.querySelector(".col-title");
           const titleText = titleCell
             ? titleCell.textContent.toLowerCase()
             : "";
 
-          if (query === "" || titleText.includes(query)) {
+          let isMatch = false;
+
+          if (activeIdFilter) {
+            isMatch = rowId === activeIdFilter;
+          } else {
+            isMatch = query === "" || titleText.includes(query);
+          }
+
+          if (isMatch) {
             row.style.display = "";
             visibleCount++;
             if (!firstVisibleRow) firstVisibleRow = row;
@@ -367,7 +421,7 @@ function handleSearch() {
     });
 
     const title = table.previousElementSibling;
-    if (!tableHasMatches && query !== "") {
+    if (!tableHasMatches && (query !== "" || activeIdFilter)) {
       table.style.display = "none";
       if (title && title.classList.contains("section-title")) {
         title.style.display = "none";

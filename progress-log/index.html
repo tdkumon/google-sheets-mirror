@@ -54,16 +54,6 @@
         <a href="../tracking-sheet/"
           >more comprehensible tracking sheet w/ only start & finish dates</a
         >
-        <p
-          class="disclaimer_mobile"
-          style="
-            font-family:
-              &quot;MS PGothic&quot;, &quot;MS Gothic&quot;,
-              &quot;MS Gothic Web&quot;, sans-serif;
-          "
-        >
-          no note column on screens for ants at the moment, sorry
-        </p>
       </div>
     </div>
 
@@ -77,6 +67,14 @@
           autocomplete="off"
         />
         <button id="clear-filter-btn" onclick="clearFilter()">
+          clear filter
+        </button>
+      </div>
+      <div class="filter-banner" id="filter-banner" style="display: none">
+        <div class="filter-banner-content" id="filter-banner-text">
+          Showing entries for...
+        </div>
+        <button id="banner-clear-btn" onclick="clearFilter()">
           clear filter
         </button>
       </div>
