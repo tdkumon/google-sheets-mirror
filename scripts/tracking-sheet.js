@@ -415,14 +415,82 @@ document.getElementById("search-input").value = "";
 
 switchTab("2026");
 
-document
-  .getElementById("table-container")
-  .addEventListener("mouseover", (event) => {
-    const cell = event.target.closest("td.col-extra");
-    if (cell) {
-      const body = cell.querySelector(".comment-popover-body");
-      if (body && body.classList.contains("is-truncated")) {
-        body.scrollTop = 0;
-      }
+const tableContainer = document.getElementById("table-container");
+
+if (tableContainer) {
+  let activePopover = null;
+  let activeCell = null;
+
+  function showPopover(cell) {
+    const popover = cell.querySelector(".comment-popover");
+    if (!popover) return;
+
+    const popoverBody = popover.querySelector(
+      ".comment-popover-body.is-truncated",
+    );
+    if (popoverBody) popoverBody.scrollTop = 0;
+
+    // Temporarily show to measure height accurately
+    popover.style.display = "block";
+    const rect = cell.getBoundingClientRect();
+    const popoverHeight = popover.offsetHeight;
+    const windowHeight = window.innerHeight;
+
+    popover.style.position = "fixed";
+    // Right-align with the cell
+    popover.style.right = window.innerWidth - rect.right + "px";
+    popover.style.left = "auto";
+    popover.style.width = "300px";
+
+    // If it overflows the bottom of the screen, flip it above the cell
+    if (
+      rect.bottom + popoverHeight > windowHeight - 10 &&
+      rect.top > popoverHeight + 10
+    ) {
+      popover.style.top = rect.top - popoverHeight + "px";
+    } else {
+      // Zero gap so your mouse can cross smoothly from cell to comment
+      popover.style.top = rect.bottom + "px";
+    }
+
+    popover.classList.add("is-active-fixed");
+    activePopover = popover;
+    activeCell = cell;
+  }
+
+  function hidePopover() {
+    if (!activePopover) return;
+    activePopover.classList.remove("is-active-fixed");
+    activePopover.style.display = "";
+    activePopover.style.position = "";
+    activePopover.style.left = "";
+    activePopover.style.right = "";
+    activePopover.style.top = "";
+    activePopover.style.width = "";
+    activePopover = null;
+    activeCell = null;
+  }
+
+  tableContainer.addEventListener("mouseover", (e) => {
+    const cell = e.target.closest("td.col-extra");
+    if (cell && activeCell !== cell) {
+      hidePopover();
+      showPopover(cell);
     }
   });
+
+  tableContainer.addEventListener("mouseout", (e) => {
+    const cell = e.target.closest("td.col-extra");
+    const popover = e.target.closest(".comment-popover");
+    const related = e.relatedTarget;
+
+    if (cell || popover) {
+      // Keep open if mouse is moving smoothly between the cell and the popover box
+      if (related) {
+        if (activeCell && activeCell.contains(related)) return;
+        if (activePopover && activePopover.contains(related)) return;
+      }
+      hidePopover();
+    }
+  });
+}

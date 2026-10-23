@@ -871,3 +871,15 @@ body[data-year="2026"] .last-updated-badge {
   font-family: "Shippori Mincho", serif;
   font-weight: 700;
 }
+
+/* Disable default CSS hover so JS can handle smart fixed positioning */
+td.col-extra:hover .comment-popover {
+  display: none;
+}
+
+/* Active fixed popover that breaks out of all container clipping */
+.comment-popover.is-active-fixed {
+  display: block !important;
+  position: fixed !important;
+  z-index: 9999 !important;
+}

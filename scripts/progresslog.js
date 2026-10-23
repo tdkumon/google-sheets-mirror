@@ -5,14 +5,78 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableContainer = document.getElementById("table-container");
 
   if (tableContainer) {
-    tableContainer.addEventListener("mouseover", (e) => {
-      const cell = e.target.closest("td.col-extra, th.col-meta");
-      if (!cell) return;
-      const popoverBody = cell.querySelector(
+    let activePopover = null;
+    let activeCell = null;
+
+    function showPopover(cell) {
+      const popover = cell.querySelector(".comment-popover");
+      if (!popover) return;
+
+      // Reset scroll of truncated body if present
+      const popoverBody = popover.querySelector(
         ".comment-popover-body.is-truncated",
       );
-      if (popoverBody) {
-        popoverBody.scrollTop = 0;
+      if (popoverBody) popoverBody.scrollTop = 0;
+
+      // Temporarily show to measure height accurately
+      popover.style.display = "block";
+      const rect = cell.getBoundingClientRect();
+      const popoverHeight = popover.offsetHeight;
+      const windowHeight = window.innerHeight;
+
+      popover.style.position = "fixed";
+      popover.style.right = window.innerWidth - rect.right + "px";
+      popover.style.left = "auto";
+      popover.style.width = "300px";
+
+      // If it overflows the bottom of the screen, flip it above the cell
+      if (
+        rect.bottom + popoverHeight > windowHeight - 10 &&
+        rect.top > popoverHeight + 10
+      ) {
+        popover.style.top = rect.top - popoverHeight + "px";
+      } else {
+        popover.style.top = rect.bottom + "px";
+      }
+
+      popover.classList.add("is-active-fixed");
+      activePopover = popover;
+      activeCell = cell;
+    }
+
+    function hidePopover() {
+      if (!activePopover) return;
+      activePopover.classList.remove("is-active-fixed");
+      activePopover.style.display = "";
+      activePopover.style.position = "";
+      activePopover.style.left = "";
+      activePopover.style.right = "";
+      activePopover.style.top = "";
+      activePopover.style.width = "";
+      activePopover = null;
+      activeCell = null;
+    }
+
+    tableContainer.addEventListener("mouseover", (e) => {
+      const cell = e.target.closest("td.col-extra");
+      if (cell && activeCell !== cell) {
+        hidePopover();
+        showPopover(cell);
+      }
+    });
+
+    tableContainer.addEventListener("mouseout", (e) => {
+      const cell = e.target.closest("td.col-extra");
+      const popover = e.target.closest(".comment-popover");
+      const related = e.relatedTarget;
+
+      if (cell || popover) {
+        // If the mouse is moving directly into the cell or the popover, keep it open
+        if (related) {
+          if (activeCell && activeCell.contains(related)) return;
+          if (activePopover && activePopover.contains(related)) return;
+        }
+        hidePopover();
       }
     });
   }
@@ -170,6 +234,23 @@ function formatUTCToLocal(utcString) {
   });
 }
 
+function updateFirstVisibleSection() {
+  const titles = document.querySelectorAll("#table-container .section-title");
+  let firstFound = false;
+  titles.forEach((title) => {
+    if (title.style.display !== "none") {
+      if (!firstFound) {
+        title.classList.add("is-first-visible");
+        firstFound = true;
+      } else {
+        title.classList.remove("is-first-visible");
+      }
+    } else {
+      title.classList.remove("is-first-visible");
+    }
+  });
+}
+
 function renderProgressLog(rows) {
   const container = document.getElementById("table-container");
   container.innerHTML = "";
@@ -309,6 +390,8 @@ function renderProgressLog(rows) {
   });
 
   document.body.setAttribute("data-year", activeYear);
+  updateFirstVisibleSection();
+  document.body.setAttribute("data-year", activeYear);
 }
 
 function renderNoteCell(note, comment) {
@@ -433,6 +516,8 @@ function handleSearch() {
       }
     }
   });
+
+  updateFirstVisibleSection();
 }
 
 function formatTitle(title) {

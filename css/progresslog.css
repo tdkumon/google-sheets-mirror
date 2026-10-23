@@ -5,7 +5,7 @@ html {
 
 #table-container {
   width: 100%;
-  padding-bottom: 200px;
+  padding-bottom: 400px;
 }
 
 #table-container table {
@@ -308,4 +308,20 @@ body[data-year="2026"] .comment-modal-box {
 }
 body[data-year="2026"] .comment-modal-header {
   color: #ea377a;
+}
+
+#table-container .section-title.is-first-visible {
+  margin-top: 0;
+}
+
+/* Disable default CSS hover so JS can handle smart fixed positioning */
+td.col-extra:hover .comment-popover {
+  display: none;
+}
+
+/* Active fixed popover that breaks out of all container clipping */
+.comment-popover.is-active-fixed {
+  display: block !important;
+  position: fixed !important;
+  z-index: 9999 !important;
 }
