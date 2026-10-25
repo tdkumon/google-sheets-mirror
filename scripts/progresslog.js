@@ -1,4 +1,3 @@
-// Global storage for ID metadata (sessions, first logged date, title)
 window.progressLogMetadata = {};
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,13 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const popover = cell.querySelector(".comment-popover");
       if (!popover) return;
 
-      // Reset scroll of truncated body if present
       const popoverBody = popover.querySelector(
         ".comment-popover-body.is-truncated",
       );
       if (popoverBody) popoverBody.scrollTop = 0;
 
-      // Temporarily show to measure height accurately
       popover.style.display = "block";
       const rect = cell.getBoundingClientRect();
       const popoverHeight = popover.offsetHeight;
@@ -29,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
       popover.style.left = "auto";
       popover.style.width = "300px";
 
-      // If it overflows the bottom of the screen, flip it above the cell
       if (
         rect.bottom + popoverHeight > windowHeight - 10 &&
         rect.top > popoverHeight + 10
@@ -71,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const related = e.relatedTarget;
 
       if (cell || popover) {
-        // If the mouse is moving directly into the cell or the popover, keep it open
         if (related) {
           if (activeCell && activeCell.contains(related)) return;
           if (activePopover && activePopover.contains(related)) return;
@@ -96,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
     clearBtn.addEventListener("click", clearFilter);
   }
 
-  // Click handler: filters by ID and switches search bar to stats banner
   document.getElementById("table-container").addEventListener("click", (e) => {
     const titleSpan = e.target.closest(".title-clickable");
     if (!titleSpan) return;
@@ -115,14 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
       searchInput.setAttribute("data-filtered-id", entryId);
     }
 
-    // Retrieve stats metadata for this ID
     const meta = window.progressLogMetadata[entryId] || {
       cleanTitle: cleanTitle(titleSpan.textContent.trim()),
       sessions: 1,
       firstDate: "Unknown",
     };
 
-    // Populate and swap banner
     if (bannerText) {
       bannerText.innerHTML = `Showing entries for <strong>${escapeHTML(meta.cleanTitle)}</strong> (ID #${entryId}) &bull; ${meta.sessions} session${meta.sessions > 1 ? "s" : ""} &bull; First logged: ${escapeHTML(meta.firstDate)}`;
     }
@@ -305,7 +297,6 @@ function renderProgressLog(rows) {
     if (currentDayBlock && currentDayBlock.date) {
       const entryDateStr = `${currentDayBlock.date} ${currentMonthTitle}`;
 
-      // Build ID metadata for stats banner
       if (colId) {
         if (!window.progressLogMetadata[colId]) {
           window.progressLogMetadata[colId] = {
@@ -315,8 +306,6 @@ function renderProgressLog(rows) {
           };
         }
         window.progressLogMetadata[colId].sessions += 1;
-        // Since parsing goes newest -> oldest, updating this on each occurrence
-        // leaves the final value as the chronological oldest date.
         window.progressLogMetadata[colId].firstDate = entryDateStr;
       }
 
@@ -330,7 +319,7 @@ function renderProgressLog(rows) {
     }
   });
 
-  monthSections.forEach((section) => {
+  monthSections.forEach((section, sIndex) => {
     const sectionTitle = document.createElement("div");
     sectionTitle.className = "section-title";
     sectionTitle.textContent = section.month;
@@ -357,14 +346,23 @@ function renderProgressLog(rows) {
 
     const tbody = document.createElement("tbody");
 
-    section.dayBlocks.forEach((block) => {
+    section.dayBlocks.forEach((block, dIndex) => {
       const rowCount = block.entries.length;
+      const dayGroupId = `s${sIndex}-d${dIndex}`;
 
       block.entries.forEach((entry, index) => {
         const tr = document.createElement("tr");
         const isFirst = index === 0;
+        const isLast = index === rowCount - 1;
 
-        tr.className = isFirst ? "day-start" : "day-entry";
+        tr.setAttribute("data-day-group", dayGroupId);
+
+        let classList = [];
+        if (isFirst) classList.push("day-start");
+        else classList.push("day-entry");
+        if (isLast) classList.push("day-end");
+
+        tr.className = classList.join(" ");
         if (entry.id) {
           tr.setAttribute("data-id", entry.id);
         }
@@ -430,31 +428,16 @@ function handleSearch() {
     const tbodies = table.querySelectorAll("tbody");
 
     tbodies.forEach((tbody) => {
-      const dayStartRows = tbody.querySelectorAll("tr.day-start");
-
-      dayStartRows.forEach((startRow) => {
-        if (!startRow.hasAttribute("data-original-rowspan")) {
-          const initialDateCell = startRow.querySelector(".col-date");
-          if (initialDateCell) {
-            startRow.setAttribute(
-              "data-original-rowspan",
-              initialDateCell.getAttribute("rowspan") || "1",
-            );
-          }
+      const groupMap = new Map();
+      tbody.querySelectorAll("tr[data-day-group]").forEach((row) => {
+        const groupId = row.getAttribute("data-day-group");
+        if (!groupMap.has(groupId)) {
+          groupMap.set(groupId, []);
         }
+        groupMap.get(groupId).push(row);
+      });
 
-        const originalRowspan = parseInt(
-          startRow.getAttribute("data-original-rowspan") || "1",
-          10,
-        );
-
-        const dayRows = [startRow];
-        let nextRow = startRow.nextElementSibling;
-        for (let i = 1; i < originalRowspan && nextRow; i++) {
-          dayRows.push(nextRow);
-          nextRow = nextRow.nextElementSibling;
-        }
-
+      groupMap.forEach((dayRows) => {
         let dateCell = null;
         dayRows.forEach((row) => {
           const found = row.querySelector(".col-date");
@@ -463,6 +446,7 @@ function handleSearch() {
 
         let visibleCount = 0;
         let firstVisibleRow = null;
+        let visibleRows = [];
 
         dayRows.forEach((row) => {
           const rowId = row.getAttribute("data-id") || "";
@@ -482,6 +466,7 @@ function handleSearch() {
           if (isMatch) {
             row.style.display = "";
             visibleCount++;
+            visibleRows.push(row);
             if (!firstVisibleRow) firstVisibleRow = row;
           } else {
             row.style.display = "none";
@@ -499,6 +484,23 @@ function handleSearch() {
               );
             }
           }
+
+          visibleRows.forEach((row, idx) => {
+            row.classList.remove("day-start", "day-entry", "day-end");
+
+            const isFirstVisible = idx === 0;
+            const isLastVisible = idx === visibleRows.length - 1;
+
+            if (isFirstVisible) {
+              row.classList.add("day-start");
+            } else {
+              row.classList.add("day-entry");
+            }
+
+            if (isLastVisible) {
+              row.classList.add("day-end");
+            }
+          });
         }
       });
     });

@@ -430,26 +430,22 @@ if (tableContainer) {
     );
     if (popoverBody) popoverBody.scrollTop = 0;
 
-    // Temporarily show to measure height accurately
     popover.style.display = "block";
     const rect = cell.getBoundingClientRect();
     const popoverHeight = popover.offsetHeight;
     const windowHeight = window.innerHeight;
 
     popover.style.position = "fixed";
-    // Right-align with the cell
     popover.style.right = window.innerWidth - rect.right + "px";
     popover.style.left = "auto";
     popover.style.width = "300px";
 
-    // If it overflows the bottom of the screen, flip it above the cell
     if (
       rect.bottom + popoverHeight > windowHeight - 10 &&
       rect.top > popoverHeight + 10
     ) {
       popover.style.top = rect.top - popoverHeight + "px";
     } else {
-      // Zero gap so your mouse can cross smoothly from cell to comment
       popover.style.top = rect.bottom + "px";
     }
 
@@ -485,7 +481,6 @@ if (tableContainer) {
     const related = e.relatedTarget;
 
     if (cell || popover) {
-      // Keep open if mouse is moving smoothly between the cell and the popover box
       if (related) {
         if (activeCell && activeCell.contains(related)) return;
         if (activePopover && activePopover.contains(related)) return;

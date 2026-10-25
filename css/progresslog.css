@@ -8,12 +8,19 @@ html {
   padding-bottom: 400px;
 }
 
+#table-container .section-title.is-first-visible {
+  margin-top: 0;
+}
+
 #table-container table {
   border-collapse: collapse;
   background-color: #16181c;
   border: 1px solid #252932;
+  border-left: none !important;
+  border-right: none !important;
   width: 100%;
   min-width: 1100px;
+  box-shadow: none;
 }
 
 #table-container th {
@@ -31,7 +38,7 @@ html {
 #table-container td {
   border-top: none;
   border-bottom: none;
-  border-left: 1px solid #252932;
+  border-left: none !important;
   border-right: 1px solid #252932;
   background-color: #16181c;
   color: #e0e0ea;
@@ -39,6 +46,18 @@ html {
   padding: 4px 16px;
   height: 50px;
   line-height: 1.2;
+}
+
+#table-container tr.day-start td {
+  border-top: 1px solid #252932;
+}
+
+#table-container tr.day-entry td {
+  border-top: 1px dotted #4a5162;
+}
+
+#table-container tr.day-end td {
+  border-bottom: 1px solid #252932;
 }
 
 th.col-date,
@@ -57,25 +76,14 @@ td.col-date {
 
 th.col-title,
 td.col-title {
-  width: 40%; /* Increased from 32% */
-  min-width: 460px; /* Increased from 380px */
+  width: 40%;
+  min-width: 460px;
   font-weight: normal;
+  cursor: default;
 }
 
 .title-bold {
   font-weight: 700;
-}
-
-th.col-meta,
-td.col-meta,
-#table-container td.col-meta {
-  width: 250px;
-  min-width: 250px;
-  text-align: left;
-  font-size: inherit;
-  position: relative;
-  overflow: visible;
-  padding-left: 4px;
 }
 
 th.col-meta {
@@ -87,14 +95,23 @@ th.col-meta:hover .comment-popover {
   font-family: "Noto Sans", "Noto Sans JP", sans-serif;
 }
 
-td.col-meta {
+td.col-meta,
+#table-container td.col-meta {
+  width: 250px;
+  min-width: 250px;
+  text-align: left;
+  font-size: inherit;
+  position: relative;
+  overflow: visible;
+  padding-left: 4px;
   white-space: pre-wrap;
 }
 
 th.col-extra,
 td.col-extra {
   width: auto;
-  min-width: 300px; /* Decreased from 450px */
+  min-width: 300px;
+  border-right: none !important;
 }
 
 #table-container td.col-extra {
@@ -111,18 +128,6 @@ td.col-extra {
 
 .kw-red {
   color: #ea4335;
-}
-
-#table-container tr.day-start td {
-  border-top: 1px solid #252932;
-}
-
-#table-container tr.day-entry td {
-  border-top: 1px dotted #4a5162;
-}
-
-td.col-title {
-  cursor: default;
 }
 
 .title-clickable {
@@ -157,14 +162,13 @@ td.col-title {
 .search-wrapper.title-active #search-input {
   width: auto;
   flex: 0 0 auto;
-  transition: none;
 }
 
 .filter-banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap; /* Allows items to wrap nicely on mobile screens */
+  flex-wrap: wrap;
   gap: 10px;
   width: 100%;
   background-color: #242832;
@@ -178,9 +182,9 @@ td.col-title {
 }
 
 .filter-banner-content {
-  flex: 1 1 250px; /* Takes available space, wraps cleanly if screen is narrow */
+  flex: 1 1 250px;
   min-width: 0;
-  white-space: normal; /* Allows text to wrap into multiple lines instead of cutting off */
+  white-space: normal;
   word-break: break-word;
 }
 
@@ -199,15 +203,6 @@ td.col-title {
 
 #banner-clear-btn:hover {
   background-color: #3b4760;
-}
-
-body[data-year="2026"] #filter-banner {
-  border-color: #ea377a;
-}
-
-body[data-year="2026"] #banner-clear-btn:hover {
-  background-color: #ea377a;
-  color: #16181c;
 }
 
 #clear-filter-btn {
@@ -232,11 +227,29 @@ body[data-year="2026"] #banner-clear-btn:hover {
   display: inline-block;
 }
 
+td.col-extra:hover .comment-popover {
+  display: none;
+}
+
+.comment-popover.is-active-fixed {
+  display: block !important;
+  position: fixed !important;
+  z-index: 9999 !important;
+}
+
 body[data-year="2026"] {
-  background-image:
-    linear-gradient(rgba(234, 55, 122, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(234, 55, 122, 0.12) 1px, transparent 1px);
+  background-image: none;
+  background-color: #16181c !important;
   background-attachment: fixed;
+}
+
+body[data-year="2026"] a {
+  background-color: #242832;
+  border-left: 3px solid #ea377a;
+}
+
+body[data-year="2026"] a:hover {
+  background-color: #ea377a;
 }
 
 body[data-year="2026"] #search-input:focus,
@@ -270,14 +283,6 @@ body[data-year="2026"] .header-img:hover {
   box-shadow: 8px 8px 0px #ea377a;
 }
 
-body[data-year="2026"] a {
-  border-left: 3px solid #ea377a;
-}
-
-body[data-year="2026"] a:hover {
-  background-color: #ea377a;
-}
-
 body[data-year="2026"] .tab-btn.active {
   background: #ea377a;
 }
@@ -306,22 +311,23 @@ body[data-year="2026"] .last-updated-badge {
 body[data-year="2026"] .comment-modal-box {
   box-shadow: 6px 6px 0px #ea377a;
 }
+
 body[data-year="2026"] .comment-modal-header {
   color: #ea377a;
 }
 
-#table-container .section-title.is-first-visible {
-  margin-top: 0;
+body[data-year="2026"] #banner-clear-btn:hover {
+  background-color: #ea377a;
+  color: #16181c;
 }
 
-/* Disable default CSS hover so JS can handle smart fixed positioning */
-td.col-extra:hover .comment-popover {
-  display: none;
+th.col-meta {
+  text-align: center;
+  position: relative;
+  overflow: visible;
 }
 
-/* Active fixed popover that breaks out of all container clipping */
-.comment-popover.is-active-fixed {
-  display: block !important;
-  position: fixed !important;
-  z-index: 9999 !important;
+th.col-meta:hover .comment-popover {
+  display: block;
+  font-family: "Noto Sans", "Noto Sans JP", sans-serif;
 }
