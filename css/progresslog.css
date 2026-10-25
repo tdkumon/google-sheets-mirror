@@ -331,3 +331,27 @@ th.col-meta:hover .comment-popover {
   display: block;
   font-family: "Noto Sans", "Noto Sans JP", sans-serif;
 }
+
+#search-input {
+  background-color: #0f0f14 !important;
+}
+
+.header-text p {
+  background-color: #000000 !important;
+}
+
+.last-updated-badge {
+  background-color: #000000 !important;
+}
+
+.comment-popover {
+  background-color: #121418 !important;
+}
+
+.comment-modal-box {
+  background-color: #121418 !important;
+}
+
+body[data-year="2026"] .comment-popover-body.is-truncated::after {
+  background: linear-gradient(to bottom, transparent, #121418);
+}

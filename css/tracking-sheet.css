@@ -442,7 +442,7 @@ body[data-year="2025"] .comment-modal-body {
 }
 
 body[data-year="2026"] .comment-modal-box {
-  background-color: #121418;
+  background-color: #1c2028;
   border: 2px solid #ffffff;
   box-shadow: 6px 6px 0px #46bdc6;
   color: #e0e0ea;
@@ -450,7 +450,7 @@ body[data-year="2026"] .comment-modal-box {
 }
 body[data-year="2026"] .comment-modal-header {
   color: #46bdc6;
-  border-bottom: 1px solid #252932;
+  border-bottom: 1px solid #2e3440;
 }
 body[data-year="2026"] .comment-modal-body {
   color: #f0f0f5;
@@ -689,11 +689,8 @@ body[data-year="2025"] .comment-expand-btn {
 
 body[data-year="2026"] {
   font-family: "Noto Sans", "Noto Sans JP", sans-serif;
-  background-color: #0a0a0c;
-  background-image: url("../media/placeholdertilebackgroundfornow.gif");
-  background-repeat: repeat;
+  background-color: #242832;
   color: #f0f0f5;
-  background-attachment: fixed;
 }
 
 body[data-year="2026"] td.col-meta {
@@ -704,7 +701,7 @@ body[data-year="2026"] td.col-meta {
 body[data-year="2026"] #search-input,
 body[data-year="2026"] #type-filter {
   font-family: "Noto Sans JP", sans-serif;
-  background: #0f0f14;
+  background: #1c2028;
   color: #ffffff;
   border: 2px solid #ffffff;
   border-radius: 0px;
@@ -752,7 +749,7 @@ body[data-year="2026"] .header-text p {
   font-family: "Noto Sans JP", sans-serif;
   font-weight: 700;
   color: #ffffff;
-  background-color: #000000;
+  background-color: #1c2028;
   border-left: 4px solid #46bdc6;
 }
 
@@ -770,7 +767,7 @@ body[data-year="2026"] .header-img:hover {
 
 body[data-year="2026"] a {
   color: #ffffff;
-  background-color: #1a1a22;
+  background-color: #1c2028;
   padding: 2px 6px;
   text-decoration: none;
   border-left: 3px solid #46bdc6;
@@ -787,7 +784,7 @@ body[data-year="2026"] .tab-btn {
   font-family: "Shippori Mincho", serif;
   font-weight: 800;
   border: 2px solid #ffffff;
-  background: #121218;
+  background: #1c2028;
   color: #ffffff;
   border-radius: 0px;
   box-shadow: 4px 4px 0px #000000;
@@ -802,7 +799,7 @@ body[data-year="2026"] .tab-btn.active {
 
 body[data-year="2026"] table {
   border: 3px solid #ffffff;
-  background: #0f0f14;
+  background: #1c2028;
   box-shadow: 8px 8px 0px #000000;
 }
 
@@ -815,15 +812,15 @@ body[data-year="2026"] th {
 }
 
 body[data-year="2026"] tr {
-  border-bottom: 1px solid #22222e;
+  border-bottom: 1px solid #2e3440;
 }
 
 body[data-year="2026"] tr:nth-child(even) {
-  background-color: #14141c;
+  background-color: transparent;
 }
 
 body[data-year="2026"] td {
-  border: 1px solid #242433;
+  border: 1px solid #2e3440;
   color: #e0e0ea;
 }
 
@@ -832,7 +829,7 @@ body[data-year="2026"] .comment-corner-mark {
 }
 
 body[data-year="2026"] .comment-popover {
-  background-color: #121418;
+  background-color: #1c2028;
   border: 2px solid #ffffff;
   box-shadow: 4px 4px 0px #46bdc6;
   color: #e0e0ea;
@@ -841,7 +838,7 @@ body[data-year="2026"] .comment-popover {
 
 body[data-year="2026"] .comment-popover-header {
   color: #46bdc6;
-  border-bottom: 1px solid #252932;
+  border-bottom: 1px solid #2e3440;
 }
 
 body[data-year="2026"] .comment-popover-body {
@@ -849,7 +846,7 @@ body[data-year="2026"] .comment-popover-body {
 }
 
 body[data-year="2026"] .comment-popover-body.is-truncated::after {
-  background: linear-gradient(to bottom, transparent, #121418);
+  background: linear-gradient(to bottom, transparent, #1c2028);
 }
 
 body[data-year="2026"] .comment-expand-btn {
@@ -861,7 +858,7 @@ body[data-year="2026"] .comment-expand-btn:hover {
 }
 
 body[data-year="2026"] .last-updated-badge {
-  background-color: #000000;
+  background-color: #1c2028;
   border: 2px solid #ffffff;
   color: #ffffff;
   box-shadow: 4px 4px 0px #46bdc6;
