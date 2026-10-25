@@ -589,7 +589,7 @@ body[data-year="2026"] .comment-modal-body {
 
 tr.row-minor td {
   height: auto;
-  font-size: 12px;
+  font-size: 12px !important;
   color: #888888 !important;
 }
 
