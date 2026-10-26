@@ -1,0 +1,87 @@
+name: Automated Sheet & Progress Log Backup
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backup-sheets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download and Validate CSVs
+        run: |
+          set -e
+
+          # Ensure the csv directory exists
+          mkdir -p csv
+
+          # Download Tracking Sheets into csv/ folder
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=0&single=true&output=csv" -o csv/trackingsheet-2026.csv
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=1563791943&single=true&output=csv" -o csv/trackingsheet-2025.csv
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=531912198&single=true&output=csv" -o csv/trackingsheet-2024.csv
+
+          # Download Progress Log into csv/ folder
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/1E_CjeXDPRjPy0PWOipLHwxvdX129M2vg9ULqXZK0GWA/gviz/tq?tqx=out:csv&headers=0" -o csv/progresslog.csv
+
+          # 1. Generic checks: Non-empty and not an HTML web page
+          for f in csv/trackingsheet-*.csv csv/progresslog.csv; do
+            if [ ! -s "$f" ]; then
+              echo "Error: $f is empty."
+              exit 1
+            fi
+            if head -n 1 "$f" | grep -qiE "<html|<!doctype"; then
+              echo "Error: $f contains HTML instead of CSV (likely a Google error page)."
+              exit 1
+            fi
+          done
+
+          # 2. Strict validation: Verify expected content/headers in files
+          if ! head -n 5 csv/progresslog.csv | grep -qi "daily progress log"; then
+            echo "Error: progresslog.csv failed validation (missing 'daily progress log' marker)."
+            exit 1
+          fi
+
+          for ts in csv/trackingsheet-*.csv; do
+            if ! head -n 5 "$ts" | grep -qi "tracking sheet"; then
+              echo "Error: $ts failed validation (missing 'tracking sheet' marker)."
+              exit 1
+            fi
+          done
+
+      - name: Commit and Push Updated Backups
+        run: |
+          set -e
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          TIMESTAMP=$(date -u +"%d/%m/%Y %H:%M UTC")
+          CHANGES_MADE=false
+
+          # Check Tracking Sheet changes
+          git add csv/trackingsheet-*.csv
+          if ! git diff --quiet --staged; then
+            echo "$TIMESTAMP" > trackingsheet-last-updated.txt
+            git add trackingsheet-last-updated.txt
+            CHANGES_MADE=true
+          fi
+
+          # Check Progress Log changes
+          git add csv/progresslog.csv
+          if ! git diff --quiet --staged; then
+            echo "$TIMESTAMP" > progresslog-last-updated.txt
+            git add progresslog-last-updated.txt
+            CHANGES_MADE=true
+          fi
+
+          # Commit and push only if actual changes occurred
+          if [ "$CHANGES_MADE" = true ]; then
+            git commit -m "Auto-update sheet backups [skip ci]"
+            git push
+          fi
