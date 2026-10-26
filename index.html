@@ -382,7 +382,7 @@
       async function fetchTrackingData() {
         try {
           const currentYear = new Date().getFullYear();
-          const response = await fetch(`trackingsheet-${currentYear}.csv`);
+          const response = await fetch(`csv/trackingsheet-${currentYear}.csv`);
           if (!response.ok) return;
 
           const text = await response.text();
