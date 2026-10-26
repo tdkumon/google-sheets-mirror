@@ -95,7 +95,7 @@ function loadSheetData(year) {
   const container = document.getElementById("table-container");
   container.textContent = "Loading data...";
 
-  fetch(`../trackingsheet-${year}.csv?v=` + Date.now())
+  fetch(`../csv/trackingsheet-${year}.csv?v=` + Date.now())
     .then((response) => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       return response.text();

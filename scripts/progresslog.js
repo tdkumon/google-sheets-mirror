@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (bannerText) {
-      bannerText.innerHTML = `Showing entries for <strong>${escapeHTML(meta.cleanTitle)}</strong> (ID #${entryId}) &bull; ${meta.sessions} session${meta.sessions > 1 ? "s" : ""} &bull; First logged: ${escapeHTML(meta.firstDate)}`;
+      bannerText.innerHTML = `Showing entries for <strong>${escapeHTML(meta.cleanTitle)}</strong> &bull; ${meta.sessions} session${meta.sessions > 1 ? "s" : ""} &bull; First logged: ${escapeHTML(meta.firstDate)}`;
     }
 
     if (searchWrapper) searchWrapper.style.display = "none";
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (badge) badge.style.display = "none";
     });
 
-  Papa.parse("../progresslog.csv", {
+  Papa.parse("../csv/progresslog.csv", {
     download: true,
     skipEmptyLines: true,
     complete: function (results) {
