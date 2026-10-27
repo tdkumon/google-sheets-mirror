@@ -24,7 +24,7 @@ const YEAR_CONFIGS = {
     extra: 5,
     type: 7, // Column H
     daysSpent: 8, // Column I
-    comment: -1, // Column K
+    comment: 9, // Column J
   },
   2024: {
     title: 1,
