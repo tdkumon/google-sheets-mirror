@@ -206,6 +206,29 @@
         src: url("fonts/MS Gothic.ttf") format("truetype");
         font-display: swap;
       }
+
+      @media (max-height: 1080px) {
+        body {
+          font-size: 14.5px;
+          gap: 12px;
+          padding: 30px 20px;
+          overflow: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        body::-webkit-scrollbar {
+          display: none;
+        }
+        .container {
+          margin-bottom: 0;
+        }
+        p {
+          margin-bottom: 0.5rem;
+        }
+        .shuffle-character {
+          max-width: 300px;
+        }
+      }
     </style>
   </head>
 

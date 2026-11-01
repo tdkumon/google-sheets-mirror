@@ -1,6 +1,3 @@
-/* ==========================================
-   1. FONTS & RESETS
-   ========================================== */
 @font-face {
   font-display: swap;
   font-family: "Comic Neue";
@@ -110,9 +107,6 @@ body {
   color: #f0f0f5;
 }
 
-/* ==========================================
-   2. CONTAINERS & LAYOUT
-   ========================================== */
 .header-section,
 .search-container,
 .last-updated-badge,
@@ -141,14 +135,39 @@ body {
   border-radius: 0;
   border: 3px solid #ffffff;
   box-shadow: 6px 6px 0px #ea377a;
-  transition:
-    transform 0.15s ease-out,
-    box-shadow 0.15s ease-out;
+  transition: transform 0.15s ease-out;
+  cursor: default;
 }
 
 .header-img:hover {
   transform: translate(-2px, -2px);
   box-shadow: 8px 8px 0px #ea377a;
+}
+
+.entry-id-badge {
+  display: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #2b2f38;
+  color: #a0a6b8;
+  font-family: "Courier New", Courier, monospace, "Noto Sans JP", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border: 1px solid #4a5162;
+  border-radius: 0px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+body.show-ids .entry-id-badge {
+  display: block;
+}
+
+body.show-ids #table-container td.col-title {
+  padding-right: 75px !important;
 }
 
 .header-text {
@@ -209,9 +228,6 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* ==========================================
-   3. SEARCH & FILTERS
-   ========================================== */
 .search-container {
   display: flex;
   gap: 12px;
@@ -323,9 +339,6 @@ a:focus-visible {
   margin-top: 12px;
 }
 
-/* ==========================================
-   4. TABLE STYLING
-   ========================================== */
 #table-container {
   width: 100%;
   padding-bottom: 400px;
@@ -417,7 +430,6 @@ td.title-major {
   color: #ffffff;
 }
 
-/* Columns */
 th.col-date,
 td.col-date {
   width: 110px;
@@ -441,6 +453,7 @@ td.col-title {
   cursor: default;
   white-space: pre-wrap;
   word-break: break-word;
+  position: relative;
 }
 
 th.col-meta,
@@ -476,7 +489,6 @@ td.col-extra {
   padding-left: 4px;
 }
 
-/* Title formatting & Keywords */
 .title-bold {
   font-weight: 700;
 }
@@ -505,9 +517,6 @@ td.col-extra {
   color: #ea4335;
 }
 
-/* ==========================================
-   5. POPOVERS & MODALS
-   ========================================== */
 .comment-corner-mark {
   position: absolute;
   top: 0;
@@ -629,7 +638,6 @@ td.col-extra:hover .comment-popover {
   opacity: 1;
 }
 
-/* Modal Overlay & Box */
 .comment-modal-overlay {
   display: none;
   position: fixed;
@@ -697,9 +705,6 @@ td.col-extra:hover .comment-popover {
   padding: 0;
 }
 
-/* ==========================================
-   6. BADGES & DECORATIVE IMAGES
-   ========================================== */
 .last-updated-badge {
   position: fixed;
   bottom: 16px;

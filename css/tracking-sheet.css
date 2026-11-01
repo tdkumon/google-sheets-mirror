@@ -167,6 +167,7 @@ th.col-title,
 td.col-title {
   width: 32%;
   min-width: 360px;
+  position: relative;
 }
 
 th.col-date,
@@ -875,4 +876,55 @@ td.col-extra:hover .comment-popover {
   display: block !important;
   position: fixed !important;
   z-index: 9999 !important;
+}
+
+td.col-title {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.progress-log-jump-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 0px;
+  text-decoration: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+tr:hover .progress-log-jump-btn {
+  opacity: 1;
+  visibility: visible;
+}
+
+body[data-year="2026"] .progress-log-jump-btn {
+  background-color: #1c2028;
+  color: #46bdc6;
+  border: 1px solid #46bdc6;
+  box-shadow: -6px 0 8px #1c2028;
+}
+body[data-year="2026"] .progress-log-jump-btn:hover {
+  background-color: #46bdc6;
+  color: #ffffff;
+}
+
+body[data-year="2025"] .progress-log-jump-btn {
+  background-color: #ffffff;
+  color: #30714f;
+  border: 1px solid #30714f;
+  box-shadow: -6px 0 8px #ffffff;
+}
+body[data-year="2025"] .progress-log-jump-btn:hover {
+  background-color: #30714f;
+  color: #ffffff;
 }

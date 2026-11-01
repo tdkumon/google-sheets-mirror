@@ -15,25 +15,28 @@ const YEAR_CONFIGS = {
     extra: 6,
     type: 8,
     daysSpent: 9,
-    comment: 10, // Column K
+    comment: 10,
+    id: 12,
   },
   2025: {
     title: 2,
     start: 3,
     finish: 4,
     extra: 5,
-    type: 7, // Column H
-    daysSpent: 8, // Column I
-    comment: 9, // Column J
+    type: 7,
+    daysSpent: 8,
+    comment: 9,
+    id: -1,
   },
   2024: {
     title: 1,
     start: -1,
     finish: 2,
     extra: 3,
-    type: 4, // Column E
+    type: 4,
     daysSpent: -1,
-    comment: -1, // Column K
+    comment: -1,
+    id: -1,
   },
 };
 
@@ -55,6 +58,40 @@ function escapeHTML(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+let progressLogSessionCounts = {};
+
+function loadProgressLogSessions() {
+  Papa.parse("../csv/progresslog.csv", {
+    download: true,
+    skipEmptyLines: true,
+    complete: function (results) {
+      progressLogSessionCounts = {};
+      results.data.forEach((row) => {
+        const colId = (row[0] || "").trim();
+        const col1 = (row[1] || "").trim();
+        const col2 = (row[2] || "").trim();
+
+        if (col1.match(/^[A-Za-z]+\s+\d{4}$/)) return;
+        if (
+          !col2 ||
+          col1.toLowerCase() === "date" ||
+          col2.toLowerCase() === "title" ||
+          colId.toLowerCase() === "id"
+        )
+          return;
+
+        if (colId) {
+          progressLogSessionCounts[colId] =
+            (progressLogSessionCounts[colId] || 0) + 1;
+        }
+      });
+      renderTables();
+    },
+  });
+}
+
+loadProgressLogSessions();
 
 function renderNoteCell(note, comment) {
   const escapedNote = escapeHTML(note);
@@ -264,7 +301,20 @@ function renderTables() {
         if (colAVal === "major") {
           td.classList.add("title-major");
         }
-        td.textContent = row[cfg.title] ? row[cfg.title].trim() : "";
+
+        const titleText = row[cfg.title] ? row[cfg.title].trim() : "";
+        const entryId = cfg.id !== -1 && row[cfg.id] ? row[cfg.id].trim() : "";
+
+        td.textContent = titleText;
+
+        if (entryId) {
+          const jumpBtn = document.createElement("a");
+          jumpBtn.href = `../progress-log/?id=${entryId}`;
+          jumpBtn.className = "progress-log-jump-btn";
+          jumpBtn.textContent = "view log ↗";
+          td.appendChild(jumpBtn);
+        }
+
         tr.appendChild(td);
       }
 
@@ -293,7 +343,16 @@ function renderTables() {
       if (cfg.daysSpent !== -1) {
         const td = document.createElement("td");
         td.className = "col-meta";
-        td.textContent = row[cfg.daysSpent] ? row[cfg.daysSpent].trim() : "";
+        const daysVal = row[cfg.daysSpent] ? row[cfg.daysSpent].trim() : "";
+        const entryId = cfg.id !== -1 && row[cfg.id] ? row[cfg.id].trim() : "";
+
+        let sessionCount = entryId ? progressLogSessionCounts[entryId] || 0 : 0;
+
+        if (sessionCount > 0) {
+          td.innerHTML = `${escapeHTML(daysVal)}<br>(${sessionCount} logged)`;
+        } else {
+          td.textContent = daysVal;
+        }
         tr.appendChild(td);
       }
 
@@ -489,3 +548,8 @@ if (tableContainer) {
     }
   });
 }
+
+function jumpToProgressLog(id) {
+  window.location.href = `../progress-log/?id=${id}`;
+}
+window.jumpToProgressLog = jumpToProgressLog;

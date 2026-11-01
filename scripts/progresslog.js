@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (bannerText) {
-      bannerText.innerHTML = `Showing entries for <strong>${escapeHTML(meta.cleanTitle)}</strong> &bull; ${meta.sessions} session${meta.sessions > 1 ? "s" : ""} &bull; First logged: ${escapeHTML(meta.firstDate)}`;
+      bannerText.innerHTML = `Showing entries for <strong>${escapeHTML(meta.cleanTitle)}</strong> &bull; ${meta.sessions} day${meta.sessions > 1 ? "s" : ""} logged &bull; First logged: ${escapeHTML(meta.firstDate)}`;
     }
 
     if (searchWrapper) searchWrapper.style.display = "none";
@@ -143,12 +143,29 @@ document.addEventListener("DOMContentLoaded", () => {
     skipEmptyLines: true,
     complete: function (results) {
       renderProgressLog(results.data);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get("id");
+      if (targetId) {
+        const row = document.querySelector(`tr[data-id="${targetId}"]`);
+        if (row) {
+          const titleSpan = row.querySelector(".title-clickable");
+          if (titleSpan) titleSpan.click();
+        }
+      }
     },
     error: function () {
       document.getElementById("table-container").innerHTML =
         '<div class="no-results">Failed to load progress log CSV data.</div>';
     },
   });
+
+  const headerImg = document.querySelector(".header-img");
+  if (headerImg) {
+    headerImg.addEventListener("click", () => {
+      document.body.classList.toggle("show-ids");
+    });
+  }
 });
 
 function cleanTitle(fullTitle) {
@@ -201,6 +218,10 @@ function clearFilter() {
 
   if (searchWrapper) searchWrapper.style.display = "flex";
   if (filterBanner) filterBanner.style.display = "none";
+
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 
   handleSearch();
 }
@@ -372,8 +393,12 @@ function renderProgressLog(rows) {
           html += `<td class="col-date" rowspan="${rowCount}">${block.date}</td>`;
         }
 
+        let idBadgeHtml = entry.id
+          ? `<span class="entry-id-badge">ID ${escapeHTML(entry.id)}</span>`
+          : "";
+
         html += `
-          <td class="col-title">${formatTitle(entry.title)}</td>
+          <td class="col-title">${formatTitle(entry.title)}${idBadgeHtml}</td>
           <td class="col-meta">${escapeHTML(entry.progress)}</td>
           <td class="col-extra">${renderNoteCell(entry.note, entry.comment)}</td>
         `;
