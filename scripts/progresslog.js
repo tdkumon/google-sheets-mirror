@@ -100,16 +100,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const entryId = row.getAttribute("data-id");
     if (!entryId) return;
 
+    const baseId = entryId.split("-")[0];
+
     const searchInput = document.getElementById("search-input");
     const searchWrapper = document.getElementById("search-wrapper");
     const filterBanner = document.getElementById("filter-banner");
     const bannerText = document.getElementById("filter-banner-text");
 
     if (searchInput) {
-      searchInput.setAttribute("data-filtered-id", entryId);
+      searchInput.setAttribute("data-filtered-id", baseId);
     }
 
-    const meta = window.progressLogMetadata[entryId] || {
+    const meta = window.progressLogMetadata[baseId] || {
       cleanTitle: cleanTitle(titleSpan.textContent.trim()),
       sessions: 1,
       firstDate: "Unknown",
@@ -319,15 +321,17 @@ function renderProgressLog(rows) {
       const entryDateStr = `${currentDayBlock.date} ${currentMonthTitle}`;
 
       if (colId) {
-        if (!window.progressLogMetadata[colId]) {
-          window.progressLogMetadata[colId] = {
+        const baseId = colId.split("-")[0];
+
+        if (!window.progressLogMetadata[baseId]) {
+          window.progressLogMetadata[baseId] = {
             cleanTitle: cleanTitle(col2),
             sessions: 0,
             firstDate: entryDateStr,
           };
         }
-        window.progressLogMetadata[colId].sessions += 1;
-        window.progressLogMetadata[colId].firstDate = entryDateStr;
+        window.progressLogMetadata[baseId].sessions += 1;
+        window.progressLogMetadata[baseId].firstDate = entryDateStr;
       }
 
       currentDayBlock.entries.push({
@@ -475,6 +479,7 @@ function handleSearch() {
 
         dayRows.forEach((row) => {
           const rowId = row.getAttribute("data-id") || "";
+          const rowBaseId = rowId ? rowId.split("-")[0] : "";
           const titleCell = row.querySelector(".col-title");
           const titleText = titleCell
             ? titleCell.textContent.toLowerCase()
@@ -483,7 +488,7 @@ function handleSearch() {
           let isMatch = false;
 
           if (activeIdFilter) {
-            isMatch = rowId === activeIdFilter;
+            isMatch = rowBaseId === activeIdFilter;
           } else {
             isMatch = query === "" || titleText.includes(query);
           }
