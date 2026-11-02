@@ -426,7 +426,7 @@ function renderNoteCell(note, comment) {
   if (!comment) return escapedNote;
 
   const escapedComment = escapeHTML(comment);
-  const isLong = comment.length > 150 || comment.split("\n").length > 3;
+  const isLong = comment.length > 350 || comment.split("\n").length > 3;
 
   return `${escapedNote}<div class="comment-corner-mark"></div><div class="comment-popover"><div class="comment-popover-header"><span>Comment</span><button type="button" class="comment-fullscreen-btn" onclick="openCommentModal(this, event)">⛶</button></div><div class="comment-popover-body ${isLong ? "is-truncated" : ""}">${escapedComment}</div>${isLong ? `<button type="button" class="comment-expand-btn" onclick="toggleCommentExpand(this, event)">Show more</button>` : ""}</div>`;
 }
