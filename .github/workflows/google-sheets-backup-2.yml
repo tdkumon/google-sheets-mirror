@@ -23,7 +23,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests Pillow
 
       - name: Download and Validate CSVs
         run: |
@@ -65,13 +65,15 @@ jobs:
             fi
           done
 
-      - name: Download Missing Thumbnails
+      - name: Download and Resize Missing Thumbnails
         run: |
           python - << 'EOF'
           import os
           import csv
           import requests
           from pathlib import Path
+          from PIL import Image
+          from io import BytesIO
 
           thumbs_dir = Path("thumbs")
           thumbs_dir.mkdir(exist_ok=True)
@@ -81,7 +83,6 @@ jobs:
               with open(csv_file, mode="r", encoding="utf-8") as f:
                   reader = csv.reader(f)
                   for row in reader:
-                      # Adjust indices if ID or Thumbnail columns change position
                       try:
                           if len(row) > 13:
                               entry_id = row[12].strip()
@@ -95,9 +96,21 @@ jobs:
                                       headers = {'User-Agent': 'Mozilla/5.0'}
                                       resp = requests.get(thumb_url, headers=headers, timeout=15)
                                       if resp.status_code == 200:
-                                          with open(file_path, "wb") as img:
-                                              img.write(resp.content)
-                                          print(f"Successfully downloaded thumbnail for {entry_id}")
+                                          # Open image from downloaded bytes, resize, and optimize
+                                          img = Image.open(BytesIO(resp.content))
+                                          
+                                          # Convert to RGB if it's RGBA/palette mode and saving as PNG (or keep transparency)
+                                          if img.mode in ("RGBA", "P"):
+                                              img = img.convert("RGBA")
+                                          else:
+                                              img = img.convert("RGB")
+                                          
+                                          # Resize maintaining aspect ratio (e.g., max width/height 200px)
+                                          img.thumbnail((200, 200), Image.Resampling.LANCZOS)
+                                          
+                                          # Save optimized image locally
+                                          img.save(file_path, "PNG", optimize=True)
+                                          print(f"Downloaded, resized, and compressed thumbnail for {entry_id}")
                       except Exception as e:
                           print(f"Skipping row error in {csv_file}: {e}")
           EOF
