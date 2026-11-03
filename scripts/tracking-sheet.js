@@ -17,6 +17,7 @@ const YEAR_CONFIGS = {
     daysSpent: 9,
     comment: 10,
     id: 12,
+    thumbnail: 13,
   },
   2025: {
     title: 2,
@@ -27,6 +28,7 @@ const YEAR_CONFIGS = {
     daysSpent: 8,
     comment: 9,
     id: -1,
+    thumbnail: -1,
   },
   2024: {
     title: 1,
@@ -37,6 +39,7 @@ const YEAR_CONFIGS = {
     daysSpent: -1,
     comment: -1,
     id: -1,
+    thumbnail: -1,
   },
 };
 
@@ -86,7 +89,11 @@ function loadProgressLogSessions() {
             (progressLogSessionCounts[colId] || 0) + 1;
         }
       });
-      renderTables();
+
+      // Only trigger a re-render if the sheet data has already been parsed and loaded
+      if (rawParsedRows && rawParsedRows.length > 0) {
+        renderTables();
+      }
     },
   });
 }
@@ -208,10 +215,32 @@ function renderTables() {
     sections.push(currentSection);
   }
 
+  // Extract entries from "Started but not finished" that start with '!'
+  let inProgressRows = [];
+  sections.forEach((sec) => {
+    if (
+      sec.title &&
+      sec.title.toLowerCase().includes("started but not finished")
+    ) {
+      sec.rows.forEach((row) => {
+        const titleText = row[cfg.title] ? row[cfg.title].trim() : "";
+        if (titleText.startsWith("!")) {
+          inProgressRows.push(row);
+        }
+      });
+    }
+  });
+
+  // Filter out the entire "Started but not finished" section
+  const filteredSections = sections.filter((sec) => {
+    const titleLower = sec.title ? sec.title.toLowerCase() : "";
+    return !titleLower.includes("started but not finished");
+  });
+
   container.textContent = "";
   let totalMatches = 0;
 
-  sections.forEach((sec) => {
+  filteredSections.forEach((sec, secIndex) => {
     const filteredRows = sec.rows.filter((row) => {
       if (searchQuery) {
         const titleIdx = cfg.title;
@@ -241,23 +270,53 @@ function renderTables() {
       return true;
     });
 
-    if (filteredRows.length === 0) return;
-    totalMatches += filteredRows.length;
+    // If this is the first section (Main table), inject and filter the in-progress rows at the top
+    let rowsToRender = filteredRows;
+    let applicableInProgress = [];
+    if (secIndex === 0 && inProgressRows.length > 0) {
+      applicableInProgress = inProgressRows.filter((row) => {
+        // Apply search query filter
+        if (searchQuery) {
+          const titleIdx = cfg.title;
+          const matchesTitle =
+            titleIdx !== -1 && row[titleIdx]
+              ? row[titleIdx].toLowerCase().includes(searchQuery)
+              : false;
+          if (!matchesTitle) return false;
+        }
+
+        // Apply type filter
+        if (selectedType !== "All") {
+          const typeIdx = cfg.type;
+          if (typeIdx !== -1) {
+            const rowType = row[typeIdx]
+              ? row[typeIdx].trim().toLowerCase()
+              : "";
+            const filter = selectedType.toLowerCase();
+
+            if (filter === "anime") {
+              if (rowType !== "anime" && rowType !== "anime (film)")
+                return false;
+            } else if (filter === "film") {
+              if (rowType !== "film" && rowType !== "anime (film)")
+                return false;
+            } else {
+              if (rowType !== filter) return false;
+            }
+          }
+        }
+
+        return true;
+      });
+    }
+
+    if (rowsToRender.length === 0 && applicableInProgress.length === 0) return;
+    totalMatches += rowsToRender.length + applicableInProgress.length;
 
     if (sec.title) {
       const h2 = document.createElement("h2");
       h2.className = "section-title";
       h2.textContent = sec.title;
-      const secTitleLower = sec.title.toLowerCase();
-
-      if (
-        !searchQuery &&
-        (secTitleLower.includes("started but not finished") ||
-          secTitleLower.includes("probably dropped"))
-      ) {
-        h2.style.marginTop = "175px";
-      }
-
       container.appendChild(h2);
     }
 
@@ -265,9 +324,7 @@ function renderTables() {
     const tbody = document.createElement("tbody");
 
     const secTitleLower = sec.title ? sec.title.toLowerCase() : "";
-    const hideHeader =
-      secTitleLower.includes("started but not finished") ||
-      secTitleLower.includes("(probably) dropped");
+    const hideHeader = secTitleLower.includes("(probably) dropped");
 
     if (!hideHeader) {
       const thead = document.createElement("thead");
@@ -285,93 +342,15 @@ function renderTables() {
       table.appendChild(thead);
     }
 
-    filteredRows.forEach((row) => {
-      const tr = document.createElement("tr");
+    // Render "in progress" items first on the main table
+    if (secIndex === 0) {
+      applicableInProgress.forEach((row) => {
+        tbody.appendChild(createRowElement(row, cfg, true));
+      });
+    }
 
-      const colAVal = row[0] ? row[0].trim().toLowerCase() : "";
-      if (colAVal === "minor") {
-        tr.classList.add("row-minor");
-      } else if (colAVal === "major") {
-        tr.classList.add("row-major");
-      }
-
-      if (cfg.title !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-title";
-        if (colAVal === "major") {
-          td.classList.add("title-major");
-        }
-
-        const titleText = row[cfg.title] ? row[cfg.title].trim() : "";
-        const entryId = cfg.id !== -1 && row[cfg.id] ? row[cfg.id].trim() : "";
-
-        td.textContent = titleText;
-
-        if (entryId) {
-          const jumpBtn = document.createElement("a");
-          jumpBtn.href = `../progress-log/?id=${entryId}`;
-          jumpBtn.className = "progress-log-jump-btn";
-          jumpBtn.textContent = "view log ↗";
-          td.appendChild(jumpBtn);
-        }
-
-        tr.appendChild(td);
-      }
-
-      if (cfg.type !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-meta";
-        td.textContent = row[cfg.type] ? row[cfg.type].trim() : "";
-        tr.appendChild(td);
-      }
-
-      if (cfg.start !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-date";
-        const startVal = row[cfg.start] ? row[cfg.start].trim() : "";
-        td.textContent = startVal === "" ? "→" : startVal;
-        tr.appendChild(td);
-      }
-
-      if (cfg.finish !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-date";
-        td.textContent = row[cfg.finish] ? row[cfg.finish].trim() : "";
-        tr.appendChild(td);
-      }
-
-      if (cfg.daysSpent !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-meta";
-        const daysVal = row[cfg.daysSpent] ? row[cfg.daysSpent].trim() : "";
-        const entryId = cfg.id !== -1 && row[cfg.id] ? row[cfg.id].trim() : "";
-
-        let sessionCount = entryId ? progressLogSessionCounts[entryId] || 0 : 0;
-
-        if (sessionCount > 0) {
-          td.innerHTML = `${escapeHTML(daysVal)}<br>(${sessionCount} logged)`;
-        } else {
-          td.textContent = daysVal;
-        }
-        tr.appendChild(td);
-      }
-
-      if (cfg.extra !== -1) {
-        const td = document.createElement("td");
-        td.className = "col-extra";
-        const noteVal = row[cfg.extra] ? row[cfg.extra].trim() : "";
-        const commentVal =
-          cfg.comment !== -1 && row[cfg.comment] ? row[cfg.comment].trim() : "";
-
-        if (commentVal) {
-          td.innerHTML = renderNoteCell(noteVal, commentVal);
-        } else {
-          td.textContent = noteVal;
-        }
-        tr.appendChild(td);
-      }
-
-      tbody.appendChild(tr);
+    rowsToRender.forEach((row) => {
+      tbody.appendChild(createRowElement(row, cfg, false));
     });
 
     table.appendChild(tbody);
@@ -390,6 +369,147 @@ function renderTables() {
       el.scrollTop = 0;
     });
   });
+}
+
+function createRowElement(row, cfg, isInProgress) {
+  const tr = document.createElement("tr");
+
+  const colAVal = row[0] ? row[0].trim().toLowerCase() : "";
+  if (colAVal === "minor") {
+    tr.classList.add("row-minor");
+  } else if (colAVal === "major") {
+    tr.classList.add("row-major");
+  }
+
+  if (cfg.title !== -1) {
+    const td = document.createElement("td");
+    td.className = "col-title";
+    if (colAVal === "major") {
+      td.classList.add("title-major");
+    }
+
+    let titleText = row[cfg.title] ? row[cfg.title].trim() : "";
+    if (isInProgress && titleText.startsWith("!")) {
+      titleText = titleText.replace(/^!\s*/, ""); // Clean up the exclamation mark
+    }
+
+    const entryId = cfg.id !== -1 && row[cfg.id] ? row[cfg.id].trim() : "";
+    const thumbnailUrl =
+      cfg.thumbnail !== -1 && row[cfg.thumbnail]
+        ? row[cfg.thumbnail].trim()
+        : "";
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "col-title-content";
+
+    // Handle thumbnail or placeholder ONLY if the sheet config supports thumbnails (i.e. cfg.thumbnail !== -1)
+    if (cfg.thumbnail !== -1) {
+      if (entryId && !entryId.startsWith("X-") && thumbnailUrl) {
+        const img = document.createElement("img");
+        img.src = `../thumbs/${entryId}.png`;
+        img.alt = "";
+        img.className = "row-thumbnail" + (isInProgress ? " in-progress" : "");
+
+        img.onerror = function () {
+          this.onerror = null;
+          this.src = thumbnailUrl;
+        };
+        wrapper.appendChild(img);
+      } else if (thumbnailUrl) {
+        const img = document.createElement("img");
+        img.src = thumbnailUrl;
+        img.alt = "";
+        img.className = "row-thumbnail";
+        wrapper.appendChild(img);
+      } else {
+        // Insert width spacer only for sheets that support thumbnails (like 2026)
+        const placeholder = document.createElement("div");
+        placeholder.className = "row-thumbnail-placeholder";
+        wrapper.appendChild(placeholder);
+      }
+    }
+
+    const textSpan = document.createElement("span");
+    textSpan.textContent = titleText;
+    wrapper.appendChild(textSpan);
+
+    // Add IN PROGRESS badge if it's an active entry
+    if (isInProgress) {
+      const badge = document.createElement("span");
+      badge.className = "in-progress-badge";
+      badge.textContent = "IN PROGRESS";
+      wrapper.appendChild(badge);
+    }
+
+    td.appendChild(wrapper);
+
+    if (entryId && !entryId.startsWith("X-")) {
+      const jumpBtn = document.createElement("a");
+      jumpBtn.href = `../progress-log/?id=${entryId}`;
+      jumpBtn.className = "progress-log-jump-btn";
+      jumpBtn.textContent = "view log ↗";
+      td.appendChild(jumpBtn);
+    }
+
+    tr.appendChild(td);
+  }
+
+  if (cfg.type !== -1) {
+    const td = document.createElement("td");
+    td.className = "col-meta";
+    td.textContent = row[cfg.type] ? row[cfg.type].trim() : "";
+    tr.appendChild(td);
+  }
+
+  if (cfg.start !== -1) {
+    const td = document.createElement("td");
+    td.className = "col-date";
+    const startVal = row[cfg.start] ? row[cfg.start].trim() : "";
+    td.textContent = startVal === "" ? "→" : startVal;
+    tr.appendChild(td);
+  }
+
+  if (cfg.finish !== -1) {
+    const td = document.createElement("td");
+    td.className = "col-date";
+    td.textContent = row[cfg.finish] ? row[cfg.finish].trim() : "";
+    tr.appendChild(td);
+  }
+
+  if (cfg.daysSpent !== -1) {
+    const td = document.createElement("td");
+    td.className = "col-meta";
+    const daysVal = row[cfg.daysSpent] ? row[cfg.daysSpent].trim() : "";
+    const entryId = cfg.id !== -1 && row[cfg.id] ? row[cfg.id].trim() : "";
+    let sessionCount =
+      entryId && !entryId.startsWith("X-")
+        ? progressLogSessionCounts[entryId] || 0
+        : 0;
+
+    if (sessionCount > 0) {
+      td.innerHTML = `${escapeHTML(daysVal)}<br>(${sessionCount} logged)`;
+    } else {
+      td.textContent = daysVal;
+    }
+    tr.appendChild(td);
+  }
+
+  if (cfg.extra !== -1) {
+    const td = document.createElement("td");
+    td.className = "col-extra";
+    const noteVal = row[cfg.extra] ? row[cfg.extra].trim() : "";
+    const commentVal =
+      cfg.comment !== -1 && row[cfg.comment] ? row[cfg.comment].trim() : "";
+
+    if (commentVal) {
+      td.innerHTML = renderNoteCell(noteVal, commentVal);
+    } else {
+      td.textContent = noteVal;
+    }
+    tr.appendChild(td);
+  }
+
+  return tr;
 }
 
 function formatUTCToLocal(utcString) {
