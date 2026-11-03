@@ -4,7 +4,30 @@
 "","","","two values = i slept in between","","","","","","","","","","","","","","","","","","","","","","","","",""
 "","date","title","playtime/episodes/etc","note","","","","","","","","","","","","","","","","","","","","","","","",""
 "","November 2026","","","","","","","","","","","","","","","","","","","","","","","","","","",""
-"237","03","started Katawa Shoujo","~1h","started Emi Ibarazaki Route","","","","","","","","","","","","","","","","","","","","","","","",""
+"236","03","finished Higurashi When They Cry: GOU (Manga)","chapter 8-15","","","","","","","","","","","","","","","","","","","","","","","","",""
+"235","","Shinryaku!? Ika Musume","episode 6 & 7","","","","","","","","","","","","","","","","","","","","","","","","",""
+"237","","started Katawa Shoujo","~1h
+~2h*","started Emi Ibarazaki Route
+*time might be slightly inaccurate, hover for insanity","it's always something
+
+in fullscreen the cursor keeps moving to the center of the screen after some random time and it doesn't disappear
+so i googled and apparently that's a known bug that's supposed to have been fixed but i am up to date and it's still there
+
+then i tried to write some own renpy script file thingy that gets rid of the cursor but the game keeps telling me there's a hidden character in the file even though there definitely is not
+
+another workaround made it so it kept appearing at the center of the screen for half a second every time there's an input which also annoys me
+
+as long as i don't use the mouse and only use the keyboard it's fine because the cursor in the center only appears when there's a mouse input but first of all i like reading VNs with my mouse and second you can very nicely scroll up to see the last text lines and scroll down to get back to the current line instead of pressing T and opening a whole text history menu
+
+so then i thought okay screw it i'm using the keyboard maybe i can at least bind the scroll wheel to my arrow keys
+so i opened powertoys keyboard manager which i use for touhou, turns out you can't bind the scroll wheel to keyboard keys in there for some reason
+
+so i wasted however many minutes looking for dozens of workarounds and ended up doing nothing and just using the keyboard and the overly complicated text history menu
+so idk if 2h is accurate i didn't look at how much time i wasted
+
+EDIT: okay i just googled apparently page up/down do the same as scroll wheel, BUT I HAVE SHAREX HOTKEYS BINDED TO THOSE AAAAA IT'S ALWAYS SOMETHING
+
+maybe i'll try reading it with my xbox controller. SURELY there won't be any problems then, right?","","","","","","","","","","","","","","","","","","","","","","",""
 "236","02","started Higurashi When They Cry: GOU (Manga)","chapter 1-7","","","","","","","","","","","","","","","","","","","","","","","","",""
 "229","","My Little Pony: Friendship Is Magic (IDW Comic)","Issue #11 & #12","","","","","","","","","","","","","","","","","","","","","","","","",""
 "235","","started Shinryaku!? Ika Musume","episode 1 & 2
