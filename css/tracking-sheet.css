@@ -901,7 +901,7 @@ td.col-extra:hover .comment-popover {
   z-index: 10;
 }
 
-td.col-title:hover .progress-log-jump-btn {
+tr:hover:not(:has(td.col-extra:hover)) .progress-log-jump-btn {
   opacity: 1;
   visibility: visible;
 }
