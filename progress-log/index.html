@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>tdk's progress log</title>
+    <meta
+      name="description"
+      content="daily progress log for anime/manga/games etc."
+    />
+    <!--<link rel="icon" type="image/png" href="../media/shinobu.png" />-->
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="tdk's progress log" />
+    <meta
+      property="og:description"
+      content="daily progress log for anime/manga/games etc."
+    />
+    <meta property="og:image" content="https://tdkumon.com/media/shinobu.png" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="tdk's progress log" />
+    <meta
+      name="twitter:description"
+      content="daily progress log for anime/manga/games etc."
+    />
+    <meta
+      name="twitter:image"
+      content="https://tdkumon.com/media/shinobu.png"
+    />
+
+    <link rel="stylesheet" href="../css/progresslog.css" />
+  </head>
+
+  <body data-year="2026">
+    <div class="header-section">
+      <div class="header-container">
+        <img src="../media/shinobu.png" alt="nobu" class="header-img" />
+        <div class="header-text">
+          <h1>tdk's daily progress log</h1>
+          <p style="font-size: 20px">
+            daily progress log for everything that seems relevant to me
+          </p>
+        </div>
+      </div>
+      <div class="links-container">
+        <a href="../">homepage</a>
+        <a
+          href="https://docs.google.com/spreadsheets/d/1E_CjeXDPRjPy0PWOipLHwxvdX129M2vg9ULqXZK0GWA"
+          target="_blank"
+          rel="noopener"
+          >google sheets version</a
+        >
+        <a href="../tracking-sheet/"
+          >more comprehensible tracking sheet w/ only start & finish dates</a
+        >
+      </div>
+    </div>
+
+    <div class="search-container">
+      <div class="search-wrapper" id="search-wrapper">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search by title..."
+          oninput="handleManualInput()"
+          autocomplete="off"
+        />
+        <button id="clear-filter-btn" onclick="clearFilter()">
+          clear filter
+        </button>
+      </div>
+      <div class="filter-banner" id="filter-banner" style="display: none">
+        <div class="filter-banner-content" id="filter-banner-text">
+          Showing entries for...
+        </div>
+        <button id="banner-clear-btn" onclick="clearFilter()">
+          clear filter
+        </button>
+      </div>
+    </div>
+
+    <div id="table-container">Loading data...</div>
+
+    <div id="last-updated" class="last-updated-badge">
+      Loading update time...
+    </div>
+
+    <img src="../media/nobu.png" alt="nobu" class="bottom-right-shinobu" />
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="../scripts/progresslog.js"></script>
+  </body>
+</html>

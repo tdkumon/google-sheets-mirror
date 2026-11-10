@@ -1,0 +1,36 @@
+name: Automatic Google Sheet Backup
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  trackingsheet-backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Sheet CSVs
+        run: |
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=0&single=true&output=csv" -o trackingsheet-2026.csv
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=1563791943&single=true&output=csv" -o trackingsheet-2025.csv
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=531912198&single=true&output=csv" -o trackingsheet-2024.csv
+
+      - name: Commit and Push Updated Backup
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add trackingsheet-*.csv
+
+          # Only update timestamp and commit if CSV content actually changed
+          if ! git diff --quiet --staged; then
+            date -u +"%d/%m/%Y %H:%M UTC" > trackingsheet-last-updated.txt
+            git add trackingsheet-last-updated.txt
+            git commit -m "Auto-update sheet backup [skip ci]"
+            git push
+          fi

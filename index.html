@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>tdkumon links</title>
+    <meta name="description" content="all awesome links of tdkumon" />
+
+    <link rel="icon" type="image/png" href="../media/renge.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="tdkumon links" />
+    <meta property="og:description" content="all awesome links of tdkumon" />
+    <meta property="og:image" content="https://tdkumon.com/media/shinobu.png" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="tdkumon links" />
+    <meta name="twitter:description" content="all awesome links of tdkumon" />
+    <meta
+      name="twitter:image"
+      content="https://tdkumon.com/media/shinobu.png"
+    />
+
+    <style>
+      :root {
+        --bg-color: #1c1c1c;
+        --text-color: #bdc0c2;
+        --link-color: #4f93d8;
+        --code-bg: #a3717126;
+        --code-color: #e0aeb4;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.5;
+        margin: 0;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1124px;
+        background-color: #262626;
+        padding: 20px;
+      }
+
+      .status-container {
+        background: unset;
+        padding-top: unset;
+        margin: unset;
+        font-family: "MS PGothic", "MS Gothic", "MS Gothic Web", sans-serif;
+      }
+
+      a {
+        color: var(--link-color);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: var(--text-color);
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+      }
+
+      code {
+        background-color: var(--code-bg);
+        color: var(--code-color);
+        padding: 2px 3px;
+        font-size: 0.85em;
+        font-family:
+          ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo,
+          monospace;
+      }
+
+      p {
+        margin-bottom: 1.2rem;
+      }
+
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .header-left img {
+        width: 100px;
+        height: 100px;
+      }
+
+      .header-left h1 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .music-player-widget {
+        width: 300px;
+        max-width: 100%;
+        background-color: #1c1c1c;
+        border: 1px solid #3a3a3a;
+        padding: 8px;
+        border-radius: 6px;
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      }
+
+      .marquee-wrapper {
+        background-color: #151515;
+        border: 1px solid #333;
+        color: #e0aeb4;
+        padding: 3px 6px;
+        font-size: 0.8rem;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-bottom: 6px;
+        border-radius: 3px;
+      }
+
+      .marquee-wrapper:hover .marquee-text {
+        animation-play-state: paused;
+      }
+
+      .marquee-text {
+        display: inline-block;
+        padding-left: 100%;
+        animation: marquee 12s linear infinite;
+        will-change: transform;
+      }
+
+      @keyframes marquee {
+        0% {
+          transform: translateX(8%);
+        }
+        100% {
+          transform: translateX(-103%);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-text {
+          animation: none;
+          padding-left: 0;
+        }
+      }
+
+      .music-player-widget audio {
+        width: 100%;
+        height: 30px;
+        filter: invert(0.85) hue-rotate(180deg);
+      }
+
+      .shuffle-character {
+        position: fixed;
+        bottom: 0;
+        right: 0px;
+        max-height: 500px;
+        width: auto;
+        max-width: 400px;
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      @media (max-width: 1200px) {
+        .shuffle-character {
+          display: none !important;
+        }
+      }
+
+      @font-face {
+        font-family: "MS Gothic Web";
+        src: url("fonts/MS Gothic.ttf") format("truetype");
+        font-display: swap;
+      }
+
+      @media (max-height: 1080px) {
+        body {
+          font-size: 14.5px;
+          gap: 12px;
+          padding: 30px 20px;
+          overflow: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        body::-webkit-scrollbar {
+          display: none;
+        }
+        .container {
+          margin-bottom: 0;
+        }
+        p {
+          margin-bottom: 0.5rem;
+        }
+        .shuffle-character {
+          max-width: 300px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header-row">
+        <div class="header-left">
+          <img id="avatar-img" />
+          <h1 id="tdk-links">tdk links</h1>
+        </div>
+
+        <div class="music-player-widget">
+          <div class="marquee-wrapper">
+            <span class="marquee-text">♫ Yakuza 4 OST Track 6 - Funny</span>
+          </div>
+
+          <audio
+            controls
+            loop
+            preload="metadata"
+            onloadedmetadata="this.volume = 0.1"
+          >
+            <source src="media/funny.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+
+      <p>
+        <strong>socials</strong> <code>(follow me please)</code><br />
+        twitter:
+        <a
+          href="https://x.com/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >x.com/tdkumon</a
+        ><br />
+        twitch:
+        <a
+          href="https://twitch.tv/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >twitch.tv/tdkumon</a
+        ><br />
+        youtube:
+        <a
+          href="https://youtube.com/@tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >youtube.com/@tdkumon</a
+        ><br />
+        discord: @tdkumon
+      </p>
+
+      <p>
+        <strong>anime and games and stuff</strong>
+        <code>(send friend requests please)</code><br />
+        anilist:
+        <a
+          href="https://anilist.co/user/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >anilist.co/user/tdkumon</a
+        >
+        <br />
+        mal:
+        <a
+          href="https://myanimelist.net/profile/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >myanimelist.net/profile/tdkumon</a
+        ><br />
+        vndb:
+        <a
+          href="https://vndb.org/u274677"
+          target="_blank"
+          rel="noopener noreferrer"
+          >vndb.org/u274677</a
+        ><br />
+        steam:
+        <a
+          href="https://steamcommunity.com/id/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >steamcommunity.com/id/tdkumon</a
+        ><br />
+        letterboxd:
+        <a
+          href="https://letterboxd.com/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >letterboxd.com/tdkumon</a
+        ><br />
+        backloggd:
+        <a
+          href="https://backloggd.com/u/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >backloggd.com/u/tdkumon</a
+        >
+      </p>
+
+      <p>
+        <span style="color: lightgreen"
+          >personal tracking sheet with everything of the above &amp; more</span
+        ><br />
+        <a href="/tracking-sheet">tdkumon.com/tracking-sheet</a><br />
+        <span style="color: lightgreen"
+          >daily progress log for everything i read/watch/play</span
+        ><br />
+        <a href="/progress-log">tdkumon.com/progress-log</a>
+      </p>
+
+      <p>
+        <a
+          href="https://www.youtube.com/watch?v=m_OpBUfp5KY"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://i.ytimg.com/vi/m_OpBUfp5KY/maxresdefault.jpg"
+            alt="Demetori - Border of Life"
+            title="Demetori - Border of Life"
+            style="width: 300px; height: 169px"
+          />
+        </a>
+      </p>
+
+      <p style="margin-bottom: unset">
+        professional linktree:
+        <a
+          href="https://linktr.ee/tdkumon"
+          target="_blank"
+          rel="noopener noreferrer"
+          >linktr.ee/tdkumon</a
+        >
+        <br />
+        contact@tdkumon.com
+      </p>
+    </div>
+
+    <div class="container status-container">
+      <p style="margin: unset" id="last-completed">last completed:</p>
+      <p style="margin: unset; display: none" id="currently-active"></p>
+    </div>
+
+    <img
+      id="shuffle-img"
+      class="shuffle-character"
+      style="display: none"
+      alt=""
+    />
+
+    <script>
+      async function loadRandomCharacter() {
+        try {
+          const response = await fetch("media/shuffle/images.json");
+          if (!response.ok) return;
+
+          const images = await response.json();
+          if (!Array.isArray(images) || images.length === 0) return;
+
+          const randomImage = images[Math.floor(Math.random() * images.length)];
+          const imgElem = document.getElementById("shuffle-img");
+          if (imgElem) {
+            imgElem.src = `media/shuffle/${randomImage}`;
+            imgElem.style.display = "block";
+          }
+        } catch (error) {
+          console.error("Failed to load random character image:", error);
+        }
+      }
+
+      async function fetchTrackingData() {
+        try {
+          const currentYear = new Date().getFullYear();
+          const response = await fetch(`csv/trackingsheet-${currentYear}.csv`);
+          if (!response.ok) return;
+
+          const text = await response.text();
+          const rows = parseCSV(text);
+
+          let titleCol = 2;
+          for (let i = 0; i < rows.length; i++) {
+            const idx = rows[i].findIndex(
+              (col) => col.toLowerCase() === "title",
+            );
+            if (idx !== -1) {
+              titleCol = idx;
+              break;
+            }
+          }
+
+          let startedIndex = -1;
+          let droppedIndex = rows.length;
+
+          for (let i = 0; i < rows.length; i++) {
+            const colValue = rows[i][titleCol]
+              ? rows[i][titleCol].toLowerCase()
+              : "";
+            if (colValue.includes("started but not finished")) {
+              startedIndex = i;
+            } else if (
+              startedIndex !== -1 &&
+              colValue.includes("(probably) dropped")
+            ) {
+              droppedIndex = i;
+              break;
+            }
+          }
+
+          let cutoffIndex = startedIndex !== -1 ? startedIndex : rows.length;
+          let lastTitle = "";
+
+          for (let i = cutoffIndex - 1; i >= 0; i--) {
+            let title = rows[i][titleCol] ? rows[i][titleCol].trim() : "";
+            title = title.replace(/\s+/g, " ");
+
+            let colA = rows[i][0] ? rows[i][0].trim().toLowerCase() : "";
+
+            if (
+              title &&
+              title.toLowerCase() !== "title" &&
+              !title.toLowerCase().includes("started but not finished") &&
+              !title.toLowerCase().includes("tracking sheet") &&
+              !title.toLowerCase().includes("progress log") &&
+              !colA.includes("minor")
+            ) {
+              lastTitle = title;
+              break;
+            }
+          }
+
+          if (lastTitle) {
+            document.getElementById("last-completed").textContent =
+              `last completed: ${lastTitle}`;
+          }
+
+          const activeTitles = [];
+          if (startedIndex !== -1) {
+            for (let i = startedIndex + 1; i < droppedIndex; i++) {
+              let title = rows[i][titleCol] ? rows[i][titleCol].trim() : "";
+              title = title.replace(/\s+/g, " ");
+
+              if (title.startsWith("!")) {
+                const cleanTitle = title.slice(1).trim();
+                if (cleanTitle) {
+                  activeTitles.push(cleanTitle);
+                }
+              }
+            }
+          }
+
+          const activeElem = document.getElementById("currently-active");
+          if (activeTitles.length > 0) {
+            activeElem.textContent = `in progress: ${activeTitles.join(", ")}`;
+            activeElem.style.display = "block";
+          } else {
+            document.getElementById("last-completed").style.marginBottom = "0";
+            activeElem.style.display = "none";
+          }
+        } catch (error) {
+          console.error("Error loading tracking sheet:", error);
+        }
+      }
+
+      function parseCSV(text) {
+        const rows = [];
+        let currentRow = [];
+        let currentCell = "";
+        let inQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          const nextChar = text[i + 1];
+
+          if (char === '"') {
+            if (inQuotes && nextChar === '"') {
+              currentCell += '"';
+              i++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (char === "," && !inQuotes) {
+            currentRow.push(currentCell.trim());
+            currentCell = "";
+          } else if ((char === "\r" || char === "\n") && !inQuotes) {
+            if (char === "\r" && nextChar === "\n") {
+              i++;
+            }
+            currentRow.push(currentCell.trim());
+            if (currentRow.some((cell) => cell.length > 0)) {
+              rows.push(currentRow);
+            }
+            currentRow = [];
+            currentCell = "";
+          } else {
+            currentCell += char;
+          }
+        }
+
+        if (currentCell.length > 0 || currentRow.length > 0) {
+          currentRow.push(currentCell.trim());
+          if (currentRow.some((cell) => cell.length > 0)) {
+            rows.push(currentRow);
+          }
+        }
+
+        return rows;
+      }
+
+      async function loadRandomAvatar() {
+        const avatars = [
+          "shinobu.png",
+          "renge.png",
+          "mspaintoc.png",
+          "rikapacifier.png",
+          "commissionocpfp.png",
+          "sakuyaforsen.jpg",
+          "sakuyafumo.jpg",
+          "umarutdk.jpg",
+          "thegreatandpowerfultrixie.png",
+        ];
+
+        const randomAvatar =
+          avatars[Math.floor(Math.random() * avatars.length)];
+        const avatarElem = document.getElementById("avatar-img");
+        if (avatarElem) {
+          avatarElem.src = `media/${randomAvatar}`;
+        }
+      }
+
+      loadRandomAvatar();
+      loadRandomCharacter();
+      fetchTrackingData();
+    </script>
+  </body>
+</html>

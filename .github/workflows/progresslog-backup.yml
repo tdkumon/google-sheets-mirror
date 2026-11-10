@@ -1,0 +1,34 @@
+name: Automatic Progress Log Backup
+
+on:
+  schedule:
+    - cron: '5 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  progresslog-backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Progress Log CSV
+        run: |
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/1E_CjeXDPRjPy0PWOipLHwxvdX129M2vg9ULqXZK0GWA/gviz/tq?tqx=out:csv&headers=0" -o progresslog.csv
+
+      - name: Commit and Push Updated Backup
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add progresslog.csv
+
+          # Only update timestamp and commit if CSV content actually changed
+          if ! git diff --quiet --staged; then
+            date -u +"%d/%m/%Y %H:%M UTC" > progresslog-last-updated.txt
+            git add progresslog-last-updated.txt
+            git commit -m "Auto-update progress log backup [skip ci]"
+            git push
+          fi

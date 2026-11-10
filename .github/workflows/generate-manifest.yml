@@ -1,0 +1,32 @@
+name: Generate Image Manifest
+
+on:
+  push:
+    paths:
+      - 'media/shuffle/**'
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  generate-manifest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate images.json
+        run: |
+          mkdir -p media/shuffle
+          cd media/shuffle
+          # Scans folder for images and formats names into a JSON array
+          find . -maxdepth 1 -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" -o -iname "*.gif" \) -exec basename {} \; | sort | jq -R . | jq -s . > images.json
+
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "auto: update media/shuffle/images.json"
+          file_pattern: "media/shuffle/images.json"
