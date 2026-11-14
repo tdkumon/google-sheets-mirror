@@ -38,7 +38,7 @@ jobs:
           curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=531912198&single=true&output=csv" -o csv/trackingsheet-2024.csv
 
           # Download Progress Log into csv/ folder
-          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/1E_CjeXDPRjPy0PWOipLHwxvdX129M2vg9ULqXZK0GWA/gviz/tq?tqx=out:csv&headers=0" -o csv/progresslog.csv
+          curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vTgxlKcxV9xO4kuqD0EMA4lzYhFuOXIXY1nRYMCDG81WEetN54vXwX5sLPn0zg783nsc2WS8HqamWZV/pub?output=csv" -o csv/progresslog.csv
 
           # 1. Generic checks: Non-empty and not an HTML web page
           for f in csv/trackingsheet-*.csv csv/progresslog.csv; do
