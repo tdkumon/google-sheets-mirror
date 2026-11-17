@@ -366,7 +366,7 @@ function renderProgressLog(rows) {
             <div class="comment-corner-mark"></div>
             <div class="comment-popover">
               <div class="comment-popover-header">COMMENT</div>
-              <div class="comment-popover-body">if there are two values in two lines (like episode 1 in one line, then episode 2 in the next), it means i slept in between (like i watched episode 1 at 2 AM, went to sleep, then watched episode 2 some time after i woke up, but still on the same date)</div>
+              <div class="comment-popover-body">if there are two values in two separate lines without an "&" (like episode 1 in one line, then episode 2 in the next), it means i slept in between (for example, i watched episode 1 at 2 AM, went to sleep, then watched episode 2 sometime after i woke up, but still on the same date)</div>
             </div>
           </th>
           <th class="col-extra">note</th>
