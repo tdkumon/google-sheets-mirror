@@ -120,10 +120,42 @@ document.addEventListener("DOMContentLoaded", () => {
       cleanTitle: cleanTitle(titleSpan.textContent.trim()),
       sessions: 1,
       firstDate: "Unknown",
+      lastDate: "Unknown",
+      status: "In Progress",
+      revisits: 0,
     };
 
     if (bannerText) {
-      bannerText.innerHTML = `Showing entries for <strong>${escapeHTML(meta.cleanTitle)}</strong> &bull; ${meta.sessions} day${meta.sessions > 1 ? "s" : ""} logged &bull; First logged: ${escapeHTML(meta.firstDate)}`;
+      const revisitHtml =
+        meta.revisits > 0
+          ? `<span class="entry-revisit-info" title="Revisited ${meta.revisits} time(s)">↻ ${meta.revisits}</span>`
+          : "";
+
+      bannerText.innerHTML = `
+        <div class="entry-card">
+          <img class="entry-card-thumb" src="../thumbs/${escapeHTML(baseId)}.png" alt="" onerror="this.src='../thumbs/yuno.png'">
+          <div class="entry-card-info">
+            <div class="entry-card-title">${escapeHTML(meta.cleanTitle)} ${revisitHtml}</div>
+            <div class="entry-card-status-row">
+              <strong>Status:</strong> <span class="entry-status-badge status-${meta.status.toLowerCase().replace(/\s+/g, "-")}">${escapeHTML(meta.status)}</span>
+            </div>
+            <div class="entry-card-metrics-row">
+              <div class="entry-metric-item">
+                <span class="entry-metric-label">Days Logged</span>
+                <span class="entry-metric-value">${meta.sessions}</span>
+              </div>
+              <div class="entry-metric-item">
+                <span class="entry-metric-label">First Logged</span>
+                <span class="entry-metric-value">${escapeHTML(meta.firstDate)}</span>
+              </div>
+              <div class="entry-metric-item">
+                <span class="entry-metric-label">Last Logged</span>
+                <span class="entry-metric-value">${escapeHTML(meta.lastDate)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
     if (searchWrapper) searchWrapper.style.display = "none";
@@ -280,6 +312,8 @@ function renderProgressLog(rows) {
   let currentMonthTitle = "";
   let monthSections = [];
   let currentDayBlock = null;
+  // Inside renderProgressLog(rows):
+  let idEntriesMap = {};
 
   rows.forEach((row) => {
     const colId = (row[0] || "").trim();
@@ -326,17 +360,30 @@ function renderProgressLog(rows) {
       const entryDateStr = `${currentDayBlock.date} ${currentMonthTitle}`;
 
       if (colId) {
-        const baseId = colId.split("-")[0];
+        const parts = colId.split("-");
+        const baseId = parts[0];
+        const revisitNum = parts.length > 1 ? parseInt(parts[1], 10) : 1;
+        const dateObj = new Date(entryDateStr);
 
-        if (!window.progressLogMetadata[baseId]) {
-          window.progressLogMetadata[baseId] = {
-            cleanTitle: cleanTitle(col2),
-            sessions: 0,
-            firstDate: entryDateStr,
+        if (!idEntriesMap[baseId]) {
+          idEntriesMap[baseId] = {
+            titles: [],
+            dates: [],
+            entriesCount: 0,
+            maxRevisit: 1,
           };
         }
-        window.progressLogMetadata[baseId].sessions += 1;
-        window.progressLogMetadata[baseId].firstDate = entryDateStr;
+        idEntriesMap[baseId].entriesCount += 1;
+        idEntriesMap[baseId].titles.push(col2);
+        if (revisitNum > idEntriesMap[baseId].maxRevisit) {
+          idEntriesMap[baseId].maxRevisit = revisitNum;
+        }
+        if (!isNaN(dateObj.getTime())) {
+          idEntriesMap[baseId].dates.push({
+            dateStr: entryDateStr,
+            dateObj: dateObj,
+          });
+        }
       }
 
       currentDayBlock.entries.push({
@@ -347,6 +394,55 @@ function renderProgressLog(rows) {
         comment: col5,
       });
     }
+  });
+
+  Object.keys(idEntriesMap).forEach((baseId) => {
+    const data = idEntriesMap[baseId];
+    data.dates.sort((a, b) => a.dateObj - b.dateObj);
+
+    const firstDate = data.dates.length > 0 ? data.dates[0].dateStr : "Unknown";
+    const lastDate =
+      data.dates.length > 0
+        ? data.dates[data.dates.length - 1].dateStr
+        : "Unknown";
+    const lastDateObj =
+      data.dates.length > 0 ? data.dates[data.dates.length - 1].dateObj : null;
+    const cleanTitleText =
+      data.titles.length > 0 ? cleanTitle(data.titles[0]) : baseId;
+
+    let status = "In Progress";
+    let hasFinished = false;
+    let hasDropped = false;
+
+    data.titles.forEach((title) => {
+      const lower = title.toLowerCase();
+      if (/\b(finished|played|read|watched)\b/.test(lower)) hasFinished = true;
+      if (/\b(dropped)\b/.test(lower)) hasDropped = true;
+    });
+
+    if (hasFinished) {
+      status = "Completed";
+    } else if (hasDropped) {
+      status = "Dropped";
+    } else if (lastDateObj) {
+      const diffDays = (new Date() - lastDateObj) / (1000 * 60 * 60 * 24);
+      if (diffDays > 30) {
+        status = "Paused";
+      } else {
+        status = "In Progress";
+      }
+    }
+
+    const revisits = data.maxRevisit > 1 ? data.maxRevisit - 1 : 0;
+
+    window.progressLogMetadata[baseId] = {
+      cleanTitle: cleanTitleText,
+      sessions: data.entriesCount,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      status: status,
+      revisits: revisits,
+    };
   });
 
   monthSections.forEach((section, sIndex) => {
