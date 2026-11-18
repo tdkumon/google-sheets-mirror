@@ -312,7 +312,6 @@ function renderProgressLog(rows) {
   let currentMonthTitle = "";
   let monthSections = [];
   let currentDayBlock = null;
-  // Inside renderProgressLog(rows):
   let idEntriesMap = {};
 
   rows.forEach((row) => {
