@@ -897,3 +897,59 @@ td.col-extra:hover .comment-popover {
   color: #ffffff;
   box-shadow: 2px 2px 0px #ffffff;
 }
+
+.view-all-link {
+  background: none;
+  border: none;
+  color: #8b92a5;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 4px;
+  text-decoration: underline;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  transition: color 0.15s ease;
+  min-width: 70px;
+  text-align: center;
+}
+
+.view-all-link:hover {
+  color: #ea377a;
+}
+
+.alphabetical-list-container {
+  display: none;
+  max-width: 1700px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 16px;
+  margin-bottom: 28px;
+}
+
+.alphabetical-list-container.is-active {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.alpha-list-item {
+  color: #ffffff;
+  font-size: 15px;
+  font-family: "Noto Sans JP", sans-serif;
+  cursor: pointer;
+  width: fit-content;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition:
+    text-decoration-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.alpha-list-item:hover {
+  color: #ea377a;
+  text-decoration-color: #ea377a;
+}

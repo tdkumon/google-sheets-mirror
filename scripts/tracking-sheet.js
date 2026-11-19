@@ -124,15 +124,71 @@ function toggleCommentExpand(btn, event) {
   }
 }
 
-function switchTab(year) {
-  currentYear = year;
-  document.body.dataset.year = year;
+const DEFAULT_YEAR = "2026";
+
+function getInitialYear() {
+  const params = new URLSearchParams(window.location.search);
+  const requestedYear = (params.get("year") || "").trim();
+  if (
+    requestedYear &&
+    Object.prototype.hasOwnProperty.call(YEAR_CONFIGS, requestedYear)
+  ) {
+    return requestedYear;
+  }
+  return DEFAULT_YEAR;
+}
+
+function updateYearInUrl(year, { replace = false } = {}) {
+  if (
+    !window.history ||
+    (!window.history.pushState && !window.history.replaceState)
+  ) {
+    return;
+  }
+  const url = new URL(window.location.href);
+  if (year === DEFAULT_YEAR) {
+    url.searchParams.delete("year");
+  } else {
+    url.searchParams.set("year", year);
+  }
+  const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+  if (replace) {
+    window.history.replaceState({ year }, "", nextUrl);
+  } else {
+    window.history.pushState({ year }, "", nextUrl);
+  }
+}
+
+function switchTab(year, options = {}) {
+  const validYear = Object.prototype.hasOwnProperty.call(YEAR_CONFIGS, year)
+    ? year
+    : DEFAULT_YEAR;
+  const { syncUrl = true, replaceUrl = false } = options;
+
+  currentYear = validYear;
+  document.body.dataset.year = validYear;
 
   document.querySelectorAll(".tab-btn").forEach((btn) => {
-    btn.classList.toggle("active", btn.textContent === year);
+    const btnYear = (btn.dataset.year || btn.textContent || "").trim();
+    btn.classList.toggle("active", btnYear === validYear);
   });
-  loadSheetData(year);
+
+  if (syncUrl) {
+    updateYearInUrl(validYear, { replace: replaceUrl });
+  }
+
+  loadSheetData(validYear);
 }
+
+window.addEventListener("popstate", (event) => {
+  const yearFromState = event.state && event.state.year;
+  const targetYear =
+    yearFromState &&
+    Object.prototype.hasOwnProperty.call(YEAR_CONFIGS, yearFromState)
+      ? yearFromState
+      : getInitialYear();
+  switchTab(targetYear, { syncUrl: false });
+});
 
 function loadSheetData(year) {
   const container = document.getElementById("table-container");
@@ -582,7 +638,7 @@ fetch("../trackingsheet-last-updated.txt?v=" + Date.now())
 document.getElementById("type-filter").value = "All";
 document.getElementById("search-input").value = "";
 
-switchTab("2026");
+switchTab(getInitialYear(), { syncUrl: true, replaceUrl: true });
 
 const tableContainer = document.getElementById("table-container");
 

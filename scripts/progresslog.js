@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (filterBanner) filterBanner.style.display = "flex";
 
     handleSearch();
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   });
 
   fetch("../progresslog-last-updated.txt?v=" + Date.now())
@@ -186,7 +187,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const targetId = urlParams.get("id");
       if (targetId) {
-        const row = document.querySelector(`tr[data-id="${targetId}"]`);
+        const safeId = CSS.escape(targetId);
+        const row = document.querySelector(
+          `tr[data-id="${safeId}"], tr[data-id^="${safeId}-"]`,
+        );
         if (row) {
           const titleSpan = row.querySelector(".title-clickable");
           if (titleSpan) titleSpan.click();
@@ -205,15 +209,31 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.toggle("show-ids");
     });
   }
+
+  const searchContainer = document.querySelector(".search-container");
+  let alphaContainer = document.getElementById("alphabetical-list-container");
+  if (!alphaContainer && searchContainer) {
+    alphaContainer = document.createElement("div");
+    alphaContainer.id = "alphabetical-list-container";
+    alphaContainer.className = "alphabetical-list-container";
+    searchContainer.after(alphaContainer);
+  }
+
+  const viewAllBtn = document.getElementById("view-all-btn");
+  if (viewAllBtn) {
+    viewAllBtn.addEventListener("click", toggleViewAll);
+  }
 });
 
 function cleanTitle(fullTitle) {
-  let cleaned = fullTitle
-    .replace(
-      /^.*?\b(finished|played|read|watched|started|dropped|restarted)\b\s*/i,
-      "",
-    )
-    .trim();
+  const actionWord =
+    "(?:finished|played|read|watched|started|dropped|restarted)";
+  const actionPrefixRegex = new RegExp(
+    `^.*?\\b${actionWord}(?:\\s*(?:&|and)\\s*${actionWord})*\\b\\s*`,
+    "i",
+  );
+
+  let cleaned = fullTitle.replace(actionPrefixRegex, "").trim();
 
   const allowedMediaRegex = /\b(Anime|Manga|Light Novel|VN|Book)\b/i;
 
@@ -245,6 +265,9 @@ function handleManualInput() {
 }
 
 function clearFilter() {
+  const shouldReturnToViewAll = returnToViewAllOnClear;
+  returnToViewAllOnClear = false;
+
   const searchInput = document.getElementById("search-input");
   const searchWrapper = document.getElementById("search-wrapper");
   const filterBanner = document.getElementById("filter-banner");
@@ -263,6 +286,10 @@ function clearFilter() {
   }
 
   handleSearch();
+
+  if (shouldReturnToViewAll && !isViewAllActive) {
+    toggleViewAll();
+  }
 }
 
 function formatUTCToLocal(utcString) {
@@ -720,6 +747,72 @@ function closeCommentModal() {
     overlay.classList.remove("is-active");
     document.body.style.overflow = "";
   }
+}
+
+let isViewAllActive = false;
+let returnToViewAllOnClear = false;
+
+function toggleViewAll() {
+  isViewAllActive = !isViewAllActive;
+  const viewAllBtn = document.getElementById("view-all-btn");
+  const tableContainer = document.getElementById("table-container");
+  const alphaContainer = document.getElementById("alphabetical-list-container");
+
+  if (viewAllBtn) {
+    viewAllBtn.textContent = isViewAllActive ? "View Log" : "View All";
+  }
+
+  if (isViewAllActive) {
+    renderAlphabeticalList();
+    if (tableContainer) tableContainer.style.display = "none";
+    if (alphaContainer) alphaContainer.classList.add("is-active");
+  } else {
+    if (tableContainer) tableContainer.style.display = "";
+    if (alphaContainer) {
+      alphaContainer.classList.remove("is-active");
+      alphaContainer.innerHTML = "";
+    }
+  }
+}
+
+function renderAlphabeticalList() {
+  const alphaContainer = document.getElementById("alphabetical-list-container");
+  if (!alphaContainer) return;
+
+  alphaContainer.innerHTML = "";
+
+  const entries = Object.keys(window.progressLogMetadata).map((baseId) => ({
+    baseId: baseId,
+    cleanTitle: window.progressLogMetadata[baseId].cleanTitle,
+  }));
+
+  entries.sort((a, b) =>
+    a.cleanTitle.localeCompare(b.cleanTitle, undefined, {
+      sensitivity: "base",
+    }),
+  );
+
+  entries.forEach((item) => {
+    const el = document.createElement("div");
+    el.className = "alpha-list-item";
+    el.textContent = item.cleanTitle;
+
+    el.addEventListener("click", () => {
+      const row = document.querySelector(
+        `tr[data-id="${CSS.escape(item.baseId)}"], tr[data-id^="${CSS.escape(item.baseId)}-"]`,
+      );
+      if (row) {
+        const titleSpan = row.querySelector(".title-clickable");
+        if (titleSpan) {
+          returnToViewAllOnClear = true;
+          toggleViewAll();
+          titleSpan.click();
+        }
+      }
+    });
+
+    alphaContainer.appendChild(el);
+  });
 }
 
 window.openCommentModal = openCommentModal;
