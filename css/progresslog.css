@@ -911,7 +911,7 @@ td.col-extra:hover .comment-popover {
   white-space: nowrap;
   flex: 0 0 auto;
   transition: color 0.15s ease;
-  min-width: 70px;
+  min-width: 50px;
   text-align: center;
 }
 

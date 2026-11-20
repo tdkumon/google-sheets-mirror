@@ -85,7 +85,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("search-input");
   const clearBtn = document.getElementById("clear-filter-btn");
 
-  if (searchInput) searchInput.value = "";
+  if (searchInput) {
+    searchInput.value = "";
+    searchInput.addEventListener("input", () => {
+      if (isViewAllActive) {
+        filterAlphabeticalList(searchInput.value);
+      } else {
+        handleManualInput();
+      }
+    });
+  }
 
   if (clearBtn) {
     clearBtn.addEventListener("click", clearFilter);
@@ -579,6 +588,11 @@ function handleSearch() {
   const activeIdFilter = searchInput.getAttribute("data-filtered-id");
   const tables = document.querySelectorAll("#table-container table");
 
+  if (isViewAllActive) {
+    filterAlphabeticalList(query);
+    return;
+  }
+
   tables.forEach((table) => {
     let tableHasMatches = false;
     const tbodies = table.querySelectorAll("tbody");
@@ -757,21 +771,63 @@ function toggleViewAll() {
   const viewAllBtn = document.getElementById("view-all-btn");
   const tableContainer = document.getElementById("table-container");
   const alphaContainer = document.getElementById("alphabetical-list-container");
+  const searchInput = document.getElementById("search-input");
+  const searchWrapper = document.getElementById("search-wrapper");
+  const filterBanner = document.getElementById("filter-banner");
+
+  if (searchInput) {
+    searchInput.value = "";
+    searchInput.removeAttribute("data-filtered-id");
+    searchInput.style.removeProperty("width");
+  }
+  if (searchWrapper) searchWrapper.style.display = "flex";
+  if (filterBanner) filterBanner.style.display = "none";
 
   if (viewAllBtn) {
-    viewAllBtn.textContent = isViewAllActive ? "View Log" : "View All";
+    viewAllBtn.textContent = isViewAllActive ? "back" : "index";
   }
 
   if (isViewAllActive) {
     renderAlphabeticalList();
     if (tableContainer) tableContainer.style.display = "none";
     if (alphaContainer) alphaContainer.classList.add("is-active");
+    filterAlphabeticalList("");
   } else {
     if (tableContainer) tableContainer.style.display = "";
     if (alphaContainer) {
       alphaContainer.classList.remove("is-active");
       alphaContainer.innerHTML = "";
     }
+    handleSearch();
+  }
+}
+
+function filterAlphabeticalList(query) {
+  const alphaContainer = document.getElementById("alphabetical-list-container");
+  if (!alphaContainer) return;
+
+  const normalizedQuery = (query || "").toLowerCase().trim();
+  const items = alphaContainer.querySelectorAll(".alpha-list-item");
+  let matchCount = 0;
+
+  items.forEach((item) => {
+    const text = item.textContent.toLowerCase();
+    const isMatch = normalizedQuery === "" || text.includes(normalizedQuery);
+    item.style.display = isMatch ? "" : "none";
+    if (isMatch) matchCount++;
+  });
+
+  let emptyEl = alphaContainer.querySelector(".no-results");
+  if (matchCount === 0 && normalizedQuery !== "") {
+    if (!emptyEl) {
+      emptyEl = document.createElement("div");
+      emptyEl.className = "no-results";
+      alphaContainer.appendChild(emptyEl);
+    }
+    //emptyEl.textContent = `No titles matching "${query.trim()}".`;
+    emptyEl.style.display = "";
+  } else if (emptyEl) {
+    emptyEl.style.display = "none";
   }
 }
 
