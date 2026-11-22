@@ -100,79 +100,26 @@ document.addEventListener("DOMContentLoaded", () => {
     clearBtn.addEventListener("click", clearFilter);
   }
 
-  document.getElementById("table-container").addEventListener("click", (e) => {
-    const titleSpan = e.target.closest(".title-clickable");
-    if (!titleSpan) return;
+  const tableClickContainer = document.getElementById("table-container");
+  if (tableClickContainer) {
+    tableClickContainer.addEventListener("click", (e) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+        return;
+      }
+      const titleLink = e.target.closest(".title-clickable");
+      if (!titleLink) return;
 
-    const row = titleSpan.closest("tr");
-    if (!row) return;
-    const entryId = row.getAttribute("data-id");
-    if (!entryId) return;
+      const row = titleLink.closest("tr");
+      if (!row) return;
+      const entryId = row.getAttribute("data-id");
+      if (!entryId) return;
 
-    const baseId = entryId.split("-")[0];
-
-    const searchInput = document.getElementById("search-input");
-    const searchWrapper = document.getElementById("search-wrapper");
-    const filterBanner = document.getElementById("filter-banner");
-    const bannerText = document.getElementById("filter-banner-text");
-
-    if (searchInput) {
-      searchInput.setAttribute("data-filtered-id", baseId);
-    }
-
-    if (window.history && window.history.pushState) {
-      const newUrl = `${window.location.pathname}?id=${encodeURIComponent(baseId)}`;
-      window.history.pushState({ id: baseId }, "", newUrl);
-    }
-
-    const meta = window.progressLogMetadata[baseId] || {
-      cleanTitle: cleanTitle(titleSpan.textContent.trim()),
-      sessions: 1,
-      firstDate: "Unknown",
-      lastDate: "Unknown",
-      status: "In Progress",
-      revisits: 0,
-    };
-
-    if (bannerText) {
-      const revisitHtml =
-        meta.revisits > 0
-          ? `<span class="entry-revisit-info" title="Revisited ${meta.revisits} time(s)">↻ ${meta.revisits}</span>`
-          : "";
-
-      bannerText.innerHTML = `
-        <div class="entry-card">
-          <img class="entry-card-thumb" src="../thumbs/${escapeHTML(baseId)}.png" alt="" onerror="this.src='../thumbs/yuno.png'">
-          <div class="entry-card-info">
-            <div class="entry-card-title">${escapeHTML(meta.cleanTitle)} ${revisitHtml}</div>
-            <div class="entry-card-status-row">
-              <strong>Status:</strong> <span class="entry-status-badge status-${meta.status.toLowerCase().replace(/\s+/g, "-")}">${escapeHTML(meta.status)}</span>
-            </div>
-            <div class="entry-card-metrics-row">
-              <div class="entry-metric-item">
-                <span class="entry-metric-label">Days Logged</span>
-                <span class="entry-metric-value">${meta.sessions}</span>
-              </div>
-              <div class="entry-metric-item">
-                <span class="entry-metric-label">First Logged</span>
-                <span class="entry-metric-value">${escapeHTML(meta.firstDate)}</span>
-              </div>
-              <div class="entry-metric-item">
-                <span class="entry-metric-label">Last Logged</span>
-                <span class="entry-metric-value">${escapeHTML(meta.lastDate)}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    if (searchWrapper) searchWrapper.style.display = "none";
-    if (filterBanner) filterBanner.style.display = "flex";
-
-    handleSearch();
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  });
+      e.preventDefault();
+      returnToViewAllOnClear = false;
+      const baseId = entryId.split("-")[0];
+      selectEntryById(baseId, titleLink.textContent.trim(), false);
+    });
+  }
 
   fetch("../progresslog-last-updated.txt?v=" + Date.now())
     .then((response) => response.text())
@@ -196,14 +143,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const targetId = urlParams.get("id");
       if (targetId) {
-        const safeId = CSS.escape(targetId);
+        const targetBaseId = targetId.split("-")[0];
+        const safeId = CSS.escape(targetBaseId);
         const row = document.querySelector(
           `tr[data-id="${safeId}"], tr[data-id^="${safeId}-"]`,
         );
-        if (row) {
-          const titleSpan = row.querySelector(".title-clickable");
-          if (titleSpan) titleSpan.click();
-        }
+        const titleSpan = row ? row.querySelector(".title-clickable") : null;
+        selectEntryById(
+          targetBaseId,
+          titleSpan ? titleSpan.textContent.trim() : "",
+        );
       }
     },
     error: function () {
@@ -232,7 +181,92 @@ document.addEventListener("DOMContentLoaded", () => {
   if (viewAllBtn) {
     viewAllBtn.addEventListener("click", toggleViewAll);
   }
+
+  window.addEventListener("popstate", syncStateFromLocation);
 });
+
+function selectEntryById(baseId, fallbackTitleText = "", fromViewAll = false) {
+  if (!baseId) return;
+  const cleanBaseId = String(baseId).split("-")[0];
+
+  const meta = window.progressLogMetadata[cleanBaseId];
+  if (!meta && fallbackTitleText) {
+    window.progressLogMetadata[cleanBaseId] = {
+      cleanTitle: cleanTitle(fallbackTitleText),
+      sessions: 1,
+      firstDate: "Unknown",
+      lastDate: "Unknown",
+      status: "In Progress",
+      revisits: 0,
+    };
+  }
+
+  if (window.history && window.history.pushState) {
+    const newUrl = `${window.location.pathname}?id=${encodeURIComponent(cleanBaseId)}`;
+    window.history.pushState(
+      { id: cleanBaseId, fromViewAll: Boolean(fromViewAll) },
+      "",
+      newUrl,
+    );
+  }
+
+  syncStateFromLocation();
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+}
+
+function parseEntryDate(dayStr, monthTitleStr) {
+  const monthNames = {
+    january: 0,
+    jan: 0,
+    february: 1,
+    feb: 1,
+    march: 2,
+    mar: 2,
+    april: 3,
+    apr: 3,
+    may: 4,
+    june: 5,
+    jun: 5,
+    july: 6,
+    jul: 6,
+    august: 7,
+    aug: 7,
+    september: 8,
+    sep: 8,
+    sept: 8,
+    october: 9,
+    oct: 9,
+    november: 10,
+    nov: 10,
+    december: 11,
+    dec: 11,
+  };
+
+  const dayMatch = (dayStr || "").trim().match(/\d{1,2}/);
+  const monthMatch = (monthTitleStr || "")
+    .trim()
+    .match(/^([A-Za-z]+)\s+(\d{4})$/);
+
+  if (!dayMatch || !monthMatch) return null;
+
+  const day = parseInt(dayMatch[0], 10);
+  const monthIndex = monthNames[monthMatch[1].toLowerCase()];
+  const year = parseInt(monthMatch[2], 10);
+
+  if (monthIndex === undefined || isNaN(day) || isNaN(year)) return null;
+
+  const dateObj = new Date(year, monthIndex, day);
+  if (
+    isNaN(dateObj.getTime()) ||
+    dateObj.getFullYear() !== year ||
+    dateObj.getMonth() !== monthIndex ||
+    dateObj.getDate() !== day
+  ) {
+    return null;
+  }
+
+  return dateObj;
+}
 
 function cleanTitle(fullTitle) {
   const actionWord =
@@ -277,24 +311,11 @@ function clearFilter() {
   const shouldReturnToViewAll = returnToViewAllOnClear;
   returnToViewAllOnClear = false;
 
-  const searchInput = document.getElementById("search-input");
-  const searchWrapper = document.getElementById("search-wrapper");
-  const filterBanner = document.getElementById("filter-banner");
-
-  if (searchInput) {
-    searchInput.value = "";
-    searchInput.removeAttribute("data-filtered-id");
-    searchInput.style.removeProperty("width");
-  }
-
-  if (searchWrapper) searchWrapper.style.display = "flex";
-  if (filterBanner) filterBanner.style.display = "none";
-
   if (window.history && window.history.replaceState) {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 
-  handleSearch();
+  syncStateFromLocation();
 
   if (shouldReturnToViewAll && !isViewAllActive) {
     toggleViewAll();
@@ -357,6 +378,7 @@ function renderProgressLog(rows) {
     const col3 = (row[3] || "").trim();
     const col4 = (row[4] || "").trim();
     const col5 = (row[5] || "").trim();
+    const col6 = (row[6] || "").trim();
 
     if (col1.match(/^[A-Za-z]+\s+\d{4}$/)) {
       currentMonthTitle = col1;
@@ -398,7 +420,7 @@ function renderProgressLog(rows) {
         const parts = colId.split("-");
         const baseId = parts[0];
         const revisitNum = parts.length > 1 ? parseInt(parts[1], 10) : 1;
-        const dateObj = new Date(entryDateStr);
+        const dateObj = parseEntryDate(currentDayBlock.date, currentMonthTitle);
 
         if (!idEntriesMap[baseId]) {
           idEntriesMap[baseId] = {
@@ -406,14 +428,20 @@ function renderProgressLog(rows) {
             dates: [],
             entriesCount: 0,
             maxRevisit: 1,
+            overrideTitle: "",
           };
         }
         idEntriesMap[baseId].entriesCount += 1;
         idEntriesMap[baseId].titles.push(col2);
+
+        if (col6 && !idEntriesMap[baseId].overrideTitle) {
+          idEntriesMap[baseId].overrideTitle = col6;
+        }
+
         if (revisitNum > idEntriesMap[baseId].maxRevisit) {
           idEntriesMap[baseId].maxRevisit = revisitNum;
         }
-        if (!isNaN(dateObj.getTime())) {
+        if (dateObj) {
           idEntriesMap[baseId].dates.push({
             dateStr: entryDateStr,
             dateObj: dateObj,
@@ -442,8 +470,11 @@ function renderProgressLog(rows) {
         : "Unknown";
     const lastDateObj =
       data.dates.length > 0 ? data.dates[data.dates.length - 1].dateObj : null;
-    const cleanTitleText =
-      data.titles.length > 0 ? cleanTitle(data.titles[0]) : baseId;
+    const cleanTitleText = data.overrideTitle
+      ? data.overrideTitle
+      : data.titles.length > 0
+        ? cleanTitle(data.titles[0])
+        : baseId;
 
     let status = "In Progress";
     let hasFinished = false;
@@ -537,8 +568,9 @@ function renderProgressLog(rows) {
           ? `<span class="entry-id-badge">ID ${escapeHTML(entry.id)}</span>`
           : "";
 
+        const entryBaseId = entry.id ? entry.id.split("-")[0] : "";
         html += `
-          <td class="col-title">${formatTitle(entry.title)}${idBadgeHtml}</td>
+          <td class="col-title">${formatTitle(entry.title, entryBaseId)}${idBadgeHtml}</td>
           <td class="col-meta">${escapeHTML(entry.progress)}</td>
           <td class="col-extra">${renderNoteCell(entry.note, entry.comment)}</td>
         `;
@@ -554,7 +586,6 @@ function renderProgressLog(rows) {
 
   document.body.setAttribute("data-year", activeYear);
   updateFirstVisibleSection();
-  document.body.setAttribute("data-year", activeYear);
 }
 
 function renderNoteCell(note, comment) {
@@ -693,7 +724,7 @@ function handleSearch() {
   updateFirstVisibleSection();
 }
 
-function formatTitle(title) {
+function formatTitle(title, baseId = "") {
   const escaped = escapeHTML(title);
   const hasKeyword =
     /\b(finished|played|read|watched|started|dropped|restarted)\b/i.test(title);
@@ -709,7 +740,8 @@ function formatTitle(title) {
   const content = hasKeyword
     ? `<span class="title-bold">${formatted}</span>`
     : formatted;
-  return `<span class="title-clickable">${content}</span>`;
+  const href = baseId ? ` href="${escapeHTML(getEntryUrl(baseId))}"` : "";
+  return `<a class="title-clickable"${href}>${content}</a>`;
 }
 
 function escapeHTML(str) {
@@ -766,8 +798,10 @@ function closeCommentModal() {
 let isViewAllActive = false;
 let returnToViewAllOnClear = false;
 
-function toggleViewAll() {
-  isViewAllActive = !isViewAllActive;
+function toggleViewAll(pushHistory = true) {
+  const nextActive = !isViewAllActive;
+  isViewAllActive = nextActive;
+
   const viewAllBtn = document.getElementById("view-all-btn");
   const tableContainer = document.getElementById("table-container");
   const alphaContainer = document.getElementById("alphabetical-list-container");
@@ -788,6 +822,9 @@ function toggleViewAll() {
   }
 
   if (isViewAllActive) {
+    if (pushHistory && window.history && window.history.pushState) {
+      window.history.pushState({ viewAll: true }, "", window.location.pathname);
+    }
     renderAlphabeticalList();
     if (tableContainer) tableContainer.style.display = "none";
     if (alphaContainer) alphaContainer.classList.add("is-active");
@@ -842,33 +879,169 @@ function renderAlphabeticalList() {
     cleanTitle: window.progressLogMetadata[baseId].cleanTitle,
   }));
 
-  entries.sort((a, b) =>
-    a.cleanTitle.localeCompare(b.cleanTitle, undefined, {
+  entries.sort((a, b) => {
+    const aIsBottom = a.baseId === "106";
+    const bIsBottom = b.baseId === "106";
+
+    if (aIsBottom && !bIsBottom) return 1;
+    if (!aIsBottom && bIsBottom) return -1;
+
+    return a.cleanTitle.localeCompare(b.cleanTitle, undefined, {
       sensitivity: "base",
-    }),
-  );
+    });
+  });
 
   entries.forEach((item) => {
-    const el = document.createElement("div");
+    const el = document.createElement("a");
     el.className = "alpha-list-item";
+    el.href = getEntryUrl(item.baseId);
     el.textContent = item.cleanTitle;
 
-    el.addEventListener("click", () => {
-      const row = document.querySelector(
-        `tr[data-id="${CSS.escape(item.baseId)}"], tr[data-id^="${CSS.escape(item.baseId)}-"]`,
-      );
-      if (row) {
-        const titleSpan = row.querySelector(".title-clickable");
-        if (titleSpan) {
-          returnToViewAllOnClear = true;
-          toggleViewAll();
-          titleSpan.click();
-        }
+    el.addEventListener("click", (e) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+        return;
       }
+      e.preventDefault();
+      returnToViewAllOnClear = true;
+      toggleViewAll();
+      selectEntryById(item.baseId, item.cleanTitle, true);
     });
 
     alphaContainer.appendChild(el);
   });
+}
+
+function getEntryUrl(baseId) {
+  return `${window.location.pathname}?id=${encodeURIComponent(baseId)}`;
+}
+
+function syncStateFromLocation(event = null) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const rawId = (urlParams.get("id") || "").trim();
+  const baseId = rawId ? rawId.split("-")[0] : "";
+
+  const searchInput = document.getElementById("search-input");
+  const searchWrapper = document.getElementById("search-wrapper");
+  const filterBanner = document.getElementById("filter-banner");
+  const tableContainer = document.getElementById("table-container");
+  const alphaContainer = document.getElementById("alphabetical-list-container");
+  const viewAllBtn = document.getElementById("view-all-btn");
+
+  if (!baseId) {
+    document.title = "tdk's progress log";
+    if (searchInput) {
+      searchInput.value = "";
+      searchInput.removeAttribute("data-filtered-id");
+      searchInput.style.removeProperty("width");
+    }
+    if (searchWrapper) searchWrapper.style.display = "flex";
+    if (filterBanner) filterBanner.style.display = "none";
+
+    const shouldRestoreViewAll =
+      returnToViewAllOnClear ||
+      Boolean(
+        event &&
+        event.state &&
+        (event.state.fromViewAll || event.state.viewAll),
+      );
+    returnToViewAllOnClear = false;
+
+    if (shouldRestoreViewAll) {
+      if (!isViewAllActive) {
+        toggleViewAll(false);
+      } else {
+        renderAlphabeticalList();
+        if (tableContainer) tableContainer.style.display = "none";
+        if (alphaContainer) alphaContainer.classList.add("is-active");
+        filterAlphabeticalList("");
+      }
+    } else {
+      isViewAllActive = false;
+      if (viewAllBtn) viewAllBtn.textContent = "index";
+      if (tableContainer) tableContainer.style.display = "";
+      if (alphaContainer) {
+        alphaContainer.classList.remove("is-active");
+        alphaContainer.innerHTML = "";
+      }
+      handleSearch();
+    }
+    return;
+  }
+
+  if (event && event.state && event.state.fromViewAll) {
+    returnToViewAllOnClear = true;
+  }
+
+  if (isViewAllActive) {
+    isViewAllActive = false;
+    if (viewAllBtn) viewAllBtn.textContent = "index";
+    if (alphaContainer) {
+      alphaContainer.classList.remove("is-active");
+      alphaContainer.innerHTML = "";
+    }
+  }
+  if (tableContainer) tableContainer.style.display = "";
+
+  const safeId = CSS.escape(baseId);
+  const row = document.querySelector(
+    `tr[data-id="${safeId}"], tr[data-id^="${safeId}-"]`,
+  );
+  const titleSpan = row ? row.querySelector(".title-clickable") : null;
+  const fallbackTitleText = titleSpan ? titleSpan.textContent.trim() : "";
+
+  const meta = window.progressLogMetadata[baseId] || {
+    cleanTitle: fallbackTitleText ? cleanTitle(fallbackTitleText) : baseId,
+    sessions: 1,
+    firstDate: "Unknown",
+    lastDate: "Unknown",
+    status: "In Progress",
+    revisits: 0,
+  };
+
+  document.title = `tdk's logs for ${meta.cleanTitle}`;
+
+  if (searchInput) {
+    searchInput.setAttribute("data-filtered-id", baseId);
+  }
+
+  const bannerText = document.getElementById("filter-banner-text");
+  if (bannerText) {
+    const revisitHtml =
+      meta.revisits > 0
+        ? `<span class="entry-revisit-info" title="Revisited ${meta.revisits} time(s)">↻ ${meta.revisits}</span>`
+        : "";
+
+    bannerText.innerHTML = `
+      <div class="entry-card">
+        <img class="entry-card-thumb" src="../thumbs/${escapeHTML(baseId)}.png" alt="" onerror="this.src='../thumbs/yuno.png'">
+        <div class="entry-card-info">
+          <div class="entry-card-title">${escapeHTML(meta.cleanTitle)} ${revisitHtml}</div>
+          <div class="entry-card-status-row">
+            <strong>Status:</strong> <span class="entry-status-badge status-${meta.status.toLowerCase().replace(/\s+/g, "-")}">${escapeHTML(meta.status)}</span>
+          </div>
+          <div class="entry-card-metrics-row">
+            <div class="entry-metric-item">
+              <span class="entry-metric-label">Days Logged</span>
+              <span class="entry-metric-value">${meta.sessions}</span>
+            </div>
+            <div class="entry-metric-item">
+              <span class="entry-metric-label">First Logged</span>
+              <span class="entry-metric-value">${escapeHTML(meta.firstDate)}</span>
+            </div>
+            <div class="entry-metric-item">
+              <span class="entry-metric-label">Last Logged</span>
+              <span class="entry-metric-value">${escapeHTML(meta.lastDate)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (searchWrapper) searchWrapper.style.display = "none";
+  if (filterBanner) filterBanner.style.display = "flex";
+
+  handleSearch();
 }
 
 window.openCommentModal = openCommentModal;

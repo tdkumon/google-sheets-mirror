@@ -499,10 +499,17 @@ td.col-extra {
   text-decoration: underline;
   text-decoration-color: transparent;
   transition: text-decoration-color 0.2s ease;
+  background-color: transparent;
+  padding: 0;
+  border-left: none;
+  font-weight: inherit;
+  color: inherit;
 }
 
 .title-clickable:hover {
   text-decoration-color: inherit;
+  background-color: transparent;
+  color: inherit;
 }
 
 .kw-green {
@@ -947,9 +954,14 @@ td.col-extra:hover .comment-popover {
   transition:
     text-decoration-color 0.15s ease,
     color 0.15s ease;
+  background-color: transparent;
+  padding: 0;
+  border-left: none;
+  font-weight: normal;
 }
 
 .alpha-list-item:hover {
   color: #ea377a;
   text-decoration-color: #ea377a;
+  background-color: transparent;
 }
