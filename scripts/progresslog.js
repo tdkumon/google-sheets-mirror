@@ -311,14 +311,22 @@ function clearFilter() {
   const shouldReturnToViewAll = returnToViewAllOnClear;
   returnToViewAllOnClear = false;
 
-  if (window.history && window.history.replaceState) {
-    window.history.replaceState({}, document.title, window.location.pathname);
+  if (window.history && window.history.pushState) {
+    window.history.pushState(
+      { viewAll: Boolean(shouldReturnToViewAll) },
+      document.title,
+      window.location.pathname,
+    );
+  }
+
+  if (shouldReturnToViewAll) {
+    returnToViewAllOnClear = true;
   }
 
   syncStateFromLocation();
 
   if (shouldReturnToViewAll && !isViewAllActive) {
-    toggleViewAll();
+    toggleViewAll(false);
   }
 }
 
