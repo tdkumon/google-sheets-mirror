@@ -258,7 +258,6 @@ a:focus-visible {
   background: #ffffff;
   color: #333;
   outline: none;
-  transition: all 0.15s ease;
 }
 
 #search-input:focus {
@@ -382,8 +381,9 @@ td.col-extra:hover .comment-popover {
   background-color: #ffffff;
   border: 1px solid #ced4da;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-  width: 90%;
-  max-width: 600px;
+  width: fit-content;
+  min-width: min(360px, 90vw);
+  max-width: min(720px, 92vw);
   max-height: 80vh;
   display: flex;
   flex-direction: column;
@@ -431,7 +431,6 @@ body[data-year="2025"] .comment-modal-box {
   background-color: #ffffff;
   border: 2px solid #000000;
   color: #000000;
-  box-shadow: 6px 6px 0px #000000;
   border-radius: 0px;
 }
 
@@ -447,7 +446,6 @@ body[data-year="2025"] .comment-modal-body {
 body[data-year="2026"] .comment-modal-box {
   background-color: #1c2028;
   border: 2px solid #ffffff;
-  box-shadow: 6px 6px 0px #46bdc6;
   color: #e0e0ea;
   border-radius: 0px;
 }
@@ -463,7 +461,7 @@ body[data-year="2026"] .comment-modal-body {
 
 .comment-popover-body {
   color: #333333;
-  font-size: 12px;
+  font-size: 13px;
   white-space: pre-wrap;
   position: relative;
   padding-right: 12px;
@@ -522,7 +520,6 @@ body[data-year="2026"] .comment-modal-body {
   width: 135px;
   height: 135px;
   object-fit: cover;
-  border-radius: 4px;
 }
 
 .header-text {
@@ -675,7 +672,6 @@ body[data-year="2025"] .comment-popover {
   background-color: #ffffff;
   border: 2px solid #000000;
   color: #000000;
-  box-shadow: 4px 4px 0px #000000;
   border-radius: 0px;
 }
 
@@ -710,13 +706,13 @@ body[data-year="2026"] #type-filter {
   color: #ffffff;
   border: 2px solid #ffffff;
   border-radius: 0px;
-  box-shadow: 4px 4px 0px #000000;
+  transition: border-color 0.1s ease;
 }
 
 body[data-year="2026"] #search-input:focus,
 body[data-year="2026"] #type-filter:focus {
   border-color: #46bdc6;
-  box-shadow: 4px 4px 0px #46bdc6;
+  transition: border-color 0.1s ease;
 }
 
 body[data-year="2026"] .section-title {
@@ -747,32 +743,24 @@ body[data-year="2026"] .header-text h1 {
   background-color: #46bdc6;
   color: #ffffff;
   letter-spacing: 1px;
-  box-shadow: 4px 4px 0px #ffffff;
+  border: 3px solid #ffffff;
 }
 
 body[data-year="2026"] .header-text p {
   font-family: "Noto Sans JP", sans-serif;
   font-weight: 700;
   color: #ffffff;
-  background-color: #1c2028;
+  background-color: #242832;
   border-left: 4px solid #46bdc6;
 }
 
 body[data-year="2026"] .header-img {
   border: 3px solid #ffffff;
-  border-radius: 0px;
-  box-shadow: 6px 6px 0px #46bdc6;
-  transition: transform 0.15s ease-out;
-}
-
-body[data-year="2026"] .header-img:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px #46bdc6;
 }
 
 body[data-year="2026"] a {
   color: #ffffff;
-  background-color: #1c2028;
+  background-color: #242832;
   padding: 2px 6px;
   text-decoration: none;
   border-left: 3px solid #46bdc6;
@@ -792,20 +780,17 @@ body[data-year="2026"] .tab-btn {
   background: #1c2028;
   color: #ffffff;
   border-radius: 0px;
-  box-shadow: 4px 4px 0px #000000;
 }
 
 body[data-year="2026"] .tab-btn.active {
   background: #46bdc6;
   color: #ffffff;
   border-color: #ffffff;
-  box-shadow: 4px 4px 0px #ffffff;
 }
 
 body[data-year="2026"] table {
   border: 3px solid #ffffff;
   background: #1c2028;
-  box-shadow: 8px 8px 0px #000000;
 }
 
 body[data-year="2026"] th {
@@ -836,7 +821,7 @@ body[data-year="2026"] .comment-corner-mark {
 body[data-year="2026"] .comment-popover {
   background-color: #1c2028;
   border: 2px solid #ffffff;
-  box-shadow: 4px 4px 0px #46bdc6;
+
   color: #e0e0ea;
   border-radius: 0px;
 }
@@ -848,6 +833,7 @@ body[data-year="2026"] .comment-popover-header {
 
 body[data-year="2026"] .comment-popover-body {
   color: #f0f0f5;
+  font-size: 12px;
 }
 
 body[data-year="2026"] .comment-popover-body.is-truncated::after {
@@ -866,7 +852,6 @@ body[data-year="2026"] .last-updated-badge {
   background-color: #1c2028;
   border: 2px solid #ffffff;
   color: #ffffff;
-  box-shadow: 4px 4px 0px #46bdc6;
   border-radius: 0px;
   font-family: "Shippori Mincho", serif;
   font-weight: 700;
@@ -993,4 +978,8 @@ body[data-year="2026"] tr.row-minor td {
   width: 50px;
   flex-shrink: 0;
   display: inline-block;
+}
+
+body[data-year="2026"] {
+  background-color: #1c2028;
 }

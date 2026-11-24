@@ -661,7 +661,8 @@ if (tableContainer) {
     const windowHeight = window.innerHeight;
 
     popover.style.position = "fixed";
-    popover.style.right = window.innerWidth - rect.right + "px";
+    popover.style.right =
+      Math.max(8, window.innerWidth - rect.right + 8) + "px";
     popover.style.left = "auto";
     popover.style.width = "300px";
 
