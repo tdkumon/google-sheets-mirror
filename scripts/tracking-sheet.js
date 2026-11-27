@@ -75,6 +75,10 @@ function loadProgressLogSessions() {
         const col1 = (row[1] || "").trim();
         const col2 = (row[2] || "").trim();
 
+        if (col2 === "END_OF_PROGRESS_LOG" || colId === "END_OF_PROGRESS_LOG") {
+          return;
+        }
+
         if (col1.match(/^[A-Za-z]+\s+\d{4}$/)) return;
         if (
           !col2 ||
