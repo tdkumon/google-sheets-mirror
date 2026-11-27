@@ -365,6 +365,10 @@ function renderProgressLog(rows) {
   let currentDayBlock = null;
   let idEntriesMap = {};
 
+  if (col2 === "END_OF_PROGRESS_LOG" || colId === "END_OF_PROGRESS_LOG") {
+    return;
+  }
+
   rows.forEach((row) => {
     const colId = (row[0] || "").trim();
     const col1 = (row[1] || "").trim();
