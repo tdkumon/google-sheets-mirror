@@ -365,10 +365,6 @@ function renderProgressLog(rows) {
   let currentDayBlock = null;
   let idEntriesMap = {};
 
-  if (col2 === "END_OF_PROGRESS_LOG" || colId === "END_OF_PROGRESS_LOG") {
-    return;
-  }
-
   rows.forEach((row) => {
     const colId = (row[0] || "").trim();
     const col1 = (row[1] || "").trim();
@@ -377,6 +373,10 @@ function renderProgressLog(rows) {
     const col4 = (row[4] || "").trim();
     const col5 = (row[5] || "").trim();
     const col6 = (row[6] || "").trim();
+
+    if (col2 === "END_OF_PROGRESS_LOG" || colId === "END_OF_PROGRESS_LOG") {
+      return;
+    }
 
     if (col1.match(/^[A-Za-z]+\s+\d{4}$/)) {
       currentMonthTitle = col1;
