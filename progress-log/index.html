@@ -58,13 +58,23 @@
 
     <div class="search-container">
       <div class="search-wrapper" id="search-wrapper">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search by title..."
-          oninput="handleManualInput()"
-          autocomplete="off"
-        />
+        <div class="search-input-box">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search by title..."
+            autocomplete="off"
+          />
+          <button
+            type="button"
+            id="search-clear-btn"
+            class="search-clear-btn"
+            aria-label="clear search"
+            title="clear search"
+          >
+            ✕
+          </button>
+        </div>
         <button id="clear-filter-btn" onclick="clearFilter()">
           clear filter
         </button>

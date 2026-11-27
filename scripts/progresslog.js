@@ -82,24 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const searchInput = document.getElementById("search-input");
-  const clearBtn = document.getElementById("clear-filter-btn");
-
-  if (searchInput) {
-    searchInput.value = "";
-    searchInput.addEventListener("input", () => {
-      if (isViewAllActive) {
-        filterAlphabeticalList(searchInput.value);
-      } else {
-        handleManualInput();
-      }
-    });
-  }
-
-  if (clearBtn) {
-    clearBtn.addEventListener("click", clearFilter);
-  }
-
   const tableClickContainer = document.getElementById("table-container");
   if (tableClickContainer) {
     tableClickContainer.addEventListener("click", (e) => {
@@ -179,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const viewAllBtn = document.getElementById("view-all-btn");
   if (viewAllBtn) {
-    viewAllBtn.addEventListener("click", toggleViewAll);
+    viewAllBtn.addEventListener("click", () => toggleViewAll(true, true));
   }
 
   window.addEventListener("popstate", syncStateFromLocation);
@@ -187,6 +169,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function selectEntryById(baseId, fallbackTitleText = "", fromViewAll = false) {
   if (!baseId) return;
+
+  const searchInput = document.getElementById("search-input");
+  if (searchInput && !searchInput.getAttribute("data-filtered-id")) {
+    savedSearchQuery = searchInput.value;
+  }
+
   const cleanBaseId = String(baseId).split("-")[0];
 
   const meta = window.progressLogMetadata[cleanBaseId];
@@ -311,8 +299,8 @@ function clearFilter() {
   const shouldReturnToViewAll = returnToViewAllOnClear;
   returnToViewAllOnClear = false;
 
-  if (window.history && window.history.pushState) {
-    window.history.pushState(
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState(
       { viewAll: Boolean(shouldReturnToViewAll) },
       document.title,
       window.location.pathname,
@@ -325,9 +313,7 @@ function clearFilter() {
 
   syncStateFromLocation();
 
-  if (shouldReturnToViewAll && !isViewAllActive) {
-    toggleViewAll(false);
-  }
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 }
 
 function formatUTCToLocal(utcString) {
@@ -536,7 +522,7 @@ function renderProgressLog(rows) {
             <div class="comment-corner-mark"></div>
             <div class="comment-popover">
               <div class="comment-popover-header">COMMENT</div>
-              <div class="comment-popover-body">if there are two values in two separate lines without an "&" (like episode 1 in one line, then episode 2 in the next), it means i slept in between (for example, i watched episode 1 at 2 AM, went to sleep, then watched episode 2 sometime after i woke up, but still on the same date)</div>
+              <div class="comment-popover-body">if there are two values in two separate lines without an "&" (like episode 1 in one line, then episode 2 in the next), it means i slept in between<br><br>(for example, i watched episode 1 at 2 AM, went to sleep, then watched episode 2 sometime after i woke up, but still on the same date)</div>
             </div>
           </th>
           <th class="col-extra">note</th>
@@ -577,11 +563,15 @@ function renderProgressLog(rows) {
           : "";
 
         const entryBaseId = entry.id ? entry.id.split("-")[0] : "";
+        const thumbHtml = entryBaseId
+          ? `<img class="entry-title-thumb" src="../thumbs/${escapeHTML(entryBaseId)}.png" alt="" loading="lazy" onerror="this.onerror=null;this.src='../thumbs/yuno.png'">`
+          : "";
+
         html += `
-          <td class="col-title">${formatTitle(entry.title, entryBaseId)}${idBadgeHtml}</td>
-          <td class="col-meta">${escapeHTML(entry.progress)}</td>
-          <td class="col-extra">${renderNoteCell(entry.note, entry.comment)}</td>
-        `;
+  <td class="col-title"><div class="title-cell-inner">${thumbHtml}${formatTitle(entry.title, entryBaseId)}</div>${idBadgeHtml}</td>
+  <td class="col-meta">${escapeHTML(entry.progress)}</td>
+  <td class="col-extra">${renderNoteCell(entry.note, entry.comment)}</td>
+`;
 
         tr.innerHTML = html;
         tbody.appendChild(tr);
@@ -593,7 +583,9 @@ function renderProgressLog(rows) {
   });
 
   document.body.setAttribute("data-year", activeYear);
+
   updateFirstVisibleSection();
+  updateFirstVisibleTable();
 }
 
 function renderNoteCell(note, comment) {
@@ -730,6 +722,7 @@ function handleSearch() {
   });
 
   updateFirstVisibleSection();
+  updateFirstVisibleTable();
 }
 
 function formatTitle(title, baseId = "") {
@@ -805,8 +798,9 @@ function closeCommentModal() {
 
 let isViewAllActive = false;
 let returnToViewAllOnClear = false;
+let savedSearchQuery = "";
 
-function toggleViewAll(pushHistory = true) {
+function toggleViewAll(pushHistory = true, resetSavedQuery = pushHistory) {
   const nextActive = !isViewAllActive;
   isViewAllActive = nextActive;
 
@@ -818,10 +812,17 @@ function toggleViewAll(pushHistory = true) {
   const filterBanner = document.getElementById("filter-banner");
 
   if (searchInput) {
-    searchInput.value = "";
+    if (resetSavedQuery) {
+      savedSearchQuery = "";
+      searchInput.value = "";
+    } else {
+      searchInput.value = savedSearchQuery;
+    }
     searchInput.removeAttribute("data-filtered-id");
     searchInput.style.removeProperty("width");
+    updateSearchClearVisibility();
   }
+
   if (searchWrapper) searchWrapper.style.display = "flex";
   if (filterBanner) filterBanner.style.display = "none";
 
@@ -836,7 +837,9 @@ function toggleViewAll(pushHistory = true) {
     renderAlphabeticalList();
     if (tableContainer) tableContainer.style.display = "none";
     if (alphaContainer) alphaContainer.classList.add("is-active");
-    filterAlphabeticalList("");
+
+    const queryToUse = resetSavedQuery ? "" : savedSearchQuery;
+    filterAlphabeticalList(queryToUse);
   } else {
     if (tableContainer) tableContainer.style.display = "";
     if (alphaContainer) {
@@ -910,8 +913,12 @@ function renderAlphabeticalList() {
         return;
       }
       e.preventDefault();
+      const searchInput = document.getElementById("search-input");
+      if (searchInput) {
+        savedSearchQuery = searchInput.value;
+      }
       returnToViewAllOnClear = true;
-      toggleViewAll();
+      toggleViewAll(true, false);
       selectEntryById(item.baseId, item.cleanTitle, true);
     });
 
@@ -929,6 +936,7 @@ function syncStateFromLocation(event = null) {
   const baseId = rawId ? rawId.split("-")[0] : "";
 
   const searchInput = document.getElementById("search-input");
+  const searchClearBtn = document.getElementById("search-clear-btn");
   const searchWrapper = document.getElementById("search-wrapper");
   const filterBanner = document.getElementById("filter-banner");
   const tableContainer = document.getElementById("table-container");
@@ -938,9 +946,15 @@ function syncStateFromLocation(event = null) {
   if (!baseId) {
     document.title = "tdk's progress log";
     if (searchInput) {
-      searchInput.value = "";
+      searchInput.value = savedSearchQuery;
       searchInput.removeAttribute("data-filtered-id");
       searchInput.style.removeProperty("width");
+    }
+    if (searchClearBtn) {
+      searchClearBtn.classList.toggle(
+        "is-visible",
+        savedSearchQuery.length > 0,
+      );
     }
     if (searchWrapper) searchWrapper.style.display = "flex";
     if (filterBanner) filterBanner.style.display = "none";
@@ -956,13 +970,22 @@ function syncStateFromLocation(event = null) {
 
     if (shouldRestoreViewAll) {
       if (!isViewAllActive) {
-        toggleViewAll(false);
+        toggleViewAll(false, false);
       } else {
         renderAlphabeticalList();
         if (tableContainer) tableContainer.style.display = "none";
         if (alphaContainer) alphaContainer.classList.add("is-active");
-        filterAlphabeticalList("");
       }
+      if (searchInput) {
+        searchInput.value = savedSearchQuery;
+      }
+      if (searchClearBtn) {
+        searchClearBtn.classList.toggle(
+          "is-visible",
+          savedSearchQuery.length > 0,
+        );
+      }
+      filterAlphabeticalList(savedSearchQuery);
     } else {
       isViewAllActive = false;
       if (viewAllBtn) viewAllBtn.textContent = "index";
@@ -1021,7 +1044,7 @@ function syncStateFromLocation(event = null) {
 
     bannerText.innerHTML = `
       <div class="entry-card">
-        <img class="entry-card-thumb" src="../thumbs/${escapeHTML(baseId)}.png" alt="" onerror="this.src='../thumbs/yuno.png'">
+        <img class="entry-card-thumb" src="../thumbs/${escapeHTML(baseId)}.png" alt="" onerror="this.onerror=null;this.src='../thumbs/yuno.png'">
         <div class="entry-card-info">
           <div class="entry-card-title">${escapeHTML(meta.cleanTitle)} ${revisitHtml}</div>
           <div class="entry-card-status-row">
@@ -1050,6 +1073,71 @@ function syncStateFromLocation(event = null) {
   if (filterBanner) filterBanner.style.display = "flex";
 
   handleSearch();
+}
+
+const searchInput = document.getElementById("search-input");
+const searchClearBtn = document.getElementById("search-clear-btn");
+const clearBtn = document.getElementById("clear-filter-btn");
+
+if (clearBtn) {
+  clearBtn.addEventListener("click", clearFilter);
+}
+
+function updateSearchClearVisibility() {
+  if (!searchInput || !searchClearBtn) return;
+  searchClearBtn.classList.toggle("is-visible", searchInput.value.length > 0);
+}
+
+if (searchInput) {
+  searchInput.value = "";
+  updateSearchClearVisibility();
+  searchInput.addEventListener("input", () => {
+    if (!searchInput.getAttribute("data-filtered-id")) {
+      savedSearchQuery = searchInput.value;
+    }
+    updateSearchClearVisibility();
+    if (isViewAllActive) {
+      filterAlphabeticalList(searchInput.value);
+    } else {
+      handleManualInput();
+    }
+  });
+}
+
+if (searchClearBtn && searchInput) {
+  searchClearBtn.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+  });
+
+  searchClearBtn.addEventListener("click", () => {
+    savedSearchQuery = "";
+    searchInput.value = "";
+    updateSearchClearVisibility();
+    if (isViewAllActive) {
+      filterAlphabeticalList("");
+    } else {
+      handleManualInput();
+    }
+    searchInput.blur();
+    searchClearBtn.blur();
+  });
+}
+
+function updateFirstVisibleTable() {
+  const tables = document.querySelectorAll("#table-container table");
+  let firstFound = false;
+  tables.forEach((table) => {
+    if (table.style.display !== "none") {
+      if (!firstFound) {
+        table.classList.add("is-first-visible-table");
+        firstFound = true;
+      } else {
+        table.classList.remove("is-first-visible-table");
+      }
+    } else {
+      table.classList.remove("is-first-visible-table");
+    }
+  });
 }
 
 window.openCommentModal = openCommentModal;
