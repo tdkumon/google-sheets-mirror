@@ -124,17 +124,17 @@ jobs:
                       except Exception as e:
                           print(f"Skipping row error in {csv_file.name}: {e}")
           # Progress log: Column A (index 0) = ID, Column H (index 7) = URL, starting at row 9
-                    progress_log = Path("csv/progresslog.csv")
-                    if progress_log.exists():
-                        with open(progress_log, mode="r", encoding="utf-8", newline="") as f:
-                            for row_num, row in enumerate(csv.reader(f), start=1):
-                                if row_num < 9:
-                                    continue
-                                try:
-                                    if len(row) > 7:
-                                        process_thumbnail(row[0], row[7], progress_log.name)
-                                except Exception as e:
-                                    print(f"Skipping row {row_num} error in {progress_log.name}: {e}")
+          progress_log = Path("csv/progresslog.csv")
+          if progress_log.exists():
+              with open(progress_log, mode="r", encoding="utf-8", newline="") as f:
+                  for row_num, row in enumerate(csv.reader(f), start=1):
+                      if row_num < 9:
+                          continue
+                      try:
+                          if len(row) > 7:
+                              process_thumbnail(row[0], row[7], progress_log.name)
+                      except Exception as e:
+                          print(f"Skipping row {row_num} error in {progress_log.name}: {e}")
           EOF
 
       - name: Commit and Push Updated Backups
