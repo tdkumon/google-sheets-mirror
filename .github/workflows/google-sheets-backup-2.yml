@@ -2,7 +2,7 @@ name: Automated Sheet & Progress Log Backup
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "17 */2 * * *"
   workflow_dispatch:
 
 permissions:
@@ -28,18 +28,18 @@ jobs:
       - name: Download and Validate CSVs
         run: |
           set -e
-
+      
           # Ensure the csv directory exists
           mkdir -p csv
-
+      
           # Download Tracking Sheets into csv/ folder
           curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=0&single=true&output=csv" -o csv/trackingsheet-2026.csv
           curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=1563791943&single=true&output=csv" -o csv/trackingsheet-2025.csv
           curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vSefBKOLNnZz6gFB_slcy9mZYN6V19w2sLYyUcR0yQdjK8Li7RVQrhA4pj7pRG4NjzIUVbrpsOXR14u/pub?gid=531912198&single=true&output=csv" -o csv/trackingsheet-2024.csv
-
+      
           # Download Progress Log into csv/ folder
           curl -f -s -S -L "https://docs.google.com/spreadsheets/d/e/2PACX-1vTgxlKcxV9xO4kuqD0EMA4lzYhFuOXIXY1nRYMCDG81WEetN54vXwX5sLPn0zg783nsc2WS8HqamWZV/pub?output=csv" -o csv/progresslog.csv
-
+      
           # 1. Generic checks: Non-empty and not an HTML web page
           for f in csv/trackingsheet-*.csv csv/progresslog.csv; do
             if [ ! -s "$f" ]; then
@@ -51,16 +51,29 @@ jobs:
               exit 1
             fi
           done
-
-          # 2. Strict validation: Verify expected content/headers in files
+      
+          # 2. Header validation: Verify expected top markers
           if ! head -n 5 csv/progresslog.csv | grep -qi "daily progress log"; then
             echo "Error: progresslog.csv failed validation (missing 'daily progress log' marker)."
             exit 1
           fi
-
+      
           for ts in csv/trackingsheet-*.csv; do
             if ! head -n 5 "$ts" | grep -qi "tracking sheet"; then
               echo "Error: $ts failed validation (missing 'tracking sheet' marker)."
+              exit 1
+            fi
+          done
+      
+          # 3. Footer validation: Verify end-of-sheet markers were reached
+          if ! grep -q "END_OF_PROGRESS_LOG" csv/progresslog.csv; then
+            echo "Error: progresslog.csv failed validation (missing END_OF_PROGRESS_LOG)."
+            exit 1
+          fi
+      
+          for ts in csv/trackingsheet-*.csv; do
+            if ! grep -q "END_OF_TRACKING_SHEET" "$ts"; then
+              echo "Error: $ts failed validation (missing END_OF_TRACKING_SHEET)."
               exit 1
             fi
           done
@@ -68,51 +81,60 @@ jobs:
       - name: Download and Resize Missing Thumbnails
         run: |
           python - << 'EOF'
-          import os
           import csv
-          import requests
-          from pathlib import Path
-          from PIL import Image
           from io import BytesIO
+          from pathlib import Path
+          import requests
+          from PIL import Image
 
           thumbs_dir = Path("thumbs")
           thumbs_dir.mkdir(exist_ok=True)
+          headers = {"User-Agent": "Mozilla/5.0"}
 
-          # Parse CSV files for missing thumbnails
-          for csv_file in Path("csv").glob("trackingsheet-*.csv"):
-              with open(csv_file, mode="r", encoding="utf-8") as f:
-                  reader = csv.reader(f)
-                  for row in reader:
+          def process_thumbnail(entry_id: str, thumb_url: str, source_name: str) -> None:
+              entry_id = entry_id.strip()
+              thumb_url = thumb_url.strip()
+
+              if not entry_id or not thumb_url.startswith("http"):
+                  return
+
+              file_path = thumbs_dir / f"{entry_id}.png"
+              if file_path.exists():
+                  return
+
+              resp = requests.get(thumb_url, headers=headers, timeout=15)
+              if resp.status_code == 200:
+                  img = Image.open(BytesIO(resp.content))
+                  if img.mode in ("RGBA", "P"):
+                      img = img.convert("RGBA")
+                  else:
+                      img = img.convert("RGB")
+
+                  img.thumbnail((200, 200), Image.Resampling.LANCZOS)
+                  img.save(file_path, "PNG", optimize=True)
+                  print(f"Downloaded, resized, and compressed thumbnail for {entry_id} ({source_name})")
+
+          # Tracking sheets: Column M (index 12) = ID, Column N (index 13) = URL
+          for csv_file in sorted(Path("csv").glob("trackingsheet-*.csv")):
+              with open(csv_file, mode="r", encoding="utf-8", newline="") as f:
+                  for row in csv.reader(f):
                       try:
                           if len(row) > 13:
-                              entry_id = row[12].strip()
-                              thumb_url = row[13].strip()
-
-                              if entry_id and thumb_url.startswith("http"):
-                                  file_path = thumbs_dir / f"{entry_id}.png"
-                                  
-                                  # Only fetch if the thumbnail does not already exist
-                                  if not file_path.exists():
-                                      headers = {'User-Agent': 'Mozilla/5.0'}
-                                      resp = requests.get(thumb_url, headers=headers, timeout=15)
-                                      if resp.status_code == 200:
-                                          # Open image from downloaded bytes, resize, and optimize
-                                          img = Image.open(BytesIO(resp.content))
-                                          
-                                          # Convert to RGB if it's RGBA/palette mode and saving as PNG (or keep transparency)
-                                          if img.mode in ("RGBA", "P"):
-                                              img = img.convert("RGBA")
-                                          else:
-                                              img = img.convert("RGB")
-                                          
-                                          # Resize maintaining aspect ratio (e.g., max width/height 200px)
-                                          img.thumbnail((200, 200), Image.Resampling.LANCZOS)
-                                          
-                                          # Save optimized image locally
-                                          img.save(file_path, "PNG", optimize=True)
-                                          print(f"Downloaded, resized, and compressed thumbnail for {entry_id}")
+                              process_thumbnail(row[12], row[13], csv_file.name)
                       except Exception as e:
-                          print(f"Skipping row error in {csv_file}: {e}")
+                          print(f"Skipping row error in {csv_file.name}: {e}")
+          # Progress log: Column A (index 0) = ID, Column H (index 7) = URL, starting at row 9
+                    progress_log = Path("csv/progresslog.csv")
+                    if progress_log.exists():
+                        with open(progress_log, mode="r", encoding="utf-8", newline="") as f:
+                            for row_num, row in enumerate(csv.reader(f), start=1):
+                                if row_num < 9:
+                                    continue
+                                try:
+                                    if len(row) > 7:
+                                        process_thumbnail(row[0], row[7], progress_log.name)
+                                except Exception as e:
+                                    print(f"Skipping row {row_num} error in {progress_log.name}: {e}")
           EOF
 
       - name: Commit and Push Updated Backups
