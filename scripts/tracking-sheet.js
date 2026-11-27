@@ -245,6 +245,10 @@ function renderTables() {
       return;
     }
 
+    if (titleText === "END_OF_TRACKING_SHEET") {
+      return;
+    }
+
     const titleText = row[cfg.title] ? row[cfg.title].trim() : "";
 
     if (
