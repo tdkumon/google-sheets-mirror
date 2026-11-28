@@ -940,4 +940,5 @@ td.col-extra:hover .comment-popover {
   border: 1px solid #3b4760;
   background-color: #000000;
   flex-shrink: 0;
+  display: none /* maybee */
 }
