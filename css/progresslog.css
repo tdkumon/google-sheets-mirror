@@ -491,7 +491,7 @@ td.col-meta {
 }
 
 #table-container td.col-meta {
-  font-size: 14px !important;
+  /*font-size: 14px !important;*/
   color: #e0e0ea;
   padding-left: 4px;
   white-space: pre-wrap;
@@ -509,7 +509,7 @@ td.col-extra {
 }
 
 #table-container td.col-extra {
-  font-size: 14px !important;
+  /*font-size: 14px !important;*/
   padding-left: 4px;
 }
 
